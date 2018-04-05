@@ -1,0 +1,50 @@
+{
+  "name": "lucid-engine",
+  "version": "0.0.1",
+  "description": "Lucid MUD Engine",
+  "engineStrict": true,
+  "engines": {
+    "node": ">= 8.9.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "**/*.spec.ts"
+    ],
+    "rootDir": "src",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ]
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/bluebird": "^3.5.20",
+    "@types/bluebird-global": "^3.5.5",
+    "@types/jest": "~22.2.2",
+    "@types/node": "~8.10.0",
+    "jest": "~22.4.3",
+    "rimraf": "~2.6.2",
+    "ts-jest": "~22.4.2",
+    "tslint": "~5.9.1",
+    "tslint-microsoft-contrib": "~5.0.3",
+    "tsutils": "~2.24.0",
+    "typedoc": "^0.11.1",
+    "typedoc-markdown-theme": "^0.0.4",
+    "typedoc-plugin-ensure-internal": "https://github.com/deap82/typedoc-plugin-ensure-internal",
+    "typescript": "~2.8.1"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "fastest-validator": "^0.6.6",
+    "moleculer": "^0.12.1",
+    "root-require": "^0.3.1",
+    "validate-typescript": "^2.0.1"
+  },
+  "scripts": {
+    "test": "jest --coverage",
+    "watch": "tsc -w -p tsconfig.release.json"
+  }
+}
