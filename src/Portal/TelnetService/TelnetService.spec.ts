@@ -18,6 +18,8 @@ describe('TelnetService', () => {
 
     beforeEach(() => {
         service = new TelnetService(<IPortalConfig>settings);
+        service.server.listen = jest.fn();
+        service.schema = service;
         service.logger = mockLogger;
     });
 
@@ -29,21 +31,23 @@ describe('TelnetService', () => {
         it('correctly sets the service name', () => {
             expect(service.name).toEqual('telnet');
         });
+    });
+
+    describe('created', () => {
+        beforeEach(() => {
+            service.created();
+        });
 
         it('sets up the server resource', () => {
             expect(service.server).toBeDefined();
         });
 
+        it('calls listen with the correct options', () => {
+            expect(service.server.listen).toHaveBeenCalledWith({host: '0.0.0.0', port: '2323'});
+        });
+
         it('sets up a listen event on the server', () => {
             expect(service.server._events).toHaveProperty('listening');
-        });
-    });
-
-    describe('created', () => {
-        it('calls listen with the correct options', () => {
-            service.server.listen = jest.fn();
-            service.created();
-            expect(service.server.listen).toHaveBeenCalledWith({host: '0.0.0.0', port: '2323'});
         });
     });
 });
