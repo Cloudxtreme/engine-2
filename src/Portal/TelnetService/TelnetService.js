@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const net = require("net");
+const ServiceSchema_1 = require("../../ServiceSchema");
 const SessionService_1 = require("../SessionService");
 // tslint:disable
 const uuid = require("uuid/v4");
@@ -9,8 +10,10 @@ const HOST_REGEX = /tcp:\/\/(.+):(\d+)/;
 /**
  * The TelnetService handles the initial connection from the player client.
  */
-class TelnetService {
+class TelnetService extends ServiceSchema_1.ServiceSchema {
     constructor(config) {
+        super();
+        this.schema = this;
         this.name = 'telnet';
         // Moleculer ServiceSchema allows for settings to be defined in the "settings" object.d
         this.settings = config;

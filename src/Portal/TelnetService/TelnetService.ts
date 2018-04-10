@@ -1,6 +1,7 @@
-import {LoggerInstance, ServiceBroker, ServiceSchema} from 'moleculer';
+import {LoggerInstance} from 'moleculer';
 import * as net from 'net';
 
+import {ServiceSchema} from '../../ServiceSchema';
 import {IPortalConfig} from '../Broker';
 import {SessionService} from '../SessionService';
 
@@ -13,15 +14,14 @@ const HOST_REGEX = /tcp:\/\/(.+):(\d+)/;
 /**
  * The TelnetService handles the initial connection from the player client.
  */
-export class TelnetService implements ServiceSchema {
+export class TelnetService extends ServiceSchema  {
     public readonly name: string;
-    public readonly broker: ServiceBroker;
-    public readonly settings: IPortalConfig;
+    public settings: IPortalConfig;
+    protected readonly schema: TelnetService = this;
     private readonly server: net.Server;
-    private readonly logger: LoggerInstance;
-    private readonly schema: ServiceSchema;
 
     constructor(config: IPortalConfig) {
+        super();
         this.name = 'telnet';
         // Moleculer ServiceSchema allows for settings to be defined in the "settings" object.d
         this.settings = config;

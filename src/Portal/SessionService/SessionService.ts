@@ -1,13 +1,13 @@
-import {LoggerInstance, ServiceSchema} from 'moleculer';
+import {LoggerInstance} from 'moleculer';
 import {Socket} from 'net';
+import {ServiceSchema} from '../../ServiceSchema';
 
-export class SessionService implements ServiceSchema {
-    public name: string;
+export class SessionService extends ServiceSchema {
     private readonly sessionId: string;
     private readonly socket: Socket;
-    private readonly logger: LoggerInstance;
 
     constructor(sessionId: string, socket: Socket) {
+        super();
         this.name = `player.${sessionId}`;
         this.sessionId = sessionId;
         this.socket = socket;

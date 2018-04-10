@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const net = require("net");
+const ServiceSchema_1 = require("../../ServiceSchema");
 const SessionService_1 = require("../SessionService");
 const uuid = require("uuid/v4");
 const HOST_REGEX = /tcp:\/\/(.+):(\d+)/;
-class TelnetService {
+class TelnetService extends ServiceSchema_1.ServiceSchema {
     constructor(config) {
+        super();
+        this.schema = this;
         this.name = 'telnet';
         this.settings = config;
         this.server = net.createServer();
