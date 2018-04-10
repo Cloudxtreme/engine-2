@@ -1,4 +1,4 @@
-const {Portal} = require("../../build/src/Portal");
-const listener = new Portal.Broker();
+const { Broker } = require("../../build/src/Portal");
+const listener = new Broker();
 
 module.exports = listener.schema();
