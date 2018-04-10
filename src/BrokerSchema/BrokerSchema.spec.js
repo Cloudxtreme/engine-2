@@ -5,6 +5,9 @@ class TestSchema extends BrokerSchema_1.BrokerSchema {
     get SERVICE_NAME() {
         return 'TEST_SCHEMA';
     }
+    get DEFAULT_CONFIG() {
+        return {};
+    }
 }
 describe('BrokerSchema', () => {
     let builder;

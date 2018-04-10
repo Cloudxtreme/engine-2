@@ -4,6 +4,11 @@ class TestSchema extends BrokerSchema {
     get SERVICE_NAME() {
         return 'TEST_SCHEMA';
     }
+
+    get DEFAULT_CONFIG() {
+        return {};
+    }
+
 }
 
 describe('BrokerSchema', () => {

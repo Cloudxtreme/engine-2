@@ -25,6 +25,8 @@
     "@types/bluebird-global": "^3.5.5",
     "@types/jest": "~22.2.2",
     "@types/node": "~8.10.0",
+    "gulp": "^3.9.1",
+    "gulp-ejs": "^3.1.2",
     "jest": "~22.4.3",
     "rimraf": "~2.6.2",
     "ts-jest": "~22.4.2",
@@ -39,12 +41,15 @@
   "dependencies": {
     "bluebird": "^3.5.1",
     "fastest-validator": "^0.6.6",
+    "gulp-rename": "^1.2.2",
+    "lodash": "^4.17.5",
     "moleculer": "^0.12.1",
+    "prettyjson": "^1.2.1",
     "root-require": "^0.3.1",
     "validate-typescript": "^2.0.1"
   },
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "watch": "tsc -w -p tsconfig.release.json"
   }
 }

@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fastest_validator_1 = require("fastest-validator");
 // tslint:disable-next-line
 const pkg = require('root-require')('package.json');
+// tslint:disable-next-line
+const Validator = require("fastest-validator");
 class BrokerSchema {
     /**
      * @param {Portal.IPortalConfig} config Portal configuration
@@ -15,16 +16,20 @@ class BrokerSchema {
         this.afterStartHooks = [];
         this.beforeStopHooks = [];
         this.afterStopHooks = [];
-        this.config = Object.assign({}, this.config, config);
-        const validateConfig = new fastest_validator_1.default().compile(this.SPortalConfig);
-        const validationRusult = validateConfig(this.config);
-        if (validationRusult instanceof Array) {
+        this.config = Object.assign({}, this.DEFAULT_CONFIG, this.config, config);
+        const validateConfig = new Validator().compile(this.SPortalConfig);
+        const validationResult = validateConfig(this.config);
+        if (validationResult instanceof Array) {
             // tslint:disable-next-line:no-console
             console.log('There was an error validating the configuration. See the documentation and correct' +
                 ' the following errors:');
             // tslint:disable-next-line:no-console
-            console.log(validationRusult);
+            console.log(validationResult);
             process.exit(1);
+        }
+        if (process.env.NODE_ENV !== 'test') {
+            // tslint:disable-next-line:no-console
+            console.log(`Lucid Mud Engine v${pkg.version} - ${this.SERVICE_NAME} Service\n`);
         }
     }
     // tslint:disable-next-line:variable-name
@@ -36,10 +41,15 @@ class BrokerSchema {
     get SERVICE_NAME() {
         throw Error('Not Implemented');
     }
+    get DEFAULT_CONFIG() {
+        throw Error('Not Implemented');
+    }
     schema() {
-        // tslint:disable-next-line:no-console
-        console.log(`Lucid Mud Engine v${pkg.version} - ${this.SERVICE_NAME} Service\n`);
         return {
+            nodeID: 'lucid-portal',
+            logger: true,
+            logLevel: 'debug',
+            transport: this.config.redis,
             created: this.runBeforeStartHooks(),
         };
     }
@@ -127,6 +137,7 @@ class BrokerSchema {
     }
     runBeforeStartHooks() {
         return (broker) => {
+            broker.logger.debug('running beforeStartHooks');
             this.beforeStartHooks.forEach((f) => f(broker));
         };
     }
