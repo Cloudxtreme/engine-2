@@ -7,6 +7,11 @@
   "extends": [
     "tslint-microsoft-contrib"
   ],
+  "linterOptions": {
+    "exclude": [
+      "**/*.spec.ts"
+    ]
+  },
   "rules": {
     "mocha-no-side-effect-code": false,
     "missing-jsdoc": false,
@@ -16,6 +21,7 @@
     "no-void-expression": false,
     "no-redundant-jsdoc": false,
     "prefer-type-cast": false,
+    "no-unsafe-any": false,
     "trailing-comma": [ // https://palantir.github.io/tslint/rules/trailing-comma/
       true,
       {

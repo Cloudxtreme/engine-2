@@ -13,6 +13,9 @@ export interface IBrokerConfig {
     redis: string;
 }
 
+/**
+ * The BrokerSchema is used to create the core service brokers for the World and Portal services.
+ */
 export class BrokerSchema {
 
     public readonly config: IBrokerConfig = {
@@ -30,9 +33,6 @@ export class BrokerSchema {
     private beforeStopHooks: Function[] = [];
     private afterStopHooks: Function[] = [];
 
-    /**
-     * @param {Portal.IPortalConfig} config Portal configuration
-     */
     constructor(config: {} | IBrokerConfig = {}) {
         this.config = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
         const validateConfig = new Validator().compile(this.SPORTAL_CONFIG);
@@ -53,7 +53,7 @@ export class BrokerSchema {
 
     public schema() {
         return {
-            nodeID: `lucid-${lodash.lowerCase(<string>this.SERVICE_NAME)}`,
+            nodeID: `lucid-${lodash.lowerCase(this.SERVICE_NAME)}`,
             logger: true,
             logLevel: 'debug',
             transporter: this.config.redis,
@@ -61,24 +61,6 @@ export class BrokerSchema {
         };
     }
 
-    /**
-     * Add a beforeStart hook. These hooks are called before the Portal's service broker starts. This is useful for
-     * making connections to external resources that will be required by the Portal to operate. This can be called
-     * multiple times, and hooks will be called in the order they are defined.
-     * @param {Function} callback the callback to call before the service starts
-     * @returns {Portal.Broker}
-     *
-     * @example
-     * ```typescript
-     *    portal
-     *      .beforeStart(function() {
-     *          // ..do things
-     *      })
-     *      .beforeStart(function() {
-     *        // .. do more things
-     *      })
-     *  ```
-     */
     public beforeStart(callback: Function): BrokerSchema {
         this.beforeStartHooks.push(callback);
 

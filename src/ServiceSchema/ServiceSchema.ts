@@ -1,11 +1,11 @@
-import {SchemaBuilder} from '../SchemaBuilder';
 import {
     Actions,
     LoggerInstance,
     ServiceBroker,
     ServiceMethods,
-    ServiceSchema as MoleculerServiceSchema
+    ServiceSchema as MoleculerServiceSchema,
 } from 'moleculer';
+import {SchemaBuilder} from '../SchemaBuilder';
 
 export interface IServiceSchemaOptions {
     settings?: object;
@@ -14,6 +14,9 @@ export interface IServiceSchemaOptions {
     methods?: ServiceMethods;
 }
 
+/**
+ * ServiceSchema is a SchemaBuilder specific to building for individual services.
+ */
 export class ServiceSchema extends SchemaBuilder {
     public broker: ServiceBroker;
     public serviceSettings: object;

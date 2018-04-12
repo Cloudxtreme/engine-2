@@ -5,8 +5,8 @@ import * as prettyJson from 'prettyjson';
 import {BrokerSchema, IBrokerConfig} from '../BrokerSchema';
 import {NewSessionService} from './NewSessionService';
 
-export interface IWorldConfig extends IBrokerConfig {
-}
+// tslint:disable-next-line
+export interface IWorldConfig extends IBrokerConfig {}
 
 /**
  * The Portal provides the connection between the player's MUD client and the World.

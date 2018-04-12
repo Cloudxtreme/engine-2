@@ -1,1 +1,1 @@
-{"version":3,"file":"SessionService.js","sourceRoot":"","sources":["../../../../src/World/SessionService/SessionService.ts"],"names":[],"mappings":";;AACA,uDAAkD;AAElD,oBAA4B,SAAQ,6BAAa;IAG7C,IAAI,IAAI;QACJ,OAAO,kBAAkB,IAAI,CAAC,eAAe,CAAC,IAAI,EAAE,CAAC;IACzD,CAAC;CAEJ;AAPD,wCAOC"}
+{"version":3,"file":"SessionService.js","sourceRoot":"","sources":["../../../../src/World/SessionService/SessionService.ts"],"names":[],"mappings":";;AACA,uDAAkD;AAKlD,oBAA4B,SAAQ,6BAAa;IAG7C,IAAI,IAAI;QACJ,OAAO,kBAAkB,IAAI,CAAC,eAAe,CAAC,IAAI,EAAE,CAAC;IACzD,CAAC;CAEJ;AAPD,wCAOC"}

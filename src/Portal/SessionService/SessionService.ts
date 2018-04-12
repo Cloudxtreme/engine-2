@@ -11,6 +11,9 @@ interface ISessionServiceOptions extends IServiceSchemaOptions {
     socket: Socket;
 }
 
+/**
+ * The SessionService handles incoming connections and creates the player service for the connection.
+ */
 export class SessionService extends ServiceSchema {
     public serviceSettings: ISessionServiceSettings;
     public socket: Socket;
