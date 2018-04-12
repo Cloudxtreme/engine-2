@@ -7,4 +7,5 @@
                                                               /____/
 </pre>
 
-
+The Lucid Mud Engine is a modern frame work for building online interactive text games AKA a 
+[MUD](https://en.wikipedia.org/wiki/MUD) powerd by NodeJS and Moleculer.
