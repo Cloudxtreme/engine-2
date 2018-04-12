@@ -42,6 +42,7 @@
     "bluebird": "^3.5.1",
     "fastest-validator": "^0.6.6",
     "gulp-rename": "^1.2.2",
+    "ioredis": "^3.2.2",
     "lodash": "^4.17.5",
     "moleculer": "^0.12.1",
     "prettyjson": "^1.2.1",

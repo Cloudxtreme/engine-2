@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const lodash = require("lodash");
 // tslint:disable-next-line
 const pkg = require('root-require')('package.json');
 // tslint:disable-next-line
@@ -10,14 +11,17 @@ class BrokerSchema {
      */
     constructor(config = {}) {
         this.config = {
-            redis: 'redis://localhost',
+            redis: 'redis://127.0.0.1:6379',
+        };
+        this.SPORTAL_CONFIG = {
+            redis: { type: 'string', pattern: /redis:\/\/.+/ },
         };
         this.beforeStartHooks = [];
         this.afterStartHooks = [];
         this.beforeStopHooks = [];
         this.afterStopHooks = [];
         this.config = Object.assign({}, this.DEFAULT_CONFIG, this.config, config);
-        const validateConfig = new Validator().compile(this.SPortalConfig);
+        const validateConfig = new Validator().compile(this.SPORTAL_CONFIG);
         const validationResult = validateConfig(this.config);
         if (validationResult instanceof Array) {
             // tslint:disable-next-line:no-console
@@ -32,24 +36,12 @@ class BrokerSchema {
             console.log(`Lucid Mud Engine v${pkg.version} - ${this.SERVICE_NAME} Service\n`);
         }
     }
-    // tslint:disable-next-line:variable-name
-    get SPortalConfig() {
-        return {
-            redis: { type: 'string', pattern: /redis:\/\/.+/ },
-        };
-    }
-    get SERVICE_NAME() {
-        throw Error('Not Implemented');
-    }
-    get DEFAULT_CONFIG() {
-        throw Error('Not Implemented');
-    }
     schema() {
         return {
-            nodeID: 'lucid-portal',
+            nodeID: `lucid-${lodash.lowerCase(this.SERVICE_NAME)}`,
             logger: true,
             logLevel: 'debug',
-            transport: this.config.redis,
+            transporter: this.config.redis,
             created: this.runBeforeStartHooks(),
         };
     }

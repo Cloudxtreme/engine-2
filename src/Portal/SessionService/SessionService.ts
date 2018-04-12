@@ -1,20 +1,45 @@
-import {LoggerInstance} from 'moleculer';
+import {ServiceBroker} from 'moleculer';
 import {Socket} from 'net';
-import {ServiceSchema} from '../../ServiceSchema';
+
+import {IServiceSchemaOptions, ServiceSchema} from '../../ServiceSchema';
+
+export interface ISessionServiceSettings {
+    uuid: string;
+}
+
+interface ISessionServiceOptions extends IServiceSchemaOptions {
+    socket: Socket;
+}
 
 export class SessionService extends ServiceSchema {
-    private readonly sessionId: string;
-    private readonly socket: Socket;
+    public serviceSettings: ISessionServiceSettings;
+    public socket: Socket;
 
-    constructor(sessionId: string, socket: Socket) {
-        super();
-        this.name = `player.${sessionId}`;
-        this.sessionId = sessionId;
-        this.socket = socket;
+    constructor(broker: ServiceBroker, options: ISessionServiceOptions) {
+        super(broker, options);
+        this.socket = options.socket;
+    }
+
+    get name() {
+        return `portal.sessions.${this.serviceSettings.uuid}`;
     }
 
     public created() {
-        this.logger.debug('received connection');
+        const socket = this.socket;
+
+        return function () {
+            this.socket = socket;
+            this.logger.debug(`received connection from ${this.socket.remoteAddress}`);
+            this.broker.call('world.sessions.connected', {
+                address: this.socket.remoteAddress,
+                uuid: this.settings.uuid,
+            });
+        };
     }
 
+    public schema() {
+        const schema = super.schema();
+
+        return {...schema, ...{created: this.created()}};
+    }
 }

@@ -1,4 +1,5 @@
-import {BrokerOptions, ServiceBroker} from 'moleculer';
+import * as lodash from 'lodash';
+import {ServiceBroker} from 'moleculer';
 
 // tslint:disable-next-line
 const pkg = require('root-require')('package.json');
@@ -14,24 +15,16 @@ export interface IBrokerConfig {
 
 export class BrokerSchema {
 
-    // tslint:disable-next-line:variable-name
-    get SPortalConfig() {
-        return {
-            redis: {type: 'string', pattern: /redis:\/\/.+/},
-        };
-    }
-
-    get SERVICE_NAME(): Error | String {
-        throw Error('Not Implemented');
-    }
-
-    get DEFAULT_CONFIG(): Error | {} {
-        throw Error('Not Implemented');
-    }
-
     public readonly config: IBrokerConfig = {
-        redis: 'redis://localhost',
+        redis: 'redis://127.0.0.1:6379',
     };
+    protected readonly SPORTAL_CONFIG: object = {
+        redis: {type: 'string', pattern: /redis:\/\/.+/},
+    };
+
+    protected readonly SERVICE_NAME: string;
+    protected readonly DEFAULT_CONFIG: object;
+
     private beforeStartHooks: Function[] = [];
     private afterStartHooks: Function[] = [];
     private beforeStopHooks: Function[] = [];
@@ -42,7 +35,7 @@ export class BrokerSchema {
      */
     constructor(config: {} | IBrokerConfig = {}) {
         this.config = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
-        const validateConfig = new Validator().compile(this.SPortalConfig);
+        const validateConfig = new Validator().compile(this.SPORTAL_CONFIG);
         const validationResult = validateConfig(this.config);
         if (validationResult instanceof Array) {
             // tslint:disable-next-line:no-console
@@ -60,10 +53,10 @@ export class BrokerSchema {
 
     public schema() {
         return {
-            nodeID: 'lucid-portal',
+            nodeID: `lucid-${lodash.lowerCase(<string>this.SERVICE_NAME)}`,
             logger: true,
             logLevel: 'debug',
-            transport: this.config.redis,
+            transporter: this.config.redis,
             created: this.runBeforeStartHooks(),
         };
     }

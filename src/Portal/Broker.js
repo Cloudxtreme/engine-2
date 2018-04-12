@@ -18,7 +18,7 @@ class Broker extends BrokerSchema_1.BrokerSchema {
     constructor(config = {}) {
         super(config);
         // set the telnet service to start up after the broker has started
-        this.beforeStart((broker) => (broker.createService(new TelnetService_1.TelnetService(this.config))));
+        this.beforeStart((broker) => (broker.createService(new TelnetService_1.TelnetService(broker, { settings: this.config }).schema())));
         if (process.env.NODE_ENV !== 'test') {
             // tslint:disable
             console.log("Config:");
