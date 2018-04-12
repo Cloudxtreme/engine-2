@@ -1,5 +1,6 @@
 import * as lodash from 'lodash';
 import {ServiceBroker} from 'moleculer';
+import {SchemaBuilder} from '../SchemaBuilder';
 
 // tslint:disable-next-line
 const pkg = require('root-require')('package.json');
@@ -16,7 +17,7 @@ export interface IBrokerConfig {
 /**
  * The BrokerSchema is used to create the core service brokers for the World and Portal services.
  */
-export class BrokerSchema {
+export class BrokerSchema extends SchemaBuilder {
 
     public readonly config: IBrokerConfig = {
         redis: 'redis://127.0.0.1:6379',
@@ -34,6 +35,7 @@ export class BrokerSchema {
     private afterStopHooks: Function[] = [];
 
     constructor(config: {} | IBrokerConfig = {}) {
+        super();
         this.config = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
         const validateConfig = new Validator().compile(this.SPORTAL_CONFIG);
         const validationResult = validateConfig(this.config);
