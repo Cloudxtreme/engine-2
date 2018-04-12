@@ -1,53 +1,54 @@
+import {Service, ServiceBroker} from 'moleculer';
+import {Server} from 'net';
+
 import {IPortalConfig} from '../Broker';
 import {TelnetService} from './TelnetService';
 
+jest.mock('net');
+
 describe('TelnetService', () => {
     let service;
+    let broker: ServiceBroker;
+
     const settings = {
         host: 'tcp://0.0.0.0:2323',
     };
 
-    const mockLogger = {
-        info() {
-            return true;
-        },
-        debug() {
-            return true;
-        },
-    };
-
     beforeEach(() => {
-        service = new TelnetService(<IPortalConfig>settings);
-        service.server.listen = jest.fn();
-        service.schema = service;
-        service.logger = mockLogger;
+        broker = new ServiceBroker();
+        service = new TelnetService(broker, {settings: <IPortalConfig>settings});
     });
 
     describe('constructor', () => {
         it('sets this.settings to the passed in configuration', () => {
-            expect(service.settings).toHaveProperty('host', 'tcp://0.0.0.0:2323');
+            expect(service.serviceSettings).toHaveProperty('host', 'tcp://0.0.0.0:2323');
         });
 
         it('correctly sets the service name', () => {
-            expect(service.name).toEqual('telnet');
+            expect(service.name).toEqual('portal.telnet');
         });
     });
 
     describe('created', () => {
         beforeEach(() => {
-            service.created();
+            service = new Service(broker, new TelnetService(broker, {settings}).schema());
         });
 
-        it('sets up the server resource', () => {
-            expect(service.server).toBeDefined();
+        it('assigns the server variable', () => {
+            expect(service.server).toBeInstanceOf(Server);
         });
 
-        it('calls listen with the correct options', () => {
+        it('sets up the listening event', () => {
+            expect(service.server._events.listening).toEqual(service.listening);
+        });
+
+        it('sets up the connection event', () => {
+            expect(service.server._events.connection).toEqual(service.createSession);
+        });
+
+        it('calls listen with the correct settings', () => {
             expect(service.server.listen).toHaveBeenCalledWith({host: '0.0.0.0', port: '2323'});
         });
 
-        it('sets up a listen event on the server', () => {
-            expect(service.server._events).toHaveProperty('listening');
-        });
     });
 });
