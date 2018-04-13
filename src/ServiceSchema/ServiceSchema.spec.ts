@@ -14,7 +14,6 @@ let service;
 
 describe('ServiceSchema', () => {
 
-
     describe('getters', () => {
 
         class TestService extends ServiceSchema {
