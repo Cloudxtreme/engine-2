@@ -1,10 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash = require("lodash");
+const SchemaBuilder_1 = require("../SchemaBuilder");
 const pkg = require('root-require')('package.json');
 const Validator = require("fastest-validator");
-class BrokerSchema {
+class BrokerSchema extends SchemaBuilder_1.SchemaBuilder {
     constructor(config = {}) {
+        super();
         this.config = {
             redis: 'redis://127.0.0.1:6379',
         };

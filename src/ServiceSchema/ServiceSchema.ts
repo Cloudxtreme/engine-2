@@ -1,5 +1,5 @@
 import {
-    Actions,
+    Actions, Context,
     LoggerInstance,
     ServiceBroker,
     ServiceMethods,
@@ -17,7 +17,7 @@ export interface IServiceSchemaOptions {
 /**
  * ServiceSchema is a SchemaBuilder specific to building for individual services.
  */
-export class ServiceSchema extends SchemaBuilder {
+export abstract class ServiceSchema extends SchemaBuilder {
     public broker: ServiceBroker;
     public serviceSettings: object;
     public serviceActions: Actions;
@@ -43,7 +43,7 @@ export class ServiceSchema extends SchemaBuilder {
         return {};
     }
 
-    constructor(broker: ServiceBroker, options: IServiceSchemaOptions = {}) {
+    public constructor(broker: ServiceBroker, options: IServiceSchemaOptions = {}) {
         super();
         this.options = options;
         this.broker = broker;
@@ -53,7 +53,7 @@ export class ServiceSchema extends SchemaBuilder {
         this.serviceMethods = {...options.methods, ...this.methods};
     }
 
-    public created(): void {
+    public  created(): void {
         return;
     }
 

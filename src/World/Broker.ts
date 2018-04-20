@@ -3,7 +3,7 @@ import {ServiceBroker} from 'moleculer';
 import * as prettyJson from 'prettyjson';
 
 import {BrokerSchema, IBrokerConfig} from '../BrokerSchema';
-import {NewSessionService} from './NewSessionService';
+import {SessionService} from './SessionService';
 
 // tslint:disable-next-line
 export interface IWorldConfig extends IBrokerConfig {}
@@ -22,7 +22,7 @@ export class Broker extends BrokerSchema {
     constructor(config: {} | IWorldConfig = {}) {
         super(config);
         this.beforeStart((broker: ServiceBroker) => (
-            broker.createService(new NewSessionService(broker).schema())
+            broker.createService(new SessionService(broker).schema())
         ));
         if (process.env.NODE_ENV !== 'test') {
             // tslint:disable
