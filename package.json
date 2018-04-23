@@ -1,6 +1,6 @@
 {
   "name": "lucid-engine",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Lucid MUD Engine",
   "engineStrict": true,
   "engines": {
@@ -14,6 +14,7 @@
       "**/*.spec.ts"
     ],
     "rootDir": "src",
+    "main": "./build/src/index.js",
     "moduleFileExtensions": [
       "ts",
       "js"
@@ -37,15 +38,18 @@
     "typedoc": "^0.11.1",
     "typedoc-markdown-theme": "^0.0.4",
     "typedoc-plugin-ensure-internal": "https://github.com/deap82/typedoc-plugin-ensure-internal",
-    "typescript": "~2.8.1"
+    "typescript": "~2.8.1",
+    "yeoman-generator": "^2.0.4"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
     "fastest-validator": "^0.6.6",
     "gulp-rename": "^1.2.2",
     "ioredis": "^3.2.2",
+    "knex": "^0.14.6",
     "lodash": "^4.17.5",
     "moleculer": "^0.12.1",
+    "pg": "^7.4.1",
     "prettyjson": "^1.2.1",
     "root-require": "^0.3.1",
     "uuid": "^3.2.1",

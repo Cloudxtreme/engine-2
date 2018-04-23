@@ -1,0 +1,589 @@
+{
+	"id": 0,
+	"name": "lucid-engine",
+	"kind": 0,
+	"flags": {},
+	"children": [
+		{
+			"id": 1,
+			"name": "\"Portal\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/fugufish/Code/lucid/src/Portal/Portal.ts",
+			"children": [
+				{
+					"id": 5,
+					"name": "Portal",
+					"kind": 2,
+					"kindString": "Module",
+					"flags": {
+						"isExported": true
+					},
+					"comment": {
+						"shortText": "The Portal provides the connection between the player's MUD client and the World."
+					},
+					"children": [
+						{
+							"id": 10,
+							"name": "Listener",
+							"kind": 128,
+							"kindString": "Class",
+							"flags": {
+								"isExported": true
+							},
+							"comment": {
+								"shortText": "The Portal.Listener provides the socket listener for the Portal service. It accepts the Portal configuration as\nthe parameter to the constructor."
+							},
+							"children": [
+								{
+									"id": 11,
+									"name": "constructor",
+									"kind": 512,
+									"kindString": "Constructor",
+									"flags": {
+										"isExported": true
+									},
+									"comment": {},
+									"signatures": [
+										{
+											"id": 12,
+											"name": "new Listener",
+											"kind": 16384,
+											"kindString": "Constructor signature",
+											"flags": {},
+											"comment": {},
+											"parameters": [
+												{
+													"id": 13,
+													"name": "config",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"comment": {
+														"shortText": "Portal configuration\n"
+													},
+													"type": {
+														"type": "reference",
+														"name": "IPortalConfig",
+														"id": 6
+													},
+													"defaultValue": " {\n            redis: 'redis://localhost',\n            server: 'tcp://localhost:2323',\n            logging: {\n                file: '/dev/stdout',\n                level: 'DEBUG',\n            },\n        }"
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Listener",
+												"id": 10
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 48,
+											"character": 49
+										}
+									]
+								},
+								{
+									"id": 14,
+									"name": "beforeStart",
+									"kind": 2048,
+									"kindString": "Method",
+									"flags": {
+										"isExported": true,
+										"isPublic": true
+									},
+									"signatures": [
+										{
+											"id": 15,
+											"name": "beforeStart",
+											"kind": 4096,
+											"kindString": "Call signature",
+											"flags": {},
+											"comment": {
+												"shortText": "Add a beforeStart hook. These hooks are called before the Portal's service broker starts. This is useful for\nmaking connections to external resources that will be required by the Portal to operate. This can be called\nmultiple times, and hooks will be called in the order they are defined.",
+												"returns": "\n",
+												"tags": [
+													{
+														"tag": "example",
+														"text": "\n```typescript\n   portal\n     .beforeStart(function() {\n         // ..do things\n     })\n     .beforeStart(function() {\n       // .. do more things\n     })\n ```\n"
+													}
+												]
+											},
+											"parameters": [
+												{
+													"id": 16,
+													"name": "callback",
+													"kind": 32768,
+													"kindString": "Parameter",
+													"flags": {},
+													"comment": {
+														"text": "the callback to call before the service starts"
+													},
+													"type": {
+														"type": "reference",
+														"name": "Function"
+													}
+												}
+											],
+											"type": {
+												"type": "reference",
+												"name": "Listener",
+												"id": 10
+											}
+										}
+									],
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 90,
+											"character": 26
+										}
+									]
+								}
+							],
+							"groups": [
+								{
+									"title": "Constructors",
+									"kind": 512,
+									"children": [
+										11
+									]
+								},
+								{
+									"title": "Methods",
+									"kind": 2048,
+									"children": [
+										14
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "Portal.ts",
+									"line": 45,
+									"character": 25
+								}
+							]
+						},
+						{
+							"id": 6,
+							"name": "IPortalConfig",
+							"kind": 256,
+							"kindString": "Interface",
+							"flags": {},
+							"children": [
+								{
+									"id": 8,
+									"name": "logging",
+									"kind": 1024,
+									"kindString": "Property",
+									"flags": {},
+									"comment": {
+										"shortText": "The logging configuration for the Portal service."
+									},
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 24,
+											"character": 15
+										}
+									],
+									"type": {
+										"type": "reference",
+										"name": "ILoggingConfig",
+										"id": 2
+									}
+								},
+								{
+									"id": 9,
+									"name": "redis",
+									"kind": 1024,
+									"kindString": "Property",
+									"flags": {},
+									"comment": {
+										"shortText": "The Redis server that will be used for brokering the messages to the World. Defaults to `redis://localhost`"
+									},
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 28,
+											"character": 13
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								},
+								{
+									"id": 7,
+									"name": "server",
+									"kind": 1024,
+									"kindString": "Property",
+									"flags": {},
+									"comment": {
+										"shortText": "The tcp host to listen on for incoming connections. Defaults to `tcp://localhost:2323`"
+									},
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 20,
+											"character": 14
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Properties",
+									"kind": 1024,
+									"children": [
+										8,
+										9,
+										7
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "Portal.ts",
+									"line": 16,
+									"character": 27
+								}
+							]
+						},
+						{
+							"id": 17,
+							"name": "SPortalConfig",
+							"kind": 2097152,
+							"kindString": "Object literal",
+							"flags": {
+								"isConst": true
+							},
+							"children": [
+								{
+									"id": 19,
+									"name": "redis",
+									"kind": 32,
+									"kindString": "Variable",
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 34,
+											"character": 13
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									},
+									"defaultValue": " RegEx(/redis:\\/\\/.+/)"
+								},
+								{
+									"id": 18,
+									"name": "server",
+									"kind": 32,
+									"kindString": "Variable",
+									"flags": {},
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 33,
+											"character": 14
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "string"
+									},
+									"defaultValue": " RegEx(/tcp:\\/\\/.+/)"
+								},
+								{
+									"id": 20,
+									"name": "logging",
+									"kind": 2097152,
+									"kindString": "Object literal",
+									"flags": {},
+									"children": [
+										{
+											"id": 21,
+											"name": "file",
+											"kind": 32,
+											"kindString": "Variable",
+											"flags": {},
+											"sources": [
+												{
+													"fileName": "Portal.ts",
+													"line": 36,
+													"character": 16
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											},
+											"defaultValue": " RegEx(/\\/.+/)"
+										},
+										{
+											"id": 22,
+											"name": "level",
+											"kind": 32,
+											"kindString": "Variable",
+											"flags": {},
+											"sources": [
+												{
+													"fileName": "Portal.ts",
+													"line": 37,
+													"character": 17
+												}
+											],
+											"type": {
+												"type": "intrinsic",
+												"name": "string"
+											},
+											"defaultValue": " Options(['OFF', 'FATAL', 'ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE', 'ALL'])"
+										}
+									],
+									"groups": [
+										{
+											"title": "Variables",
+											"kind": 32,
+											"children": [
+												21,
+												22
+											]
+										}
+									],
+									"sources": [
+										{
+											"fileName": "Portal.ts",
+											"line": 35,
+											"character": 15
+										}
+									],
+									"type": {
+										"type": "intrinsic",
+										"name": "object"
+									}
+								}
+							],
+							"groups": [
+								{
+									"title": "Variables",
+									"kind": 32,
+									"children": [
+										19,
+										18
+									]
+								},
+								{
+									"title": "Object literals",
+									"kind": 2097152,
+									"children": [
+										20
+									]
+								}
+							],
+							"sources": [
+								{
+									"fileName": "Portal.ts",
+									"line": 32,
+									"character": 23
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "object"
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Classes",
+							"kind": 128,
+							"children": [
+								10
+							]
+						},
+						{
+							"title": "Interfaces",
+							"kind": 256,
+							"children": [
+								6
+							]
+						},
+						{
+							"title": "Object literals",
+							"kind": 2097152,
+							"children": [
+								17
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "Portal.ts",
+							"line": 14,
+							"character": 23
+						}
+					]
+				},
+				{
+					"id": 2,
+					"name": "ILoggingConfig",
+					"kind": 256,
+					"kindString": "Interface",
+					"flags": {},
+					"children": [
+						{
+							"id": 3,
+							"name": "file",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "Portal.ts",
+									"line": 7,
+									"character": 8
+								}
+							],
+							"type": {
+								"type": "intrinsic",
+								"name": "string"
+							}
+						},
+						{
+							"id": 4,
+							"name": "level",
+							"kind": 1024,
+							"kindString": "Property",
+							"flags": {},
+							"sources": [
+								{
+									"fileName": "Portal.ts",
+									"line": 8,
+									"character": 9
+								}
+							],
+							"type": {
+								"type": "union",
+								"types": [
+									{
+										"type": "stringLiteral",
+										"value": "OFF"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "FATAL"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "ERROR"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "WARN"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "INFO"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "DEBUG"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "TRACE"
+									},
+									{
+										"type": "stringLiteral",
+										"value": "ALL"
+									}
+								]
+							}
+						}
+					],
+					"groups": [
+						{
+							"title": "Properties",
+							"kind": 1024,
+							"children": [
+								3,
+								4
+							]
+						}
+					],
+					"sources": [
+						{
+							"fileName": "Portal.ts",
+							"line": 6,
+							"character": 24
+						}
+					]
+				}
+			],
+			"groups": [
+				{
+					"title": "Modules",
+					"kind": 2,
+					"children": [
+						5
+					]
+				},
+				{
+					"title": "Interfaces",
+					"kind": 256,
+					"children": [
+						2
+					]
+				}
+			],
+			"sources": [
+				{
+					"fileName": "Portal.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		},
+		{
+			"id": 23,
+			"name": "\"index\"",
+			"kind": 1,
+			"kindString": "External module",
+			"flags": {
+				"isExported": true
+			},
+			"originalName": "/Users/fugufish/Code/lucid/src/Portal/index.ts",
+			"sources": [
+				{
+					"fileName": "index.ts",
+					"line": 1,
+					"character": 0
+				}
+			]
+		}
+	],
+	"groups": [
+		{
+			"title": "External modules",
+			"kind": 1,
+			"children": [
+				1,
+				23
+			]
+		}
+	]
+}

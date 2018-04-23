@@ -1,0 +1,22 @@
+@startuml
+actor "Mud Client (Player)" as Player
+
+box "Portal" #lightblue
+participant portal.telnet as telnet
+participant "portal.player.<uuid>" as session
+
+
+Player -> telnet: connect
+telnet -> telnet: portal.telnet#createSession
+activate telnet
+telnet -> telnet: create session uuid
+telnet -> telnet: register portal.player.<uuid> service
+deactivate telnet
+session -> World: world.sessions.connect
+World -> session: return player serviceId
+
+endbox
+box "World" #lightgreen
+participant World
+endbox
+@enduml

@@ -1,7 +1,7 @@
 import * as net from 'net';
 
 import {ServiceSchema} from '../../ServiceSchema';
-import {IPortalConfig} from '../Broker';
+import {IPortalConfig} from '../Broker/Broker';
 import {SessionService} from '../SessionService';
 
 // tslint:disable
