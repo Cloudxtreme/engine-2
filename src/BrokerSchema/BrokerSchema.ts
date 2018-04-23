@@ -13,16 +13,7 @@ export interface IBrokerConfig {
 /**
  * The BrokerSchema class is used to build the Moleculer schemas for the World and Portal processes.
  */
-export class BrokerSchema extends SchemaBuilder {
-
-    /**
-     * Broker configuration.
-     * @type {{redis: string}} the redis url host to connect to. This must be the same in both the World and Portal
-     * processes
-     */
-    public readonly config: IBrokerConfig = {
-        redis: 'redis://127.0.0.1:6379',
-    };
+export abstract class BrokerSchema extends SchemaBuilder {
 
     /**
      * The name of the process. This is used to name the World and Portal processes, and thereby to set the `nodeId`
@@ -35,6 +26,15 @@ export class BrokerSchema extends SchemaBuilder {
      * is merged with any configuration passed into the broker from it's respective configuration file.
      */
     protected readonly DEFAULT_CONFIG: object;
+
+    /**
+     * Broker configuration.
+     * @type {{redis: string}} the redis url host to connect to. This must be the same in both the World and Portal
+     * processes
+     */
+    protected readonly config: IBrokerConfig = {
+        redis: 'redis://127.0.0.1:6379',
+    };
 
     private beforeStartHooks: Function[] = [];
     private afterStartHooks: Function[] = [];
