@@ -5,8 +5,8 @@
         <description>The Lucid Mud Engine, a modern framework for text based games.</description>
         <link>http://localhost:4000/</link>
         <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-        <pubDate>Mon, 23 Apr 2018 08:08:52 -0600</pubDate>
-        <lastBuildDate>Mon, 23 Apr 2018 08:08:52 -0600</lastBuildDate>
+        <pubDate>Mon, 23 Apr 2018 08:59:27 -0600</pubDate>
+        <lastBuildDate>Mon, 23 Apr 2018 08:59:27 -0600</lastBuildDate>
         <generator>Jekyll v3.6.2</generator>
         
     </channel>

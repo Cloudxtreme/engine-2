@@ -1,0 +1,17 @@
+{
+  "name": "generator-lucid-engine",
+  "version": "0.1.0",
+  "description": "Lucid Mud Engine Generator",
+  "license": "MIT",
+  "dependencies": {
+    "glob-fs": "^0.1.7",
+    "lodash": "^4.17.5",
+    "yeoman-generator": "^2.0.4"
+  },
+  "files": [
+    "app"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ]
+}

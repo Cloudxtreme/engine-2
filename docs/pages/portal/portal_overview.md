@@ -31,7 +31,7 @@ The SessionService is responsible for passing all communication to the player cl
 the client and passing it to the world.
 
 ## Connection Flow
-![connection flow](./portal_connection_flow.png)
+![portal architecture](pages/portal/portal_connection_flow.png)
 
 1. As soon as the initial connection is made, a UUID is created to represent the connection.
 1. The TelnetService then creates a new SessionService under the name of `portal.player.<uuid>`

@@ -1,11 +1,7 @@
 import * as lodash from 'lodash';
-import {ServiceBroker} from 'moleculer';
-import {SchemaBuilder} from '../SchemaBuilder';
+import {BrokerOptions, ServiceBroker} from 'moleculer';
 
-// tslint:disable-next-line
-const pkg = require('root-require')('package.json');
-// tslint:disable-next-line
-const Validator = require("fastest-validator");
+import {SchemaBuilder} from '../SchemaBuilder';
 
 export interface IBrokerConfig {
     /**
@@ -15,54 +11,61 @@ export interface IBrokerConfig {
 }
 
 /**
- * The BrokerSchema is used to create the core service brokers for the World and Portal services.
+ * The BrokerSchema class is used to build the Moleculer schemas for the World and Portal processes.
  */
 export class BrokerSchema extends SchemaBuilder {
 
+    /**
+     * Broker configuration.
+     * @type {{redis: string}} the redis url host to connect to. This must be the same in both the World and Portal
+     * processes
+     */
     public readonly config: IBrokerConfig = {
         redis: 'redis://127.0.0.1:6379',
     };
-    protected readonly SPORTAL_CONFIG: object = {
-        redis: {type: 'string', pattern: /redis:\/\/.+/},
-    };
 
-    protected readonly SERVICE_NAME: string;
+    /**
+     * The name of the process. This is used to name the World and Portal processes, and thereby to set the `nodeId`
+     * of the Moleculer broker.
+     */
+    protected readonly PROCESS_NAME: string;
+
+    /**
+     * The default configuration for the broker. This is set to whatever defaults the particular broker requires, and
+     * is merged with any configuration passed into the broker from it's respective configuration file.
+     */
     protected readonly DEFAULT_CONFIG: object;
 
     private beforeStartHooks: Function[] = [];
     private afterStartHooks: Function[] = [];
     private beforeStopHooks: Function[] = [];
-    private afterStopHooks: Function[] = [];
 
+    /**
+     * @param {{} | IBrokerConfig} config configuration to override the configuration defaults.
+     */
     constructor(config: {} | IBrokerConfig = {}) {
         super();
         this.config = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
-        const validateConfig = new Validator().compile(this.SPORTAL_CONFIG);
-        const validationResult = validateConfig(this.config);
-        if (validationResult instanceof Array) {
-            // tslint:disable-next-line:no-console
-            console.log('There was an error validating the configuration. See the documentation and correct' +
-                ' the following errors:');
-            // tslint:disable-next-line:no-console
-            console.log(validationResult);
-            process.exit(1);
-        }
-        if (process.env.NODE_ENV !== 'test') {
-            // tslint:disable-next-line:no-console
-            console.log(`Lucid Mud Engine v${pkg.version} - ${this.SERVICE_NAME} Service\n`);
-        }
     }
 
-    public schema() {
+    public schema(): BrokerOptions {
         return {
-            nodeID: `lucid-${lodash.lowerCase(this.SERVICE_NAME)}`,
+            nodeID: `lucid-${lodash.lowerCase(this.PROCESS_NAME)}`,
             logger: true,
             logLevel: 'debug',
             transporter: this.config.redis,
             created: this.runBeforeStartHooks(),
+            started: this.runAfterStartHooks(),
+            stopped: this.runBeforeStopHooks(),
         };
     }
 
+    /**
+     * Add a beforeStart hook. These hooks are called after the process service broker is created, but before it
+     * starts.
+     * @param {Function} callback
+     * @returns {BrokerSchema} returns `this`
+     */
     public beforeStart(callback: Function): BrokerSchema {
         this.beforeStartHooks.push(callback);
 
@@ -70,20 +73,9 @@ export class BrokerSchema extends SchemaBuilder {
     }
 
     /**
-     * Add an afterStart hook. These hooks are called after the Portal's service broker starts.
-     * @param {Function} callback the callback to call after the service starts
-     * @returns {Portal.Broker}
-     *
-     * @example
-     * ```typescript
-     *    portal
-     *      .afterStart(function() {
-     *          // ..do things
-     *      })
-     *      .afterStart(function() {
-     *        // .. do more things
-     *      })
-     *  ```
+     * Add an afterStart hook. These hooks are called after the process service broker is started.
+     * @param {Function} callback
+     * @returns {BrokerSchema} returns `this`
      */
     public afterStart(callback: Function): BrokerSchema {
         this.afterStartHooks.push(callback);
@@ -92,53 +84,34 @@ export class BrokerSchema extends SchemaBuilder {
     }
 
     /**
-     * Add an afterStop hook. These hooks are called after the Portal's service broker stops.
-     * @param {Function} callback the callback to call after the service starts
-     * @returns {Portal.Broker}
-     *
-     * @example
-     * ```typescript
-     *    portal
-     *      .afterStop(function() {
-     *          // ..do things
-     *      })
-     *      .afterStop(function() {
-     *        // .. do more things
-     *      })
-     *  ```
-     */
-    public afterStop(callback: Function): BrokerSchema {
-        this.afterStopHooks.push(callback);
-
-        return this;
-    }
-
-    /**
-     * Add a beforeStop hook. These hooks are called before the Portal's service broker stops.
-     * @param {Function} callback the callback to call before the service stops
-     * @returns {Portal.Broker}
-     *
-     * @example
-     * ```typescript
-     *    portal
-     *      .beforeStop(function() {
-     *          // ..do things
-     *      })
-     *      .beforeStop(function() {
-     *        // .. do more things
-     *      })
-     *  ```
+     * Add an beforeStop hook. These hooks are called before the process service broker is stopped.
+     * @param {Function} callback
+     * @returns {BrokerSchema} returns `this`
      */
     public beforeStop(callback: Function): BrokerSchema {
-        this.beforeStartHooks.push(callback);
+        this.beforeStopHooks.push(callback);
 
         return this;
     }
 
-    private runBeforeStartHooks(): Function {
-        return (broker: ServiceBroker) => {
+    private runBeforeStartHooks(): (broker: ServiceBroker) => void {
+        return (broker: ServiceBroker): void => {
             broker.logger.debug('running beforeStartHooks');
             this.beforeStartHooks.forEach((f: Function) => f(broker));
+        };
+    }
+
+    private runAfterStartHooks(): (broker: ServiceBroker) => void {
+        return (broker: ServiceBroker): void => {
+            broker.logger.debug('running afterStartHooks');
+            this.afterStartHooks.forEach((f: Function) => f(broker));
+        };
+    }
+
+    private runBeforeStopHooks(): (broker: ServiceBroker) => void {
+        return (broker: ServiceBroker): void => {
+            broker.logger.debug('running afterStartHooks');
+            this.beforeStopHooks.forEach((f: Function) => f(broker));
         };
     }
 

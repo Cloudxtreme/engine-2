@@ -15,7 +15,7 @@ export class Broker extends BrokerSchema {
     public readonly config: IWorldConfig;
     protected readonly DEFAULT_CONFIG: object = {};
 
-    get SERVICE_NAME() {
+    get PROCESS_NAME() {
         return 'World';
     }
 

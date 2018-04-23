@@ -1,0 +1,9 @@
+@startuml
+class Portal<extends BrokerSchema>
+class TelnetService<extends ServiceSchema>
+class SessionService<extends ServiceSchema>
+
+Portal --> TelnetService
+TelnetService *-- SessionService
+
+@enduml

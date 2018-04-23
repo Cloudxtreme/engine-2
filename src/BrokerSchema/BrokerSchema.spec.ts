@@ -1,7 +1,7 @@
 import {BrokerSchema} from './BrokerSchema';
 
 class TestSchema extends BrokerSchema {
-    get SERVICE_NAME() {
+    get PROCESS_NAME() {
         return 'TEST_SCHEMA';
     }
 

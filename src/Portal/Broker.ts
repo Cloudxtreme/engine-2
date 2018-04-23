@@ -19,7 +19,7 @@ export class Broker extends BrokerSchema {
         };
     }
 
-    get SERVICE_NAME() {
+    get PROCESS_NAME() {
         return 'Portal';
     }
 
