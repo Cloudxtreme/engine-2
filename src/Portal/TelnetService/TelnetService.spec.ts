@@ -16,16 +16,16 @@ describe('TelnetService', () => {
 
     beforeEach(() => {
         broker = new ServiceBroker();
-        service = new TelnetService(broker, {settings: <IPortalConfig>settings});
+        service = new TelnetService(broker, {settings: settings});
     });
 
     describe('constructor', () => {
         it('sets this.settings to the passed in configuration', () => {
-            expect(service.serviceSettings).toHaveProperty('host', 'tcp://0.0.0.0:2323');
+            expect(service.schema().settings).toHaveProperty('host', 'tcp://0.0.0.0:2323');
         });
 
         it('correctly sets the service name', () => {
-            expect(service.name).toEqual('portal.telnet');
+            expect(service.schema().name).toEqual('portal.telnet');
         });
     });
 

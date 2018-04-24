@@ -1,3 +1,4 @@
+import * as Bluebird from 'bluebird';
 import {
     Actions,
     GenericObject,
@@ -5,6 +6,7 @@ import {
     ServiceBroker,
     ServiceEvents,
     ServiceMethods,
+    ServiceSchema as MoleculerServiceSchema,
     ServiceSettingSchema,
 } from 'moleculer';
 
@@ -26,6 +28,7 @@ export abstract class ServiceSchema extends SchemaBuilder {
     protected readonly events: ServiceEvents = {};
     protected readonly methods: ServiceMethods = {};
     protected readonly logger: LoggerInstance;
+    protected readonly broker: ServiceBroker;
 
     constructor(broker: ServiceBroker, config: IServiceSchemaOptions = {}) {
         super();
@@ -43,6 +46,21 @@ export abstract class ServiceSchema extends SchemaBuilder {
             events: this.events,
             methods: this.methods,
             metadata: this.metadata,
+            created: this.created,
+            started: this.started,
+            stopped: this.stopped,
         };
+    }
+
+    protected created(): void {
+        return;
+    }
+
+    protected started(): Bluebird<void> {
+        return new Promise((resolve: Function) => resolve());
+    }
+
+    protected stopped(): Bluebird<void> {
+        return new Promise((resolve: Function) => resolve());
     }
 }
