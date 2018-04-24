@@ -1,7 +1,6 @@
 import {Service, ServiceBroker} from 'moleculer';
 import {Server} from 'net';
 
-import {IPortalConfig} from '../Broker/Broker';
 import {TelnetService} from './TelnetService';
 
 jest.mock('net');
