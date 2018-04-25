@@ -8,11 +8,13 @@
     "node": ">= 8.9.0"
   },
   "dependencies": {
-    "lucid-engine": "^0.1.0",
-    "generator-lucid-engine": "^0.1.0",
-    "dotenv": "^5.0.1"
+    "lucid-engine": "file:..",
+    "generator-lucid-engine": "file:../generator",
+    "dotenv": "^5.0.1",
+    "moleculer": "^0.12.3"
   },
   "scripts": {
+    "portal": "moleculer-runner -c ./config/portal.config.js",
     "knex": "knex --knexfile ./config/knexfile.js"
   }
 }

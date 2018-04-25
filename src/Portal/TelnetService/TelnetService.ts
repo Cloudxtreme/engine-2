@@ -39,10 +39,13 @@ export class TelnetService extends ServiceSchema {
         const sessionService = new SessionService(
             this.broker,
             {
-                settings: {
-                    uuid: uuid(),
+                metadata: {
+                    uuid: uuid.v1(),
+                    remoteAddress: socket.remoteAddress,
                 },
-                socket,
+                settings: {
+                    socket,
+                },
             },
         );
         this.broker.createService(sessionService.schema());

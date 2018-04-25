@@ -1,4 +1,4 @@
-import * as Portal from './Portal/Broker/index';
+import * as Portal from './Portal';
 import * as World from './World';
 
 export {World, Portal};

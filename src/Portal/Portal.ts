@@ -22,17 +22,21 @@ export interface IPortalConfig {
  */
 export class Portal extends BrokerSchema {
 
-    protected readonly DEFAULT_CONFIG: IPortalConfig = {
-        host: 'tcp://0.0.0.0:2323',
-    };
+    /**
+     * Must define a getter here, as the constructor super() cannot reference the child constant.
+     */
+    get DEFAULT_CONFIG(): IPortalConfig {
+        return {
+            host: 'tcp://0.0.0.0:2323',
+        };
+    }
+
     protected readonly PROCESS_NAME: string = 'Portal';
     protected readonly config: IBrokerConfig & IPortalConfig;
 
     constructor(config: {} | IBrokerConfig & IPortalConfig = {}) {
         super(config);
-        this.beforeStart((broker: ServiceBroker) => (
-            broker.createService(new TelnetService(broker, {settings: this.config}).schema())
-        ));
+        this.beforeStart(this.createTelnetService());
         if (process.env.NODE_ENV !== 'test') {
             // tslint:disable
             console.log("Config:");
@@ -43,5 +47,17 @@ export class Portal extends BrokerSchema {
             console.log("---\n")
             //tslint:enable
         }
+    }
+
+    /**
+     * Closure allows hook to have access to configuration
+     * @returns {Function} beforeStart hook callback
+     */
+    private createTelnetService(): Function {
+        const config = this.config;
+
+        return (broker: ServiceBroker) => {
+            return broker.createService(new TelnetService(broker, {settings: config}).schema());
+        };
     }
 }
