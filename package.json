@@ -11,10 +11,10 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testMatch": [
-      "**/*.spec.ts"
+      "**/*.spec.ts",
+      "*.spec.ts"
     ],
     "rootDir": "src",
-    "main": "./build/src/index.js",
     "moduleFileExtensions": [
       "ts",
       "js"
@@ -58,8 +58,8 @@
   "scripts": {
     "test": "jest",
     "watch": "tsc -w -p tsconfig.release.json",
-    "build": "tsc -p tsconfig.release.json",
-    "lint": "./node_modules/tslint/bin/tslint .",
+    "build": "jest && ./node_modules/tslint/bin/tslint --project ./ && rm -rf build/** && tsc -p tsconfig.release.json && BUNDLE_GEMFILE=./docs/Gemfile bundle exec jekyll build -s ./docs -d ./docs/_site",
+    "lint": "./node_modules/tslint/bin/tslint --project ./",
     "validate": "npm ls"
   },
   "pre-commit": [

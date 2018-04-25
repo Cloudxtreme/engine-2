@@ -12,6 +12,9 @@
       "**/*.spec.ts"
     ]
   },
+  "files": {
+
+  },
   "rules": {
     "mocha-no-side-effect-code": false,
     "missing-jsdoc": false,
