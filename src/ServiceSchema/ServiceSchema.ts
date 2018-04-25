@@ -1,70 +1,67 @@
+import * as Bluebird from 'bluebird';
 import {
-    Actions, Context,
+    Actions,
+    GenericObject,
     LoggerInstance,
     ServiceBroker,
+    ServiceEvents,
     ServiceMethods,
     ServiceSchema as MoleculerServiceSchema,
+    ServiceSettingSchema,
 } from 'moleculer';
+
 import {SchemaBuilder} from '../SchemaBuilder';
 
 export interface IServiceSchemaOptions {
-    settings?: object;
-    metadata?: object;
-    actions?: Actions;
-    methods?: ServiceMethods;
+    metadata?: GenericObject;
+    settings?: ServiceSettingSchema;
 }
 
 /**
- * ServiceSchema is a SchemaBuilder specific to building for individual services.
+ * The ServiceSchema class acts as as a base class for services that are registered by the Portal and World brokers.
  */
 export abstract class ServiceSchema extends SchemaBuilder {
-    public broker: ServiceBroker;
-    public serviceSettings: object;
-    public serviceActions: Actions;
-    public serviceMetadata: object;
-    public serviceMethods: ServiceMethods;
-    public name: string;
-    public logger: LoggerInstance;
-    public options: IServiceSchemaOptions;
+    protected readonly name: string;
+    protected settings: ServiceSettingSchema = {};
+    protected metadata: GenericObject = {};
+    protected readonly actions: Actions = {};
+    protected readonly events: ServiceEvents = {};
+    protected readonly methods: ServiceMethods = {};
+    protected logger: LoggerInstance;
+    protected readonly broker: ServiceBroker;
 
-    get actions(): Actions {
-        return {};
-    }
-
-    get metadata(): object {
-        return {};
-    }
-
-    get settings(): object {
-        return {};
-    }
-
-    get methods(): ServiceMethods {
-        return {};
-    }
-
-    public constructor(broker: ServiceBroker, options: IServiceSchemaOptions = {}) {
+    constructor(broker: ServiceBroker, config: IServiceSchemaOptions = {}) {
         super();
-        this.options = options;
+        const {settings, metadata} = config;
+        this.logger = broker.logger;
         this.broker = broker;
-        this.serviceActions = {...options.actions, ...this.actions};
-        this.serviceMetadata = {...options.metadata, ...this.metadata};
-        this.serviceSettings = {...options.settings, ...this.settings};
-        this.serviceMethods = {...options.methods, ...this.methods};
-    }
-
-    public  created(): void {
-        return;
+        this.settings = {...settings, ...this.settings};
+        this.metadata = {...metadata, ...this.metadata};
     }
 
     public schema(): MoleculerServiceSchema {
         return {
+            actions: this.actions,
+            settings: this.settings,
             name: this.name,
-            actions: this.serviceActions,
-            settings: this.serviceSettings,
-            metadata: this.serviceMetadata,
-            methods: this.serviceMethods,
+            events: this.events,
+            methods: this.methods,
+            metadata: this.metadata,
             created: this.created,
+            started: this.started,
+            stopped: this.stopped,
         };
+    }
+
+    protected created(): void {
+        return;
+    }
+
+    protected started(): Bluebird<void> {
+        return new Promise((resolve: Function) => resolve());
+    }
+
+    protected stopped(): Bluebird<void> {
+        return new Promise((resolve: Function) => resolve());
     }
 }

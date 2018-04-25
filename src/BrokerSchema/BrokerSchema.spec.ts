@@ -39,8 +39,12 @@ describe('BrokerSchema', () => {
     describe('#schema', () => {
         it('it assigns runBeforeStartHooks to .created', () => {
             builder.runBeforeStartHooks = jest.fn();
+            builder.runAfterStartHooks = jest.fn();
+            builder.runBeforeStopHooks = jest.fn();
             const schema = builder.schema();
             expect(schema.created).toEqual(builder.runBeforeStartHooks());
+            expect(schema.started).toEqual(builder.runBeforeStartHooks());
+            expect(schema.stopped).toEqual(builder.runBeforeStopHooks());
         });
     });
 });

@@ -35,5 +35,4 @@ the client and passing it to the world.
 
 1. As soon as the initial connection is made, a UUID is created to represent the connection.
 1. The TelnetService then creates a new SessionService under the name of `portal.player.<uuid>`
-1. The SessionService informs the World that a new connection has been made, after which the world creates a 
-   corresponding endpoint for the SessionService to communicate with.
+1. The SessionService broadcasts the 'player.connected' event with the player connection information.

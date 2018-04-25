@@ -1,4 +1,9 @@
-const { Broker } = require("../../build/src/Portal");
-const listener = new Broker();
+const { Portal } = require("../../build/src/Portal");
 
+const listener = new Portal({
+    // Your configuration settings here.
+});
+
+
+// This line is required, it exports the Broker schema used by Moleculer Runner.
 module.exports = listener.schema();

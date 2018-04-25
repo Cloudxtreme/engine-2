@@ -69,10 +69,11 @@ module.exports = class extends Generator {
         this.fs.copyTpl(
             this.templatePath('config/config.js'),
             this.destinationPath('config/config.js')
-        )
-    }
+        );
+        this.fs.copyTpl(
+            this.templatePath('config/portal.config.js'),
+            this.destinationPath('config/portal.config.js')
+        );
 
-    migrations() {
-        this.fs.copy(this.templatePath("migrations"), "migrations")
     }
 };

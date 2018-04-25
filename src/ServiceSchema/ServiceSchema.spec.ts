@@ -1,4 +1,11 @@
-import {ServiceBroker} from 'moleculer';
+import {
+    Actions,
+    GenericObject,
+    ServiceBroker,
+    ServiceMethods,
+    ServiceSettingSchema,
+} from 'moleculer';
+
 import {ServiceSchema} from './ServiceSchema';
 
 function testAction() {
@@ -17,29 +24,21 @@ describe('ServiceSchema', () => {
     describe('getters', () => {
 
         class TestService extends ServiceSchema {
-            get actions() {
-                return {
-                    testAction,
-                };
-            }
+            protected readonly actions: Actions = {
+                testAction,
+            };
 
-            get methods() {
-                return {
-                    testMethod,
-                };
-            }
+            protected readonly methods: ServiceMethods = {
+                testMethod,
+            };
 
-            get settings() {
-                return {
-                    someSetting: true,
-                };
-            }
+            protected readonly settings: ServiceSettingSchema = {
+                someSetting: 'set',
+            };
 
-            get someMetadata() {
-                return {
-                    someMetadata: true,
-                };
-            }
+            protected readonly metadata: GenericObject = {
+                someMetadata: 'set',
+            };
         }
 
         beforeEach(() => {
@@ -47,25 +46,22 @@ describe('ServiceSchema', () => {
             service = new TestService(broker);
         });
 
-        it('merges the serviceActions object', () => {
-            expect(service.serviceActions.testAction).toEqual(testAction);
+        it('merges the actions object', () => {
+            expect(service.schema().actions.testAction).toEqual(testAction);
         });
 
-        it('merges the serviceMethods object', () => {
-            expect(service.serviceMethods.testMethod).toEqual(testMethod);
+        it('merges the methods object', () => {
+            expect(service.schema().methods.testMethod).toEqual(testMethod);
         });
 
-        it('merges the serviceSettings object', () => {
-            expect(service.serviceSettings.someSetting).toEqual(true);
+        it('merges the settings object', () => {
+            expect(service.schema().settings).toEqual({someSetting: 'set'});
         });
 
-        it('merges the serviceMetadata object', () => {
-            expect(service.someMetadata.someMetadata).toEqual(true);
+        it('merges the settings object', () => {
+            expect(service.schema().metadata).toEqual({someMetadata: 'set'});
         });
 
-        it('sets the broker', () => {
-            expect(service.broker).toEqual(broker);
-        });
     });
 
     describe('options', () => {
@@ -75,12 +71,6 @@ describe('ServiceSchema', () => {
         beforeEach(() => {
             broker = new ServiceBroker();
             service = new TestService(broker, {
-                actions: {
-                    testAction,
-                },
-                methods: {
-                    testMethod,
-                },
                 settings: {
                     someSetting: true,
                 },
@@ -88,59 +78,14 @@ describe('ServiceSchema', () => {
                     someMetadata: true,
                 },
             });
-        });
-
-        it('merges the options.actions', () => {
-            expect(service.serviceActions.testAction).toEqual(testAction);
-        });
-
-        it('merges the options.methods', () => {
-            expect(service.serviceMethods.testMethod).toEqual(testMethod);
         });
 
         it('merges the options.settings object', () => {
-            expect(service.serviceSettings.someSetting).toEqual(true);
+            expect(service.schema().settings).toEqual({someSetting: true});
         });
 
         it('merges the options.metadata object', () => {
-            expect(service.serviceMetadata.someMetadata).toEqual(true);
-        });
-    });
-
-    describe('schema', () => {
-        class TestService extends ServiceSchema {
-            get name() {
-                return 'testService';
-            }
-        }
-
-        beforeEach(() => {
-            broker = new ServiceBroker();
-            service = new TestService(broker, {
-                actions: {
-                    testAction,
-                },
-                methods: {
-                    testMethod,
-                },
-                settings: {
-                    someSetting: true,
-                },
-                metadata: {
-                    someMetadata: true,
-                },
-            });
-        });
-    });
-
-    it('returns a valid service schema', () => {
-        expect(service.schema()).toEqual({
-            name: service.name,
-            actions: service.serviceActions,
-            settings: service.serviceSettings,
-            metadata: service.serviceMetadata,
-            methods: service.serviceMethods,
-            created: service.created,
+            expect(service.schema().metadata).toEqual({someMetadata: true});
         });
     });
 });

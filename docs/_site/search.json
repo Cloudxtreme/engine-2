@@ -28,6 +28,17 @@
 
 
 {
+"title": "Lucid Mud Engine Portal - Configuration",
+"tags": "portalconfiguration",
+"keywords": "luicid mud engine, mud, mux, moo",
+"url": "portal_configuration.html",
+"summary": "Documentation for the Lucid Mud Engine"
+}
+,
+
+
+
+{
 "title": "Lucid Mud Engine Portal - Overview",
 "tags": "portal",
 "keywords": "luicid mud engine, mud, mux, moo",
@@ -72,28 +83,6 @@
 
 
 
-
-
-
-
-{
-"title": "",
-"tags": "",
-"keywords": "",
-"url": "assetscssstyle.css",
-"summary": ""
-}
-,
-
-
-
-{
-"title": "",
-"tags": "",
-"keywords": "",
-"url": "pagesportalportal_confiration.html",
-"summary": ""
-}
 
 
 

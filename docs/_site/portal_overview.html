@@ -41,7 +41,7 @@
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<link rel="alternate" type="application/rss+xml" title="documentation-theme-jekyll" href="http://localhost:4000/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="" href="http://lucidmud.com/feed.xml">
 
     <script>
         $(document).ready(function() {
@@ -270,7 +270,7 @@ the World input back to the Player. While it wont be typically necessary to alte
 helpful to understand the Portal’s architecture.</p>
 
 <h2 id="portal-architecture">Portal Architecture</h2>
-<p><img src="/pages/portal/portal_architecture.png" alt="portal architecture" /></p>
+<p><img src="./portal_architecture.png" alt="portal architecture" /></p>
 
 <p>The Portal is fairly simple, it is made up of the Broker (the Portal itself) and two 
 <a href="http://moleculer.services/0.12/docs/service.html">Services</a>.</p>
@@ -294,8 +294,7 @@ the client and passing it to the world.</p>
 <ol>
   <li>As soon as the initial connection is made, a UUID is created to represent the connection.</li>
   <li>The TelnetService then creates a new SessionService under the name of <code class="highlighter-rouge">portal.player.&lt;uuid&gt;</code></li>
-  <li>The SessionService informs the World that a new connection has been made, after which the world creates a 
-corresponding endpoint for the SessionService to communicate with.</li>
+  <li>The SessionService broadcasts the ‘player.connected’ event with the player connection information.</li>
 </ol>
 
 
@@ -336,7 +335,7 @@ corresponding endpoint for the SessionService to communicate with.</li>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2018 Jarod Reid. All rights reserved. <br />
- Site last generated: Apr 23, 2018 <br />
+ Site last generated: Apr 25, 2018 <br />
                 </div>
             </div>
 </footer>

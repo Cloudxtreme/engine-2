@@ -12,11 +12,6 @@ activate telnet
 telnet -> telnet: create session uuid
 telnet -> telnet: register portal.player.<uuid> service
 deactivate telnet
-session -> World: world.sessions.connect
-World -> session: return player serviceId
-
-endbox
-box "World" #lightgreen
-participant World
+session -> session: broadcast player.connected
 endbox
 @enduml
