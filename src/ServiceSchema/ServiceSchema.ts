@@ -27,13 +27,14 @@ export abstract class ServiceSchema extends SchemaBuilder {
     protected readonly actions: Actions = {};
     protected readonly events: ServiceEvents = {};
     protected readonly methods: ServiceMethods = {};
-    protected readonly logger: LoggerInstance;
+    protected logger: LoggerInstance;
     protected readonly broker: ServiceBroker;
 
     constructor(broker: ServiceBroker, config: IServiceSchemaOptions = {}) {
         super();
         const {settings, metadata} = config;
         this.logger = broker.logger;
+        this.broker = broker;
         this.settings = {...settings, ...this.settings};
         this.metadata = {...metadata, ...this.metadata};
     }

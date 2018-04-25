@@ -20,7 +20,7 @@ interface ISessionServiceSettings extends ServiceSettingSchema {
     socket: Socket;
 }
 
-interface ISessionServiceOptions extends IServiceSchemaOptions {
+export interface ISessionServiceOptions extends IServiceSchemaOptions {
     metadata: ISessionServiceMetadata;
     settings: ISessionServiceSettings;
 }
