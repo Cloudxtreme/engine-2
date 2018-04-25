@@ -11,18 +11,13 @@ import {
     ServiceSchema,
 } from '../../ServiceSchema';
 
-interface ISessionServiceMetadata extends GenericObject {
+export interface ISessionServiceMetadata extends GenericObject {
     uuid: string;
     remoteAddress: string;
 }
 
-interface ISessionServiceSettings extends ServiceSettingSchema {
-    socket: Socket;
-}
-
 export interface ISessionServiceOptions extends IServiceSchemaOptions {
     metadata: ISessionServiceMetadata;
-    settings: ISessionServiceSettings;
 }
 
 /**
@@ -32,13 +27,28 @@ export interface ISessionServiceOptions extends IServiceSchemaOptions {
 export class SessionService extends ServiceSchema {
     private socket: Socket;
 
-    constructor(broker: ServiceBroker, options: ISessionServiceOptions) {
+    get name() {
+        return `portal.player.${this.metadata.uuid}`;
+    }
+
+    constructor(broker: ServiceBroker, socket: Socket, options: ISessionServiceOptions) {
         super(broker, options);
+        this.socket = socket;
+    }
+
+    public schema() {
+        const schema = super.schema();
+
+        return {...schema, ...{created: this.created()}};
     }
 
     protected created() {
-        this.socket = this.settings.socket;
-        this.logger.debug(`connected from ${this.metadata.remoteAddress}`);
-        this.broker.broadcast('player.connected', this.metadata);
+        const socket = this.socket;
+
+        return function () {
+            this.socket = socket;
+            this.logger.debug(`connected from ${this.metadata.remoteAddress}`);
+            this.broker.broadcast('player.connected', this.metadata);
+        };
     }
 }

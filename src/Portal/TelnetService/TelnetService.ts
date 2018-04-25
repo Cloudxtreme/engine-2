@@ -38,13 +38,11 @@ export class TelnetService extends ServiceSchema {
     private createSession(socket: net.Socket) {
         const sessionService = new SessionService(
             this.broker,
+            socket,
             {
                 metadata: {
                     uuid: uuid.v1(),
                     remoteAddress: socket.remoteAddress,
-                },
-                settings: {
-                    socket,
                 },
             },
         );

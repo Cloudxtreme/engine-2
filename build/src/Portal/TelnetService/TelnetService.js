@@ -26,13 +26,10 @@ class TelnetService extends ServiceSchema_1.ServiceSchema {
         this.logger.info(`listening on ${this.settings.host}`);
     }
     createSession(socket) {
-        const sessionService = new SessionService_1.SessionService(this.broker, {
+        const sessionService = new SessionService_1.SessionService(this.broker, socket, {
             metadata: {
                 uuid: uuid.v1(),
                 remoteAddress: socket.remoteAddress,
-            },
-            settings: {
-                socket,
             },
         });
         this.broker.createService(sessionService.schema());
