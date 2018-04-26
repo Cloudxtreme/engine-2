@@ -41,7 +41,7 @@
 <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<link rel="alternate" type="application/rss+xml" title="" href="http://lucidmud.com/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="engine" href="http://localhost:4000/feed.xml">
 
     <script>
         $(document).ready(function() {
@@ -270,7 +270,7 @@ the World input back to the Player. While it wont be typically necessary to alte
 helpful to understand the Portal’s architecture.</p>
 
 <h2 id="portal-architecture">Portal Architecture</h2>
-<p><img src="portal_architecture.png" alt="portal architecture" /></p>
+<p><img src="/pages/developer_guide/portal/portal_architecture.png" alt="portal architecture" /></p>
 
 <p>The Portal is fairly simple, it is made up of the Broker (the Portal itself) and two 
 <a href="http://moleculer.services/0.12/docs/service.html">Services</a>.</p>
@@ -289,7 +289,7 @@ occurred.</p>
 the client and passing it to the world.</p>
 
 <h2 id="connection-flow">Connection Flow</h2>
-<p><img src="./portal_connection_flow.png" alt="portal architecture" /></p>
+<p><img src="/pages/developer_guide/portal/portal_connection_flow.png" alt="portal architecture" /></p>
 
 <ol>
   <li>As soon as the initial connection is made, a UUID is created to represent the connection.</li>
