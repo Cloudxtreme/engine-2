@@ -1,3 +1,4 @@
-import * as Portal from './Portal';
+import {Portal} from './Portal';
+import {World} from './World';
 
-export {Portal};
+export {Portal, World};

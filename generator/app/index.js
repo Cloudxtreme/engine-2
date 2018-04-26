@@ -74,6 +74,9 @@ module.exports = class extends Generator {
             this.templatePath('config/portal.config.js'),
             this.destinationPath('config/portal.config.js')
         );
-
+        this.fs.copyTpl(
+            this.templatePath('config/world.config.js'),
+            this.destinationPath('config/world.config.js')
+        );
     }
 };

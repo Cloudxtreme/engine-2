@@ -55,6 +55,7 @@
     "uuid": "^3.2.1",
     "validate-typescript": "^2.0.1"
   },
+  "main": "./build/src/index.js",
   "scripts": {
     "test": "jest",
     "watch": "tsc -w -p tsconfig.release.json",

@@ -1,4 +1,5 @@
-const { Portal } = require("lucid-engine/Portal");
+require('./config');
+const { Portal } = require("lucid-engine");
 
 const listener = new Portal({
     // Your configuration settings here.
