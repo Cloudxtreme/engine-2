@@ -45,7 +45,7 @@ export class SessionService extends ServiceSchema {
     protected created() {
         const socket = this.socket;
 
-        return function () {
+        return  () => {
             this.socket = socket;
             this.logger.debug(`connected from ${this.metadata.remoteAddress}`);
             this.broker.broadcast('player.connected', this.metadata);

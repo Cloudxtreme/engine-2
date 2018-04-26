@@ -12,20 +12,22 @@ describe('created', () => {
         socket = new net.Socket();
         socket.remoteAddress = 'testAddress';
         broker = new ServiceBroker();
-        session = new SessionService(broker, {
-            settings: {
-                socket: socket,
-            },
+        session = new SessionService(broker, socket, {
             metadata: {
                 uuid: 'testUUID',
                 remoteAddress: socket.remoteAddress,
             },
         });
+        session.logger = {
+            debug() {
+                return;
+            },
+        };
     });
 
     it('broadcasts player.connected on the broker', () => {
         broker.broadcast = jest.fn();
-        session.created();
+        session.schema().created();
         expect(broker.broadcast).toHaveBeenCalledWith('player.connected', session.schema().metadata);
     });
 });
