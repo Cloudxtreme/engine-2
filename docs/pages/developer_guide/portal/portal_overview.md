@@ -1,5 +1,5 @@
 ---
-title: "Lucid Mud Engine Portal - Overview"
+title: "Lucid Mud Engine Developer Guide - The Portal Process"
 keywords: luicid mud engine, mud, mux, moo
 tags: [portal]
 sidebar: mydoc_sidebar
@@ -12,7 +12,7 @@ the World input back to the Player. While it wont be typically necessary to alte
 helpful to understand the Portal's architecture.
 
 ## Portal Architecture
-![portal architecture](./portal_architecture.png)
+![portal architecture](portal_architecture.png)
 
 The Portal is fairly simple, it is made up of the Broker (the Portal itself) and two 
 [Services](http://moleculer.services/0.12/docs/service.html).
@@ -31,7 +31,7 @@ The SessionService is responsible for passing all communication to the player cl
 the client and passing it to the world.
 
 ## Connection Flow
-![portal architecture](pages/portal/portal_connection_flow.png)
+![portal architecture](./portal_connection_flow.png)
 
 1. As soon as the initial connection is made, a UUID is created to represent the connection.
 1. The TelnetService then creates a new SessionService under the name of `portal.player.<uuid>`

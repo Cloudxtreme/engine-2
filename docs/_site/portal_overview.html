@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Documentation for the Lucid Mud Engine">
 <meta name="keywords" content="portal,  luicid mud engine, mud, mux, moo">
-<title>Lucid Mud Engine Portal - Overview | Lucid Mud Engine</title>
+<title>Lucid Mud Engine Developer Guide - The Portal Process | Lucid Mud Engine</title>
 <link rel="stylesheet" href="css/syntax.css">
 
 <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -126,7 +126,7 @@
 
 
 
-  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:therealfugu@gmail.com?subject=Lucid Mud Engine feedback&body=I have some feedback about the Lucid Mud Engine Portal - Overview page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Feedback</a>
+  <a class="email" title="Submit feedback" href="#" onclick="javascript:window.location='mailto:therealfugu@gmail.com?subject=Lucid Mud Engine feedback&body=I have some feedback about the Lucid Mud Engine Developer Guide - The Portal Process page: ' + window.location.href;"><i class="fa fa-envelope-o"></i> Feedback</a>
 
 </li>
 
@@ -144,7 +144,7 @@
                                 searchInput: document.getElementById('search-input'),
                                 resultsContainer: document.getElementById('results-container'),
                                 dataSource: 'search.json',
-                                searchResultTemplate: '<li><a href="{url}" title="Lucid Mud Engine Portal - Overview">{title}</a></li>',
+                                searchResultTemplate: '<li><a href="{url}" title="Lucid Mud Engine Developer Guide - The Portal Process">{title}</a></li>',
                     noResultsText: 'No results found.',
                             limit: 10,
                             fuzzy: true,
@@ -191,12 +191,12 @@
       
   
   <li>
-      <a href="#">Portal</a>
+      <a href="#">Developer Guide</a>
       <ul>
           
           
           
-          <li class="active"><a href="portal_overview.html">Overview</a></li>
+          <li class="active"><a href="portal_overview.html">The Portal</a></li>
           
           
           
@@ -223,7 +223,7 @@
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
             <div class="post-header">
-   <h1 class="post-title-main">Lucid Mud Engine Portal - Overview</h1>
+   <h1 class="post-title-main">Lucid Mud Engine Developer Guide - The Portal Process</h1>
 </div>
 
 
@@ -270,7 +270,7 @@ the World input back to the Player. While it wont be typically necessary to alte
 helpful to understand the Portal’s architecture.</p>
 
 <h2 id="portal-architecture">Portal Architecture</h2>
-<p><img src="./portal_architecture.png" alt="portal architecture" /></p>
+<p><img src="portal_architecture.png" alt="portal architecture" /></p>
 
 <p>The Portal is fairly simple, it is made up of the Broker (the Portal itself) and two 
 <a href="http://moleculer.services/0.12/docs/service.html">Services</a>.</p>
@@ -289,7 +289,7 @@ occurred.</p>
 the client and passing it to the world.</p>
 
 <h2 id="connection-flow">Connection Flow</h2>
-<p><img src="pages/portal/portal_connection_flow.png" alt="portal architecture" /></p>
+<p><img src="./portal_connection_flow.png" alt="portal architecture" /></p>
 
 <ol>
   <li>As soon as the initial connection is made, a UUID is created to represent the connection.</li>
@@ -335,7 +335,7 @@ the client and passing it to the world.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2018 Jarod Reid. All rights reserved. <br />
- Site last generated: Apr 25, 2018 <br />
+ Site last generated: Apr 26, 2018 <br />
                 </div>
             </div>
 </footer>

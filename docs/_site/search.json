@@ -28,10 +28,10 @@
 
 
 {
-"title": "Lucid Mud Engine Portal - Configuration",
-"tags": "portalconfiguration",
+"title": "Lucid Mud Engine Developer Guide - Object Types",
+"tags": "world",
 "keywords": "luicid mud engine, mud, mux, moo",
-"url": "portal_configuration.html",
+"url": "world_overview.html",
 "summary": "Documentation for the Lucid Mud Engine"
 }
 ,
@@ -39,7 +39,7 @@
 
 
 {
-"title": "Lucid Mud Engine Portal - Overview",
+"title": "Lucid Mud Engine Developer Guide - The Portal Process",
 "tags": "portal",
 "keywords": "luicid mud engine, mud, mux, moo",
 "url": "portal_overview.html",
@@ -55,6 +55,14 @@
 
 
 
+{
+"title": "Lucid Mud Engine Developer Guide - World State",
+"tags": "world",
+"keywords": "luicid mud engine, mud, mux, moo",
+"url": "world_overview.html",
+"summary": "Documentation for the Lucid Mud Engine"
+}
+,
 
 
 
@@ -83,6 +91,20 @@
 
 
 
+
+
+
+
+
+
+
+{
+"title": "Lucid Mud Engine Developer Guide - The World Process",
+"tags": "world",
+"keywords": "luicid mud engine, mud, mux, moo",
+"url": "world_overview.html",
+"summary": "Documentation for the Lucid Mud Engine"
+}
 
 
 

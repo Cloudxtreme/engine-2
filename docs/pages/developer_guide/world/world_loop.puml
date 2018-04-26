@@ -1,0 +1,34 @@
+@startuml
+participant "world.loop.run<event>" as wloop
+participant "world.state" as state
+participant "world.redis" as redis
+participant "world.mongo" as mongo
+
+wloop -> redis: check for queued actions
+activate redis
+activate wloop
+redis -> wloop: return queued actions
+deactivate redis
+alt queued actions exists
+wloop -> state: load current state
+activate state
+state -> redis: request state document from redis
+activate redis
+redis -> state: return state document
+deactivate redis
+state -> wloop: return current state
+deactivate state
+loop each item in queue
+wloop -> wloop: process next action with current or new state
+end
+wloop -> state: persist new world state
+activate state
+state -> redis: write state to redis
+wloop -> wloop: fire world.loop.run<event>
+state -> mongo: persist snapshot (async)
+deactivate state
+else
+wloop -> wloop: fire world.loop.run<event>
+end
+deactivate wloop
+@enduml

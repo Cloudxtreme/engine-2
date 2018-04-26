@@ -22,7 +22,7 @@
   
   
   <url>
-    <loc>http://lucidmud.com/portal_configuration.html</loc>
+    <loc>http://lucidmud.com/world_overview.html</loc>
   </url>
   
   
@@ -39,6 +39,9 @@
   
   
   
+  <url>
+    <loc>http://lucidmud.com/world_overview.html</loc>
+  </url>
   
   
   
@@ -68,6 +71,15 @@
   
   
   
+  
+  
+  
+  
+  
+  
+  <url>
+    <loc>http://lucidmud.com/world_overview.html</loc>
+  </url>
   
   
 </urlset>

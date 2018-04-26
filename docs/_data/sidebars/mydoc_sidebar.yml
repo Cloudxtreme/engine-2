@@ -11,10 +11,10 @@ entries:
         - title: Introduction
           output: web
           url: /introduction.html
-    - title: Portal
+    - title: Developer Guide
       output: web
       folderitems:
-        - title: Overview
+        - title: The Portal
           output: web
           url: /portal_overview.html
 
