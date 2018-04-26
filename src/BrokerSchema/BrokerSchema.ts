@@ -1,5 +1,5 @@
 import * as lodash from 'lodash';
-import {BrokerOptions, ServiceBroker} from 'moleculer';
+import {BrokerOptions, LoggerInstance, ServiceBroker} from 'moleculer';
 
 import {SchemaBuilder} from '../SchemaBuilder';
 
@@ -35,6 +35,7 @@ export abstract class BrokerSchema extends SchemaBuilder {
     protected readonly config: IBrokerConfig = {
         redis: 'redis://127.0.0.1:6379',
     };
+    protected readonly logger: LoggerInstance;
 
     private beforeStartHooks: Function[] = [];
     private afterStartHooks: Function[] = [];
@@ -105,24 +106,27 @@ export abstract class BrokerSchema extends SchemaBuilder {
     private runBeforeStartHooks(): (broker: ServiceBroker) => void {
         return (broker: ServiceBroker): void => {
             broker.logger.debug('running beforeStartHooks');
-            this.beforeStartHooks.forEach((f: Function) => f(broker));
+            this.beforeStartHooks.forEach((f: Function) => {
+                return f.bind(this)(broker);
+            });
         };
     }
 
     private runAfterStartHooks(): (broker: ServiceBroker) => void {
         return (broker: ServiceBroker): void => {
             broker.logger.debug('running afterStartHooks');
-            this.afterStartHooks.forEach((f: Function) => f(broker));
+            this.afterStartHooks.forEach((f: Function) => {
+                return f.bind(this)(broker);
+            });
         };
     }
 
     private runBeforeStopHooks(): (broker: ServiceBroker) => void {
         return (broker: ServiceBroker): void => {
             broker.logger.debug('running afterStartHooks');
-            this.beforeStopHooks.forEach((f: Function) => f(broker));
+            this.beforeStopHooks.forEach((f: Function) => {
+                return f.bind(this)(broker);
+            });
         };
     }
-
-
-
 }

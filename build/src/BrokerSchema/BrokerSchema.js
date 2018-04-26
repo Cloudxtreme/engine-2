@@ -43,19 +43,25 @@ class BrokerSchema extends SchemaBuilder_1.SchemaBuilder {
     runBeforeStartHooks() {
         return (broker) => {
             broker.logger.debug('running beforeStartHooks');
-            this.beforeStartHooks.forEach((f) => f(broker));
+            this.beforeStartHooks.forEach((f) => {
+                return f.bind(this)(broker);
+            });
         };
     }
     runAfterStartHooks() {
         return (broker) => {
             broker.logger.debug('running afterStartHooks');
-            this.afterStartHooks.forEach((f) => f(broker));
+            this.afterStartHooks.forEach((f) => {
+                return f.bind(this)(broker);
+            });
         };
     }
     runBeforeStopHooks() {
         return (broker) => {
             broker.logger.debug('running afterStartHooks');
-            this.beforeStopHooks.forEach((f) => f(broker));
+            this.beforeStopHooks.forEach((f) => {
+                return f.bind(this)(broker);
+            });
         };
     }
 }
