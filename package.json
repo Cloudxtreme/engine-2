@@ -61,6 +61,7 @@
     "watch": "tsc -w -p tsconfig.release.json",
     "build": "jest && ./node_modules/tslint/bin/tslint --project ./ && rm -rf build/** && tsc -p tsconfig.release.json && BUNDLE_GEMFILE=./docs/Gemfile bundle exec jekyll build -s ./docs -d ./docs/_site",
     "lint": "./node_modules/tslint/bin/tslint --project ./",
+    "doc": "BUNDLE_GEMFILE=./docs/Gemfile bundle exec jekyll build -s ./docs -d ./docs/_site",
     "validate": "npm ls"
   },
   "pre-commit": [

@@ -10,37 +10,25 @@
   
   
   <url>
-    <loc>http://localhost:4000/index.html</loc>
+    <loc>http://lucidmud.com/index.html</loc>
   </url>
   
   
   
   <url>
-    <loc>http://localhost:4000/introduction.html</loc>
+    <loc>http://lucidmud.com/introduction.html</loc>
   </url>
   
   
   
   <url>
-    <loc>http://localhost:4000/world_overview.html</loc>
+    <loc>http://lucidmud.com/world_overview.html</loc>
   </url>
   
   
   
   <url>
-    <loc>http://localhost:4000/portal_overview.html</loc>
-  </url>
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  <url>
-    <loc>http://localhost:4000/world_overview.html</loc>
+    <loc>http://lucidmud.com/portal_overview.html</loc>
   </url>
   
   
@@ -51,40 +39,46 @@
   
   
   
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   <url>
-    <loc>http://localhost:4000/world_overview.html</loc>
+    <loc>http://lucidmud.com/world_overview.html</loc>
   </url>
   
   
   
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <url>
-    <loc>http://localhost:4000/assets/css/style.css</loc>
+    <loc>http://lucidmud.com/world_overview.html</loc>
   </url>
   
   
