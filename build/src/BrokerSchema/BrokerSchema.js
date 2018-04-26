@@ -5,14 +5,17 @@ const SchemaBuilder_1 = require("../SchemaBuilder");
 class BrokerSchema extends SchemaBuilder_1.SchemaBuilder {
     constructor(config = {}) {
         super();
-        this.config = {
+        this.CONFIG = {
             redis: 'redis://127.0.0.1:6379',
         };
         this.beforeStartHooks = [];
         this.afterStartHooks = [];
         this.beforeStopHooks = [];
-        this.config = Object.assign({}, this.DEFAULT_CONFIG, this.config, config);
+        this.CONFIG = Object.assign({}, this.DEFAULT_CONFIG, this.config, config);
         this.initialize();
+    }
+    get config() {
+        return this.CONFIG;
     }
     schema() {
         return {

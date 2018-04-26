@@ -32,9 +32,14 @@ export abstract class BrokerSchema extends SchemaBuilder {
      * @type {{redis: string}} the redis url host to connect to. This must be the same in both the World and Portal
      * processes
      */
-    protected readonly config: IBrokerConfig = {
+    protected readonly CONFIG: IBrokerConfig = {
         redis: 'redis://127.0.0.1:6379',
     };
+
+    get config(): IBrokerConfig {
+        return this.CONFIG;
+    }
+
     protected readonly logger: LoggerInstance;
 
     private beforeStartHooks: Function[] = [];
@@ -46,7 +51,7 @@ export abstract class BrokerSchema extends SchemaBuilder {
      */
     constructor(config: {} | IBrokerConfig = {}) {
         super();
-        this.config = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
+        this.CONFIG = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
         this.initialize();
     }
 
