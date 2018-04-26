@@ -9,6 +9,13 @@ class TestSchema extends BrokerSchema {
         return {};
     }
 
+    private testFunc: Function;
+
+    protected initialize() {
+        this.testFunc = jest.fn();
+        this.testFunc();
+    }
+
 }
 
 describe('BrokerSchema', () => {
@@ -45,6 +52,12 @@ describe('BrokerSchema', () => {
             expect(schema.created).toEqual(builder.runBeforeStartHooks());
             expect(schema.started).toEqual(builder.runBeforeStartHooks());
             expect(schema.stopped).toEqual(builder.runBeforeStopHooks());
+        });
+    });
+
+    describe('#initialize', () => {
+        it('is has been called by the constructor', () => {
+            expect(builder.testFunc).toHaveBeenCalled();
         });
     });
 });

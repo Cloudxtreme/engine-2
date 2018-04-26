@@ -12,6 +12,7 @@ class BrokerSchema extends SchemaBuilder_1.SchemaBuilder {
         this.afterStartHooks = [];
         this.beforeStopHooks = [];
         this.config = Object.assign({}, this.DEFAULT_CONFIG, this.config, config);
+        this.initialize();
     }
     schema() {
         return {
@@ -35,6 +36,9 @@ class BrokerSchema extends SchemaBuilder_1.SchemaBuilder {
     beforeStop(callback) {
         this.beforeStopHooks.push(callback);
         return this;
+    }
+    initialize() {
+        return;
     }
     runBeforeStartHooks() {
         return (broker) => {

@@ -46,6 +46,7 @@ export abstract class BrokerSchema extends SchemaBuilder {
     constructor(config: {} | IBrokerConfig = {}) {
         super();
         this.config = {...<IBrokerConfig>this.DEFAULT_CONFIG, ...this.config, ...config};
+        this.initialize();
     }
 
     public schema(): BrokerOptions {
@@ -94,6 +95,13 @@ export abstract class BrokerSchema extends SchemaBuilder {
         return this;
     }
 
+    /**
+     * allows for adding custom initialization code.
+     */
+    protected initialize(): void {
+        return;
+    }
+
     private runBeforeStartHooks(): (broker: ServiceBroker) => void {
         return (broker: ServiceBroker): void => {
             broker.logger.debug('running beforeStartHooks');
@@ -114,5 +122,7 @@ export abstract class BrokerSchema extends SchemaBuilder {
             this.beforeStopHooks.forEach((f: Function) => f(broker));
         };
     }
+
+
 
 }
