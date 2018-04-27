@@ -2,7 +2,12 @@ import {ServiceBroker} from 'moleculer';
 import * as prettyJson from 'prettyjson';
 
 import {BrokerSchema} from '../BrokerSchema';
+import {LoginPlayMode, PlayMode} from './PlayModes';
 import {WorldLoop} from './WorldLoop';
+
+interface IPlayModeList {
+    [key: string]: typeof PlayMode;
+}
 
 /**
  * The World process runs the game world. You can run as many world processes as you like, they will work together to
@@ -10,6 +15,13 @@ import {WorldLoop} from './WorldLoop';
  */
 export class World extends BrokerSchema {
     protected readonly PROCESS_NAME: string = 'World';
+    protected readonly playModes: IPlayModeList = {
+        LoginPlayMode,
+    };
+
+    public addPlayMode(name: string, playMode: typeof PlayMode) {
+        this.playModes[name] = playMode;
+    }
 
     protected initialize() {
         this.beforeStart(this.createWorldLoopService);

@@ -29,6 +29,7 @@ export abstract class ServiceSchema extends SchemaBuilder {
     protected readonly methods: ServiceMethods = {};
     protected logger: LoggerInstance;
     protected readonly broker: ServiceBroker;
+    protected readonly dependencies: GenericObject | String[] | GenericObject[];
 
     constructor(broker: ServiceBroker, config: IServiceSchemaOptions = {}) {
         super();
@@ -50,6 +51,7 @@ export abstract class ServiceSchema extends SchemaBuilder {
             created: this.created,
             started: this.started,
             stopped: this.stopped,
+            dependencies: this.dependencies,
         };
     }
 

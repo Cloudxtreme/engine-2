@@ -39,6 +39,10 @@ describe('ServiceSchema', () => {
             protected readonly metadata: GenericObject = {
                 someMetadata: 'set',
             };
+
+            protected readonly dependencies: String[] = [
+                'dependency'
+            ]
         }
 
         beforeEach(() => {
@@ -60,6 +64,10 @@ describe('ServiceSchema', () => {
 
         it('merges the settings object', () => {
             expect(service.schema().metadata).toEqual({someMetadata: 'set'});
+        });
+
+        it('merges the dependencies object', () => {
+            expect(service.schema().dependencies).toEqual(['dependency']);
         });
 
     });
