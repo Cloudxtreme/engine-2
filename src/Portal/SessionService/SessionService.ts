@@ -1,4 +1,6 @@
+import * as Bluebird from 'bluebird';
 import {
+    Actions,
     Context,
     GenericObject,
     ServiceBroker,
@@ -45,10 +47,17 @@ export class SessionService extends ServiceSchema {
     protected created() {
         const socket = this.socket;
 
-        return  () => {
+        return () => {
             this.socket = socket;
             this.logger.debug(`connected from ${this.metadata.remoteAddress}`);
             this.broker.broadcast('player.connected', this.metadata);
         };
+    }
+
+    private writeRaw(message: string): Bluebird<void> {
+        return new Promise((resolve: Function) => {
+            this.socket.write(new Buffer(message));
+            resolve();
+        });
     }
 }
