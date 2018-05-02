@@ -6,6 +6,7 @@ function createServer() {
     server.on = function(event, cb) {
         this._events[event] = cb
     };
+    server.listen = jest.fn();
     return server
 }
 

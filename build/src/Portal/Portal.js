@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const version_1 = require("../version");
 const TelnetService_1 = require("./TelnetService");
-const DEFAULT_CONFIG = {
+exports.DEFAULT_CONFIG = {
     redis: 'redis://localhost:6379',
     host: 'tcp://localhost:2323',
 };
 exports.Portal = (options = {}) => {
-    const config = Object.assign({}, DEFAULT_CONFIG, options);
+    const config = Object.assign({}, exports.DEFAULT_CONFIG, options);
     console.log(`Starting Lucid Portal - v${version_1.VERSION}`);
     return {
         nodeID: 'lucid-portal',

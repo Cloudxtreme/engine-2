@@ -1,6 +1,6 @@
 import {ServiceBroker} from 'moleculer';
 
-import {IPortalConfig, Portal} from './Portal';
+import {DEFAULT_CONFIG, Portal} from './Portal';
 import {TelnetService} from './TelnetService';
 
 jest.mock('./TelnetService');
@@ -8,11 +8,6 @@ jest.mock('./TelnetService');
 const mockBroker = new ServiceBroker();
 mockBroker.createService = jest.fn();
 console.log = jest.fn();
-
-const DEFAULT_CONFIG: IPortalConfig = {
-    redis: 'redis://localhost:6379',
-    host: 'tcp://localhost:2323',
-};
 
 describe('Portal', () => {
 

@@ -1,4 +1,5 @@
 import {Portal} from './Portal';
-import {World} from './World';
+import {VERSION} from './version';
+// import {World} from './World';
 
-export {Portal, World};
+export {Portal, VERSION};

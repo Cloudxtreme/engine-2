@@ -41,17 +41,28 @@ export abstract class ServiceSchema extends SchemaBuilder {
     }
 
     public schema(): MoleculerServiceSchema {
+        const builder = (): Function => {
+            // tslint:disable-next-line
+            const b: SchemaBuilder = this;
+
+            return (): SchemaBuilder => b;
+        };
+
         return {
             actions: this.actions,
             settings: this.settings,
             name: this.name,
             events: this.events,
-            methods: this.methods,
+            methods: {
+                ...this.methods,
+                builder,
+            },
             metadata: this.metadata,
             created: this.created,
             started: this.started,
             stopped: this.stopped,
             dependencies: this.dependencies,
+            builder: this,
         };
     }
 
