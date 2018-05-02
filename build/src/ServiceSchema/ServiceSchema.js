@@ -16,16 +16,22 @@ class ServiceSchema extends SchemaBuilder_1.SchemaBuilder {
         this.metadata = Object.assign({}, metadata, this.metadata);
     }
     schema() {
+        const builder = () => {
+            const b = this;
+            return () => b;
+        };
         return {
             actions: this.actions,
             settings: this.settings,
             name: this.name,
             events: this.events,
-            methods: this.methods,
+            methods: Object.assign({}, this.methods, { builder }),
             metadata: this.metadata,
             created: this.created,
             started: this.started,
             stopped: this.stopped,
+            dependencies: this.dependencies,
+            builder: this,
         };
     }
     created() {

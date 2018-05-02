@@ -1,32 +1,34 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const prettyJson = require("prettyjson");
-const BrokerSchema_1 = require("../BrokerSchema");
+const version_1 = require("../version");
 const TelnetService_1 = require("./TelnetService");
-class Portal extends BrokerSchema_1.BrokerSchema {
-    constructor() {
-        super(...arguments);
-        this.PROCESS_NAME = 'Portal';
-    }
-    get DEFAULT_CONFIG() {
-        return {
-            host: 'tcp://0.0.0.0:2323',
-        };
-    }
-    initialize() {
-        this.beforeStart(this.createTelnetService);
-        if (process.env.NODE_ENV !== 'test') {
-            console.log("Config:");
-            console.log(prettyJson.render(this.config));
-            console.log("---\n\n");
-            console.log("Broker Schema:");
-            console.log(prettyJson.render(this.schema()));
-            console.log("---\n");
-        }
-    }
-    createTelnetService(broker) {
-        return broker.createService(new TelnetService_1.TelnetService(broker, { settings: this.config }).schema());
-    }
-}
-exports.Portal = Portal;
+const DEFAULT_CONFIG = {
+    redis: 'redis://localhost:6379',
+    host: 'tcp://localhost:2323',
+};
+exports.Portal = (options = {}) => {
+    const config = Object.assign({}, DEFAULT_CONFIG, options);
+    console.log(`Starting Lucid Portal - v${version_1.VERSION}`);
+    return {
+        nodeID: 'lucid-portal',
+        transporter: config.redis,
+        created(broker) {
+            if (config.created) {
+                config.created.bind(this)(broker);
+            }
+            broker.createService(TelnetService_1.TelnetService(config));
+        },
+        started(broker) {
+            if (config.started) {
+                config.started.bind(this)(broker);
+            }
+        },
+        stopped(broker) {
+            if (config.stopped) {
+                config.stopped.bind(this)(broker);
+            }
+        },
+        validation: true,
+    };
+};
 //# sourceMappingURL=Portal.js.map

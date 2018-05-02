@@ -1,29 +1,79 @@
-import {Portal} from './Portal';
+import {ServiceBroker} from 'moleculer';
 
-class TestClass extends Portal {
-    public defaultConfig() {
-        return this.DEFAULT_CONFIG;
-    }
+import {IPortalConfig, Portal} from './Portal';
+import {TelnetService} from './TelnetService';
 
-    public name() {
-        return this.PROCESS_NAME;
-    }
-}
+jest.mock('./TelnetService');
 
-let testClass;
+const mockBroker = new ServiceBroker();
+mockBroker.createService = jest.fn();
+console.log = jest.fn();
+
+const DEFAULT_CONFIG: IPortalConfig = {
+    redis: 'redis://localhost:6379',
+    host: 'tcp://localhost:2323',
+};
 
 describe('Portal', () => {
-    beforeEach(() => {
-        testClass = new TestClass();
+
+    it('is sets the correct nodeID', () => {
+        expect(Portal().nodeID).toEqual('lucid-portal');
     });
 
-    it('sets the DEFAULT_CONFIG to the correct value', () => {
-        expect(testClass.defaultConfig()).toEqual({
-            host: 'tcp://0.0.0.0:2323',
+    it('sets validation to true', () => {
+        expect(Portal().validation).toEqual(true);
+    });
+
+    describe('created', () => {
+        it('creates a TelnetService', () => {
+            Portal().created(mockBroker);
+            expect(TelnetService).toHaveBeenCalledWith(DEFAULT_CONFIG);
+            expect(mockBroker.createService).toHaveBeenCalledWith(TelnetService(DEFAULT_CONFIG));
         });
     });
 
-    it('sets the PROCESS_MAME to the correct value', () => {
-        expect(testClass.name()).toEqual('Portal');
+    describe('configuration', () => {
+        describe('redis', () => {
+            it('sets the transporter to the default', () => {
+                expect(Portal().transporter).toEqual('redis://localhost:6379');
+            });
+
+            it('sets the transporter to whatever is passed in as the redis option', () => {
+                expect(Portal({redis: 'redis://notlocal'}).transporter).toEqual('redis://notlocal');
+            });
+        });
+
+        describe('created', () => {
+            it('calls the passed in created function', () => {
+                const created = <Function>jest.fn();
+                const schema = Portal({
+                    created,
+                });
+                schema.created(mockBroker);
+                expect(created).toHaveBeenCalled();
+            });
+        });
+
+        describe('started', () => {
+            it('calls the passed in started function', () => {
+                const started = <Function>jest.fn();
+                const schema = Portal({
+                    started,
+                });
+                schema.started(mockBroker);
+                expect(started).toHaveBeenCalled();
+            });
+        });
+
+        describe('stopped', () => {
+            it('calls the passed in started function', () => {
+                const stopped = <Function>jest.fn();
+                const schema = Portal({
+                    stopped,
+                });
+                schema.stopped(mockBroker);
+                expect(stopped).toHaveBeenCalled();
+            });
+        });
     });
 });

@@ -25,6 +25,8 @@
     "no-redundant-jsdoc": false,
     "prefer-type-cast": false,
     "no-unsafe-any": false,
+    "variable-name": false,
+    "no-invalid-this": false,
     "trailing-comma": [ // https://palantir.github.io/tslint/rules/trailing-comma/
       true,
       {
