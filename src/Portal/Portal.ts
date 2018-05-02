@@ -3,12 +3,15 @@ import {
     ServiceBroker,
 } from 'moleculer';
 
-import {IBrokerConfig} from '../BrokerSchema';
 import {VERSION} from '../version';
 import {TelnetService} from './TelnetService';
 
-export interface IPortalConfig extends IBrokerConfig {
+export interface IPortalConfig {
+    redis?: string;
     host?: string;
+    created?: Function;
+    stopped?: Function;
+    started?: Function;
 }
 
 export const DEFAULT_CONFIG: IPortalConfig = {

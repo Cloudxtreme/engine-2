@@ -1,63 +1,39 @@
 import * as Bluebird from 'bluebird';
 import {
-    Actions,
-    Context,
-    GenericObject,
-    ServiceBroker,
-    ServiceSettingSchema,
+    ServiceSchema,
 } from 'moleculer';
 import {Socket} from 'net';
+import * as uuid from 'uuid';
 
-import {
-    IServiceSchemaOptions,
-    ServiceSchema,
-} from '../../ServiceSchema';
+import {IPortalConfig} from '../Portal';
 
-export interface ISessionServiceMetadata extends GenericObject {
-    uuid: string;
-    remoteAddress: string;
+interface ISessionServiceConfig extends IPortalConfig {
+    socket: Socket;
 }
 
-export interface ISessionServiceOptions extends IServiceSchemaOptions {
-    metadata: ISessionServiceMetadata;
-}
+export const SessionService = (config: ISessionServiceConfig): ServiceSchema => {
+    const sessionUuid: string = uuid.v1();
 
-/**
- * The SessionService represents each individual connected player. A new SessionService instance is created for every
- * connection.
- */
-export class SessionService extends ServiceSchema {
-    private socket: Socket;
-
-    get name() {
-        return `portal.player.${this.metadata.uuid}`;
-    }
-
-    constructor(broker: ServiceBroker, socket: Socket, options: ISessionServiceOptions) {
-        super(broker, options);
-        this.socket = socket;
-    }
-
-    public schema() {
-        const schema = super.schema();
-
-        return {...schema, ...{created: this.created()}};
-    }
-
-    protected created() {
-        const socket = this.socket;
-
-        return () => {
-            this.socket = socket;
-            this.logger.debug(`connected from ${this.metadata.remoteAddress}`);
-            this.broker.broadcast('player.connected', this.metadata);
-        };
-    }
-
-    private writeRaw(message: string): Bluebird<void> {
-        return new Promise((resolve: Function) => {
-            this.socket.write(new Buffer(message));
-            resolve();
-        });
-    }
-}
+    return {
+        name: `portal.player.${sessionUuid}`,
+        metadata: {
+            uuid: sessionUuid,
+            createdAt: new Date().getTime() / 1000,
+            remoteAddress: config.socket.remoteAddress,
+        },
+        created() {
+            this.logger.info(`connected on '${config.socket.remoteAddress}'`);
+            config.socket.on('close', () => {
+                this.logger.info(`connection on '${config.socket.remoteAddress}' disconnected`);
+                this.broker.broadcast('player.disconnected', this.metadata);
+                this.broker.call('portal.telnet.destroySession', {uuid: sessionUuid});
+            });
+        },
+        started() {
+            return new Promise((resolve: Function) => {
+                this.broker.broadcast('player.connected', this.metadata);
+                resolve();
+            });
+        },
+    };
+};

@@ -2,8 +2,15 @@ import * as Bluebird from 'bluebird';
 import {GenericObject} from 'moleculer';
 import * as uuid from 'uuid';
 
+import {ISessionMessageContext} from '../../Portal/SessionService';
 import {ServiceSchema} from '../../ServiceSchema';
 import {StateManager} from '../../StateManager';
+
+export interface IPlayModeMessageContext {
+    messageUuid: string;
+    message: string;
+    timestamp: number;
+}
 
 export abstract class PlayMode extends ServiceSchema {
     /**
@@ -17,26 +24,41 @@ export abstract class PlayMode extends ServiceSchema {
      */
     public state: StateManager;
 
+    public schema() {
+        const schema = super.schema();
+
+        return {
+            ...schema,
+            initialSate: this.initialState,
+            methods: {
+                ...schema.methods,
+                onLoad: this.onLoad,
+                sendToScreen: this.sendToScreen,
+                callPortal: this.callPortal,
+            },
+            portalName: `portal.player.${this.metadata.uuid}`,
+        };
+    }
+
     protected get name(): string {
         return `world.player.${this.metadata.uuid}`;
     }
 
-    protected get portalName(): string {
-        return `portal.player.${this.metadata.uuid}`;
-    }
-
+    public abstract inputHandler(inputContext: ISessionMessageContext): Bluebird<void>;
 
     /**
      * sends the provided string message to the player screen.
      * @param {String} message - the message to send to the player screen
      * @returns {Bluebird<Moleculer.GenericObject>}
      */
-    public sendToScreen(message: String): Bluebird<GenericObject> {
-        return this.callPortal('sendToScreen', {
-            uuid: uuid.v1(),
+    public sendToScreen(message: string): Bluebird<GenericObject> {
+        const msg: IPlayModeMessageContext = {
+            messageUuid: <string>uuid.v1(),
             message,
             timestamp: Math.round((new Date()).getTime() / 1000),
-        });
+        };
+
+        return this.callPortal('sendToScreen', msg);
     }
 
     /**
@@ -68,7 +90,9 @@ export abstract class PlayMode extends ServiceSchema {
     }
 
     protected callPortal<P extends GenericObject>(action: string, args: P | {} = {}): Bluebird<P> {
-        return this.broker.call(`${this.portalName}.${action}`, args);
+        //tslint:disable-next-line
+        const sch = this.schema as GenericObject;
+        return this.broker.call(`${sch.portalName}.${action}`, args);
     }
 
 }

@@ -26,6 +26,9 @@
     "@types/bluebird-global": "^3.5.5",
     "@types/jest": "~22.2.2",
     "@types/node": "~8.10.0",
+    "@types/bcrypt": "^2.0.0",
+    "@types/immutable": "^3.8.7",
+    "@types/mongoose": "^5.0.11",
     "gulp": "^3.9.1",
     "gulp-ejs": "^3.1.2",
     "jest": "~22.4.3",
@@ -42,9 +45,6 @@
     "yeoman-generator": "^2.0.4"
   },
   "dependencies": {
-    "@types/bcrypt": "^2.0.0",
-    "@types/immutable": "^3.8.7",
-    "@types/mongoose": "^5.0.11",
     "bcrypt": "^2.0.1",
     "bluebird": "^3.5.1",
     "fastest-validator": "^0.6.6",
@@ -66,7 +66,8 @@
   "scripts": {
     "test": "jest",
     "watch": "tsc -w -p tsconfig.release.json",
-    "build": "jest && ./node_modules/tslint/bin/tslint --project ./ && rm -rf build/** && tsc -p tsconfig.release.json && BUNDLE_GEMFILE=./docs/Gemfile bundle exec jekyll build -s ./docs -d ./docs/_site",
+    "compile": "rm -rf build && tsc -p tsconfig.release.json",
+    "build": "yarn test && yarn lint && yarn compile && yarn doc",
     "doc": "BUNDLE_GEMFILE=./docs/Gemfile bundle exec jekyll build -s ./docs -d ./docs/_site",
     "lint": "./node_modules/tslint/bin/tslint --project ./",
     "validate": "npm ls"

@@ -2,11 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const prettyJson = require("prettyjson");
 const BrokerSchema_1 = require("../BrokerSchema");
+const PlayModes_1 = require("./PlayModes");
 const WorldLoop_1 = require("./WorldLoop");
 class World extends BrokerSchema_1.BrokerSchema {
     constructor() {
         super(...arguments);
         this.PROCESS_NAME = 'World';
+        this.playModes = {
+            LoginPlayMode: PlayModes_1.LoginPlayMode,
+        };
+    }
+    addPlayMode(name, playMode) {
+        this.playModes[name] = playMode;
     }
     initialize() {
         this.beforeStart(this.createWorldLoopService);
