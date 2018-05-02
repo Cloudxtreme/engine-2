@@ -39,6 +39,28 @@
 
 
 {
+"title": "Lucid Mud Engine Developer Guide - Play Modes",
+"tags": "world",
+"keywords": "luicid mud engine, mud, mux, moo",
+"url": "play_modes_overview.html",
+"summary": "Documentation for the Lucid Mud Engine"
+}
+,
+
+
+
+{
+"title": "Lucid Mud Engine Admin Guide - The Portal Process",
+"tags": "portaladmin_guide",
+"keywords": "luicid mud engine, mud, mux, moo",
+"url": "admin_portal_overview.html",
+"summary": "Documentation for the Lucid Mud Engine"
+}
+,
+
+
+
+{
 "title": "Lucid Mud Engine Developer Guide - The Portal Process",
 "tags": "portal",
 "keywords": "luicid mud engine, mud, mux, moo",

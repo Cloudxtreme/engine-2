@@ -11,6 +11,12 @@ entries:
         - title: Introduction
           output: web
           url: /introduction.html
+    - title: Admin Guide
+      output: web
+      folderitems:
+        - title: The Portal
+          output: web
+          url: /admin_portal_overview.html
     - title: Developer Guide
       output: web
       folderitems:

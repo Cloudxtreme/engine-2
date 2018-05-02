@@ -191,6 +191,22 @@
       
   
   <li>
+      <a href="#">Admin Guide</a>
+      <ul>
+          
+          
+          
+          <li><a href="admin_portal_overview.html">The Portal</a></li>
+          
+          
+          
+          
+      </ul>
+   </li>
+     
+      
+  
+  <li>
       <a href="#">Developer Guide</a>
       <ul>
           
@@ -266,27 +282,12 @@ $('#toc').on('click', 'a', function() {
     
 
   <p>The Portal process handles the incoming connections from the player and proxies the player input to the <a href="">World</a>, and
-the World input back to the Player. While it wont be typically necessary to alter how this process works, it may be
-helpful to understand the Portal’s architecture.</p>
+the World output back to the Player. Only one Portal should be run per game instance.</p>
 
 <h2 id="portal-architecture">Portal Architecture</h2>
-<p><img src="portal_architecture.png" alt="portal architecture" /></p>
-
-<p>The Portal is fairly simple, it is made up of the Broker (the Portal itself) and two 
-<a href="http://moleculer.services/0.12/docs/service.html">Services</a>.</p>
-
-<h3 id="telnetservice">TelnetService</h3>
-<p>The TelnetService is registered in the broker as <code class="highlighter-rouge">telnet</code>. It provides the socket server that the player clients connect
-to.</p>
-
-<h3 id="sessionservice">SessionService</h3>
-<p>The SessionService is spawned and registered by the  Portal service every time a player connects. A single 
-SessionService service is spawned for every single player, and registered under <code class="highlighter-rouge">portal.sessions.&lt;uuid&gt;</code> where the 
-<code class="highlighter-rouge">uuid</code> is a unique identifier for that connection created by the TelnetService at the time the connection event 
-occurred.</p>
-
-<p>The SessionService is responsible for passing all communication to the player client, and parsing incoming data from 
-the client and passing it to the world.</p>
+<p>The Portal is a <a href="">Moleculer Service Broker</a> that runs a single <a href="">TelnetService</a> under <code class="highlighter-rouge">portal.telnet</code> and dynamically 
+spools up <a href="">SessionService</a> instances for every connection under <code class="highlighter-rouge">portal.player.&lt;uuid&gt;</code>. These SessionService instances
+are automatically destroyed when the session disconnects.</p>
 
 <h2 id="connection-flow">Connection Flow</h2>
 <p><img src="./portal_connection_flow.png" alt="portal architecture" /></p>
@@ -335,7 +336,7 @@ the client and passing it to the world.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2018 Jarod Reid. All rights reserved. <br />
- Site last generated: Apr 26, 2018 <br />
+ Site last generated: May 2, 2018 <br />
                 </div>
             </div>
 </footer>
