@@ -10,16 +10,23 @@ interface ISessionServiceConfig extends IPortalConfig {
     socket: Socket;
 }
 
+export interface ISessionMetadata {
+    uuid: string;
+    createdAt: number;
+    remoteAddress: string,
+}
+
 export const SessionService = (config: ISessionServiceConfig): ServiceSchema => {
     const sessionUuid: string = uuid.v1();
+    const metadata: ISessionMetadata = {
+        uuid: sessionUuid,
+        createdAt: new Date().getTime() / 1000,
+        remoteAddress: config.socket.remoteAddress,
+    };
 
     return {
         name: `portal.player.${sessionUuid}`,
-        metadata: {
-            uuid: sessionUuid,
-            createdAt: new Date().getTime() / 1000,
-            remoteAddress: config.socket.remoteAddress,
-        },
+        metadata,
         methods: {
             onClose() {
                 this.logger.info(`connection on '${config.socket.remoteAddress}' disconnected`);

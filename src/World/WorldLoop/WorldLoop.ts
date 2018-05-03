@@ -1,26 +1,20 @@
-import {ServiceEvents} from 'moleculer';
+import {ServiceSchema} from 'moleculer';
 
-import {ISessionServiceMetadata} from '../../Portal/SessionService';
-import {ServiceSchema} from '../../ServiceSchema';
-import {LoginPlayMode} from '../PlayModes';
+import {ISessionMetadata} from '../../Portal/SessionService';
+import {LoginPlayMode, PlayMode} from '../PlayModes';
+import {IWorldConfig} from '../World';
 
-/**
- * The World Loop is the primary processor for World events. It handles queued events from players, processes them, and
- * updates the state.
- */
-export class WorldLoop extends ServiceSchema {
-    protected readonly name: string = 'world.loop';
-
-    protected readonly events: ServiceEvents = {
-        'player.connected': this.playerConnected,
+export const WorldLoop = (config: IWorldConfig): ServiceSchema => {
+    return {
+        name: 'world.loop',
+        metadata: {...config},
+        events: {
+            'player.connected': function(payload: ISessionMetadata) {
+                this.broker.createService(PlayMode(LoginPlayMode)(payload));
+            },
+            'player.disconnected': function(payload: ISessionMetadata) {
+                this.broker.destroyService(this.broker.getLocalService(`world.player.${payload.uuid}`));
+            },
+        },
     };
-
-    private playerConnected(payload: ISessionServiceMetadata) {
-        this.logger.debug(`player connected on ${payload.remoteAddress}`);
-        const loginPlayMode = new LoginPlayMode(this.broker, {
-            metadata: payload,
-        });
-
-        this.broker.createService(loginPlayMode.schema());
-    }
-}
+};

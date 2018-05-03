@@ -1,43 +1,27 @@
-import {ServiceBroker} from 'moleculer';
+import {BrokerOptions, ServiceBroker} from 'moleculer';
 import * as prettyJson from 'prettyjson';
 
-import {BrokerSchema} from '../BrokerSchema';
-import {LoginPlayMode, PlayMode} from './PlayModes';
+import {IBrokerConfig} from '../Broker';
 import {WorldLoop} from './WorldLoop';
 
-interface IPlayModeList {
-    [key: string]: typeof PlayMode;
+export interface IWorldConfig extends IBrokerConfig {
+    name?: string;
 }
 
-/**
- * The World process runs the game world. You can run as many world processes as you like, they will work together to
- * manage your game world allowing you to easily scale your game as time goes on.
- */
-export class World extends BrokerSchema {
-    protected readonly PROCESS_NAME: string = 'World';
-    protected readonly playModes: IPlayModeList = {
-        LoginPlayMode,
+export const DEFAULT_CONFIG: IWorldConfig = {
+    redis: 'redis://localhost:6379',
+};
+
+// tslint:disable-next-line:no-object-literal-type-assertion
+export const World: Function = (options: IWorldConfig = <IWorldConfig>{}): BrokerOptions => {
+    const config = {...DEFAULT_CONFIG, ...options};
+
+    return {
+        nodeID: 'lucid-world',
+        transporter: config.redis,
+        validation: true,
+        created: (broker: ServiceBroker) => {
+            broker.createService(WorldLoop(config));
+        },
     };
-
-    public addPlayMode(name: string, playMode: typeof PlayMode) {
-        this.playModes[name] = playMode;
-    }
-
-    protected initialize() {
-        this.beforeStart(this.createWorldLoopService);
-        if (process.env.NODE_ENV !== 'test') {
-            // tslint:disable
-            console.log("Config:");
-            console.log(prettyJson.render(this.config));
-            console.log("---\n\n");
-            console.log("Broker Schema:");
-            console.log(prettyJson.render(this.schema()));
-            console.log("---\n")
-            //tslint:enable
-        }
-    }
-
-    private createWorldLoopService(broker: ServiceBroker) {
-        broker.createService(new WorldLoop(broker).schema());
-    }
-}
+};

@@ -3,13 +3,14 @@ import {
     ServiceBroker,
 } from 'moleculer';
 
-import {IBrokerCnfig} from '../Broker';
+import {IBrokerConfig} from '../Broker';
 import {VERSION} from '../version';
 import {TelnetService} from './TelnetService';
 
-export interface IPortalConfig extends IBrokerCnfig {
-    redis?: string;
+export interface IPortalConfig extends IBrokerConfig {
+    host?: string;
 }
+
 
 export const DEFAULT_CONFIG: IPortalConfig = {
     redis: 'redis://localhost:6379',
@@ -17,7 +18,7 @@ export const DEFAULT_CONFIG: IPortalConfig = {
 };
 
 // tslint:disable-next-line:no-object-literal-type-assertion
-export const Portal = (options: IPortalConfig = <IPortalConfig>{}): BrokerOptions => {
+export const Portal: Function = (options: IPortalConfig = <IPortalConfig>{}): BrokerOptions => {
     const config = {...DEFAULT_CONFIG, ...options};
     //tslint:disable-next-line:no-console
     console.log(`Starting Lucid Portal - v${VERSION}`);

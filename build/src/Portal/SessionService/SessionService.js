@@ -3,13 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const uuid = require("uuid");
 exports.SessionService = (config) => {
     const sessionUuid = uuid.v1();
+    const metadata = {
+        uuid: sessionUuid,
+        createdAt: new Date().getTime() / 1000,
+        remoteAddress: config.socket.remoteAddress,
+    };
     return {
         name: `portal.player.${sessionUuid}`,
-        metadata: {
-            uuid: sessionUuid,
-            createdAt: new Date().getTime() / 1000,
-            remoteAddress: config.socket.remoteAddress,
-        },
+        metadata,
         methods: {
             onClose() {
                 this.logger.info(`connection on '${config.socket.remoteAddress}' disconnected`);
