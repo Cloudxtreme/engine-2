@@ -1,4 +1,3 @@
-import * as Bluebird from 'bluebird';
 import {
     ServiceSchema,
 } from 'moleculer';
@@ -21,13 +20,16 @@ export const SessionService = (config: ISessionServiceConfig): ServiceSchema => 
             createdAt: new Date().getTime() / 1000,
             remoteAddress: config.socket.remoteAddress,
         },
-        created() {
-            this.logger.info(`connected on '${config.socket.remoteAddress}'`);
-            config.socket.on('close', () => {
+        methods: {
+            onClose() {
                 this.logger.info(`connection on '${config.socket.remoteAddress}' disconnected`);
                 this.broker.broadcast('player.disconnected', this.metadata);
                 this.broker.call('portal.telnet.destroySession', {uuid: sessionUuid});
-            });
+            },
+        },
+        created() {
+            this.logger.info(`connected on '${config.socket.remoteAddress}'`);
+            config.socket.on('close', this.onClose);
         },
         started() {
             return new Promise((resolve: Function) => {
