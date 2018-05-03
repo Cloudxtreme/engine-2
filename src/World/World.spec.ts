@@ -1,12 +1,45 @@
-import {World} from './World';
+import {ServiceBroker} from 'moleculer';
+
+import {DEFAULT_CONFIG, World} from './World';
+import {WorldLoop} from './WorldLoop';
+
+jest.mock('./WorldLoop');
+
+const mockBroker = new ServiceBroker();
+mockBroker.createService = jest.fn();
+console.log = jest.fn();
+
+const CONFIG = {
+    name: 'TestWorld',
+}
 
 describe('World', () => {
-    let world;
+    let schema;
+
     beforeEach(() => {
-        world = new World();
+        schema = World(CONFIG);
     });
 
-    it('should have the correct name', () => {
-        expect(world.PROCESS_NAME).toEqual('World');
+    it('sets the nodeID', () => {
+        expect(schema.nodeID).toEqual('lucid-world');
     });
+
+    it('sets the transporter to the redis url', () => {
+        expect(schema.transporter).toEqual(DEFAULT_CONFIG.redis);
+    });
+
+    it('sets validation to true', () => {
+        expect(schema.validation).toEqual(true);
+    });
+
+    describe('created', () => {
+        it('creates the WorldLoop service', () => {
+            schema.created(mockBroker);
+            expect(WorldLoop).toHaveBeenCalledWith({
+                ...DEFAULT_CONFIG,
+                ...CONFIG,
+            });
+        });
+    });
+
 });

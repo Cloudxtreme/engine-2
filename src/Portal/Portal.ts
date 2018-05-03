@@ -11,7 +11,6 @@ export interface IPortalConfig extends IBrokerConfig {
     host?: string;
 }
 
-
 export const DEFAULT_CONFIG: IPortalConfig = {
     redis: 'redis://localhost:6379',
     host: 'tcp://localhost:2323',
