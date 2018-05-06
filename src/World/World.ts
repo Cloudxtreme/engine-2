@@ -2,6 +2,8 @@ import {BrokerOptions, ServiceBroker} from 'moleculer';
 import * as prettyJson from 'prettyjson';
 
 import {IBrokerConfig} from '../Broker';
+import {DataService} from './DataServices/DataService';
+import {Player} from './DataServices/Player';
 import {WorldLoop} from './WorldLoop';
 
 export interface IWorldConfig extends IBrokerConfig {
@@ -22,6 +24,8 @@ export const World: Function = (options: IWorldConfig = <IWorldConfig>{}): Broke
         validation: true,
         created: (broker: ServiceBroker) => {
             broker.createService(WorldLoop(config));
+            // load data services
+            broker.createService(DataService(Player(config)));
         },
     };
 };
