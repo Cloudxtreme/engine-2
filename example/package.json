@@ -15,6 +15,7 @@
   },
   "scripts": {
     "portal": "moleculer-runner -c ./config/portal.config.js",
-    "knex": "knex --knexfile ./config/knexfile.js"
+    "migrate:latest": "knex --knexfile ./config/knexfile.js migrate:latest",
+    "migrate:rollback": "knex --knexfile ./config/knexfile.js migrate:rollback"
   }
 }
