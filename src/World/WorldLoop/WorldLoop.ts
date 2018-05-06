@@ -1,7 +1,7 @@
 import {ServiceSchema} from 'moleculer';
 
 import {ISessionMetadata} from '../../Portal/SessionService';
-import {LoginPlayMode, PlayMode} from '../PlayModes';
+import {LoginPlayMode, PlayMode} from '../PlayMode';
 import {IWorldConfig} from '../World';
 
 export const WorldLoop = (config: IWorldConfig): ServiceSchema => {

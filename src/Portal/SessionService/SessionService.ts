@@ -13,7 +13,7 @@ interface ISessionServiceConfig extends IPortalConfig {
 export interface ISessionMetadata {
     uuid: string;
     createdAt: number;
-    remoteAddress: string,
+    remoteAddress: string;
 }
 
 export const SessionService = (config: ISessionServiceConfig): ServiceSchema => {

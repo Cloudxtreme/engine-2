@@ -1,1 +1,0 @@
-{"version":3,"file":"LoginPlayMode.js","sourceRoot":"","sources":["../../../../src/World/PlayModes/LoginPlayMode.ts"],"names":[],"mappings":";;AAAa,QAAA,aAAa,GAAG;IACzB,YAAY,EAAE;QACV,WAAW,EAAE,CAAC;KACjB;IACD,OAAO;QACH,IAAI,CAAC,MAAM,CAAC,KAAK,CAAC,0BAA0B,IAAI,CAAC,QAAQ,CAAC,aAAa,GAAG,CAAC,CAAC;IAChF,CAAC;CACJ,CAAC"}

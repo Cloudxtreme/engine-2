@@ -11,7 +11,7 @@ console.log = jest.fn();
 
 const CONFIG = {
     name: 'TestWorld',
-}
+};
 
 describe('World', () => {
     let schema;

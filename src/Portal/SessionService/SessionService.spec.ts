@@ -18,6 +18,7 @@ describe('SessionService', () => {
 
     beforeEach(() => {
         socket = new net.Socket();
+        socket.remoteAddress = 'remoteaddress';
         schema = SessionService({...DEFAULT_CONFIG, socket: socket});
         service = new Service(mockBroker, schema);
     });

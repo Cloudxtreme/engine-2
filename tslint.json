@@ -27,6 +27,10 @@
     "no-unsafe-any": false,
     "variable-name": false,
     "no-invalid-this": false,
+    "strict-boolean-expressions": [
+      "allow-null-union",
+      "allow-undefined-union"
+    ],
     "trailing-comma": [ // https://palantir.github.io/tslint/rules/trailing-comma/
       true,
       {
