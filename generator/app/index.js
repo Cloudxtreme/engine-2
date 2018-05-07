@@ -54,7 +54,10 @@ module.exports = class extends Generator {
     env() {
         this.fs.copyTpl(
             this.templatePath('env'),
-            this.destinationPath('.env')
+            this.destinationPath('.env'),
+            {
+                worldName: this.worldName,
+            }
         )
     }
 
@@ -78,5 +81,9 @@ module.exports = class extends Generator {
             this.templatePath('config/world.config.js'),
             this.destinationPath('config/world.config.js')
         );
+    }
+
+    migrations() {
+        this.fs.copy(this.templatePath("migrations"), "migrations")
     }
 };
