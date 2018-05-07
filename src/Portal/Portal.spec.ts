@@ -30,11 +30,11 @@ describe('Portal', () => {
     describe('configuration', () => {
         describe('redis', () => {
             it('sets the transporter to the default', () => {
-                expect(Portal().transporter).toEqual('redis://localhost:6379');
+                expect(Portal().transporter).toEqual(DEFAULT_CONFIG.transporter);
             });
 
             it('sets the transporter to whatever is passed in as the redis option', () => {
-                expect(Portal({redis: 'redis://notlocal'}).transporter).toEqual('redis://notlocal');
+                expect(Portal({transporter: 'redis://notlocal'}).transporter).toEqual('redis://notlocal');
             });
         });
 

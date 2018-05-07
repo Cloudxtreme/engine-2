@@ -1,4 +1,5 @@
 import {
+    Context,
     ServiceSchema,
 } from 'moleculer';
 import {Socket} from 'net';
@@ -33,10 +34,24 @@ export const SessionService = (config: ISessionServiceConfig): ServiceSchema => 
                 this.broker.broadcast('player.disconnected', this.metadata);
                 this.broker.call('portal.telnet.destroySession', {uuid: sessionUuid});
             },
+            sendToWorld(message: Buffer) {
+                this.broker.call(`world.player.${sessionUuid}.sendToWorld`, {
+                    ...this.metadata,
+                    message: message.toString(),
+                    messageUuid: uuid.v1(),
+                    messageCreatedAt: new Date().getTime() / 1000,
+                });
+            },
+        },
+        actions: {
+            sendToScreen(ctx: Context) {
+                config.socket.write(ctx.params.message);
+            },
         },
         created() {
             this.logger.info(`connected on '${config.socket.remoteAddress}'`);
             config.socket.on('close', this.onClose);
+            config.socket.on('data', this.sendToWorld);
         },
         started() {
             return new Promise((resolve: Function) => {

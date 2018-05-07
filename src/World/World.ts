@@ -12,6 +12,7 @@ export interface IWorldConfig extends IBrokerConfig {
 
 export const DEFAULT_CONFIG: IWorldConfig = {
     redis: 'redis://localhost:6379',
+    transporter: 'nats://localhost:4222',
 };
 
 // tslint:disable-next-line:no-object-literal-type-assertion
@@ -20,8 +21,9 @@ export const World: Function = (options: IWorldConfig = <IWorldConfig>{}): Broke
 
     return {
         nodeID: 'lucid-world',
-        transporter: config.redis,
+        transporter: config.transporter,
         validation: true,
+        heartbeatInterval: 0.5,
         created: (broker: ServiceBroker) => {
             broker.createService(WorldLoop(config));
             // load data services
