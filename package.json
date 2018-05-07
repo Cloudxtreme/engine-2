@@ -31,6 +31,7 @@
     "@types/knex": "^0.14.12",
     "@types/mongoose": "^5.0.11",
     "@types/node": "~8.10.0",
+    "dotenv": "^5.0.1",
     "faker": "^4.1.0",
     "gulp": "^3.9.1",
     "gulp-ejs": "^3.1.2",
