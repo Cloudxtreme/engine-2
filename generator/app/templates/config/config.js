@@ -1,4 +1,4 @@
 require('dotenv').config({path: '../.env'});
 const path = require('path');
 
-console.log(path.dirname(require.main.filename))
+process.env.GAME_ROOT = path.dirname(__dirname);
