@@ -1,11 +1,11 @@
-import * as knex from 'knex';
+//tslint:disable-next-line
+import knex from 'knex';
 import {
     Context,
     ServiceMethods,
     ServiceSchema,
     ServiceSettingSchema,
 } from 'moleculer';
-import path from 'path';
 
 interface IDataServiceSchema {
     name: string;

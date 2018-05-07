@@ -1,3 +1,16 @@
 language: node_js
 node_js:
   - "8"
+before_script:
+  - psql -c 'create database lucid_test;' -U postgres
+addons:
+  postgresql: '9.6'
+  apt:
+    packages:
+    - g++-4.8
+    - gcc-4.8
+env:
+  - DATABASE_URL=postgres://postgres:postgres@localhost:5432/lucid_test
+script:
+  - knex --knexfile ./example/config/knexfile.js migrate:latest
+  - yarn test
