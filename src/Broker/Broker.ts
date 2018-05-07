@@ -3,4 +3,5 @@ export interface IBrokerConfig {
     created?: Function;
     stopped?: Function;
     started?: Function;
+    transporter?: string;
 }

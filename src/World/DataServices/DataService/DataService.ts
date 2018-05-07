@@ -1,5 +1,5 @@
 //tslint:disable-next-line
-import knex from 'knex';
+import Knex from 'knex';
 import {
     Context,
     ServiceMethods,
@@ -26,7 +26,7 @@ export const DataService = (schema: IDataServiceSchema): ServiceSchema => {
         },
         created() {
             // tslint:disable-next-line:non-literal-require
-            this.db = knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
+            this.db = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
         },
     };
 };

@@ -25,7 +25,7 @@ describe('World', () => {
     });
 
     it('sets the transporter to the redis url', () => {
-        expect(schema.transporter).toEqual(DEFAULT_CONFIG.redis);
+        expect(schema.transporter).toEqual(DEFAULT_CONFIG.transporter);
     });
 
     it('sets validation to true', () => {

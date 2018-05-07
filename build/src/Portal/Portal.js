@@ -5,13 +5,15 @@ const TelnetService_1 = require("./TelnetService");
 exports.DEFAULT_CONFIG = {
     redis: 'redis://localhost:6379',
     host: 'tcp://localhost:2323',
+    transporter: 'nats://localhost:4222',
 };
 exports.Portal = (options = {}) => {
     const config = Object.assign({}, exports.DEFAULT_CONFIG, options);
     console.log(`Starting Lucid Portal - v${version_1.VERSION}`);
     return {
         nodeID: 'lucid-portal',
-        transporter: config.redis,
+        transporter: config.transporter,
+        heartbeatInterval: 0.5,
         created(broker) {
             if (config.created) {
                 config.created.bind(this)(broker);
