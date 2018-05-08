@@ -1,7 +1,7 @@
 import {ServiceSchema} from 'moleculer';
 
 import {ISessionMetadata} from '../../Portal/SessionService';
-import {App, Signup} from '../Apps';
+import {App, Login, Signup} from '../Apps';
 import {IWorldConfig} from '../World';
 
 interface IAppPayload extends ISessionMetadata {
@@ -10,6 +10,7 @@ interface IAppPayload extends ISessionMetadata {
 
 const APPS = {
     Signup,
+    Login,
 };
 
 export const WorldLoop = (config: IWorldConfig): ServiceSchema => {
@@ -18,7 +19,7 @@ export const WorldLoop = (config: IWorldConfig): ServiceSchema => {
         metadata: {...config},
         events: {
             'player.connected': function (payload: ISessionMetadata) {
-                this.broker.broadcast('world.player.loadApp', {...payload, app: 'Signup'});
+                this.broker.broadcast('world.player.loadApp', {...payload, app: 'Login'});
             },
             'player.disconnected': function (payload: ISessionMetadata) {
                 const service = this.broker.getLocalService(`world.player.${payload.uuid}`);

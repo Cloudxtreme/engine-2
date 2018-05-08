@@ -53,6 +53,7 @@
   "dependencies": {
     "bcrypt": "^2.0.1",
     "bluebird": "^3.5.1",
+    "bookshelf": "^0.13.3",
     "fastest-validator": "^0.6.6",
     "gulp-rename": "^1.2.2",
     "handlebars": "^4.0.11",

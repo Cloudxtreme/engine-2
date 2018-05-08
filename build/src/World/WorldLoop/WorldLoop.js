@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Apps_1 = require("../Apps");
 const APPS = {
     Signup: Apps_1.Signup,
+    Login: Apps_1.Login,
 };
 exports.WorldLoop = (config) => {
     return {
@@ -10,7 +11,7 @@ exports.WorldLoop = (config) => {
         metadata: Object.assign({}, config),
         events: {
             'player.connected': function (payload) {
-                this.broker.broadcast('world.player.loadApp', Object.assign({}, payload, { app: 'Signup' }));
+                this.broker.broadcast('world.player.loadApp', Object.assign({}, payload, { app: 'Login' }));
             },
             'player.disconnected': function (payload) {
                 const service = this.broker.getLocalService(`world.player.${payload.uuid}`);

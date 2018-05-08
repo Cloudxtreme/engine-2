@@ -27,6 +27,7 @@
     "no-unsafe-any": false,
     "variable-name": false,
     "no-invalid-this": false,
+    "prefer-template": false,
     "strict-boolean-expressions": [
       "allow-null-union",
       "allow-undefined-union"

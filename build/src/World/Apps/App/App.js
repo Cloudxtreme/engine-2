@@ -17,8 +17,11 @@ exports.App = (app) => {
                     resolve();
                 });
             },
-            methods: Object.assign({}, app.methods, { sendToScreen(message) {
+            methods: Object.assign({ sendToScreen(message) {
                     return this.broker.call(`portal.player.${config.uuid}.sendToScreen`, Object.assign({}, this.metadata, { message, messageUuid: uuid.v1(), messageCreatedAt: new Date().getTime() / 1000 }));
+                },
+                switchApp(name) {
+                    this.broker.broadcast('world.player.loadApp', Object.assign({}, this.metadata, { app: name }));
                 } }, app.methods),
             actions: {
                 sendToWorld(ctx) {

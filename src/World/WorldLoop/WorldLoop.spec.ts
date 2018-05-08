@@ -44,11 +44,11 @@ describe('WorldLoop', () => {
             event = service.schema.events['player.connected'].bind(service);
         });
 
-        it('broadcasts loadApp with Signup', () => {
+        it('broadcasts loadApp with Login', () => {
             event(metadata);
             expect(mockBroker.broadcast).toHaveBeenCalledWith(
                 'world.player.loadApp',
-                {app: 'Signup', ...metadata},
+                {app: 'Login', ...metadata},
             );
         });
 

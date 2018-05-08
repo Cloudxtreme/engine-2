@@ -34,7 +34,6 @@ export const App = (app: IApp): Function => {
                 });
             },
             methods: {
-                ...app.methods,
                 sendToScreen(message: string): Bluebird<void> {
                     return this.broker.call(`portal.player.${config.uuid}.sendToScreen`, {
                         ...this.metadata,
@@ -42,6 +41,9 @@ export const App = (app: IApp): Function => {
                         messageUuid: uuid.v1(),
                         messageCreatedAt: new Date().getTime() / 1000,
                     });
+                },
+                switchApp(name: string) {
+                    this.broker.broadcast('world.player.loadApp', {...this.metadata, app: name});
                 },
                 ...app.methods,
             },

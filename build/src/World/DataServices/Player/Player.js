@@ -6,11 +6,14 @@ exports.Player = (config) => ({
     name: 'player',
     create(object) {
         return new Promise((resolve) => {
-            return this.db.insert({
-                username: object.username,
-                password: this.hashPassword(object.password),
+            this.hashPassword(object.password)
+                .then((password) => {
+                return this.db.insert({
+                    username: object.username,
+                    password,
+                })
+                    .into('players');
             })
-                .into('players')
                 .then((data) => {
                 resolve(data);
             });
@@ -22,6 +25,25 @@ exports.Player = (config) => ({
         },
         hashPassword(password) {
             return bcrypt.hash(password, 10);
+        },
+        authenticate(username, password) {
+            return this.db.select('password', 'id')
+                .from('players')
+                .where({ username })
+                .then((data) => {
+                return this.validatePassword(password, data[0].password);
+            })
+                .then((e) => {
+                return e;
+            })
+                .catch(() => {
+                return false;
+            });
+        },
+    },
+    actions: {
+        authenticate(ctx) {
+            return this.authenticate(ctx.params.username, ctx.params.password);
         },
     },
 });

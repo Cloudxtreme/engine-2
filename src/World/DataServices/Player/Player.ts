@@ -1,6 +1,8 @@
 import * as bcrypt from 'bcrypt';
 
 import * as Bluebird from 'bluebird';
+import {Context} from 'moleculer';
+
 import {IWorldConfig} from '../../World';
 
 export interface IPlayer {
@@ -16,11 +18,14 @@ export const Player = (config: IWorldConfig) => ({
     //tslint:disable-next-line
     create(object: IPlayer): Bluebird<any> {
         return new Promise((resolve: Function) => {
-            return this.db.insert({
-                username: object.username,
-                password: this.hashPassword(object.password),
-            })
-                .into('players')
+            this.hashPassword(object.password)
+                .then((password: string) => {
+                    return this.db.insert({
+                        username: object.username,
+                        password,
+                    })
+                        .into('players');
+                })
                 .then((data: IPlayer) => {
                     resolve(data);
                 });
@@ -32,6 +37,26 @@ export const Player = (config: IWorldConfig) => ({
         },
         hashPassword(password: string) {
             return bcrypt.hash(password, 10);
+        },
+        authenticate(username: string, password: string) {
+            return this.db.select('password', 'id')
+                .from('players')
+                .where({username})
+                //tslint:disable-next-line:no-any
+                .then((data: any) => {
+                    return this.validatePassword(password, data[0].password);
+                })
+                .then((e) => {
+                    return e;
+                })
+                .catch(() => {
+                    return false;
+                });
+        },
+    },
+    actions: {
+        authenticate(ctx: Context) {
+            return this.authenticate(ctx.params.username, ctx.params.password);
         },
     },
 });

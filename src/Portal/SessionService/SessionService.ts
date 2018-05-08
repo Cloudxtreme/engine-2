@@ -35,17 +35,25 @@ export const SessionService = (config: ISessionServiceConfig): ServiceSchema => 
                 this.broker.call('portal.telnet.destroySession', {uuid: sessionUuid});
             },
             sendToWorld(message: Buffer) {
+                const input = this.cleanInput(message.toString());
+                this.logger.debug(`sending input '${input} to world`);
                 this.broker.call(`world.player.${sessionUuid}.sendToWorld`, {
                     ...this.metadata,
-                    message: message.toString(),
+                    message: input,
                     messageUuid: uuid.v1(),
                     messageCreatedAt: new Date().getTime() / 1000,
                 });
+            },
+            cleanInput(input: string) {
+                return input.replace(/\r\n/,'');
             },
         },
         actions: {
             sendToScreen(ctx: Context) {
                 config.socket.write(ctx.params.message);
+            },
+            disconnect() {
+                config.socket.destroy();
             },
         },
         created() {

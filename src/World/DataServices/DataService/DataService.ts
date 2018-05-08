@@ -1,6 +1,7 @@
 //tslint:disable-next-line
 import Knex from 'knex';
 import {
+    Actions,
     Context,
     ServiceMethods,
     ServiceSchema,
@@ -12,6 +13,7 @@ interface IDataServiceSchema {
     create: Function;
     methods?: ServiceMethods;
     settings?: ServiceSettingSchema;
+    actions?: Actions;
 }
 
 export const DataService = (schema: IDataServiceSchema): ServiceSchema => {
@@ -23,6 +25,7 @@ export const DataService = (schema: IDataServiceSchema): ServiceSchema => {
             create(ctx: Context) {
                 return schema.create.bind(this)(ctx.params);
             },
+            ...schema.actions,
         },
         created() {
             // tslint:disable-next-line:non-literal-require
