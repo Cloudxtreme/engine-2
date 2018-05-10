@@ -281,33 +281,26 @@ $('#toc').on('click', 'a', function() {
 
     
 
-  <p>The Portal process handles the incoming connections from the player and proxies the player input to the <a href="">World</a>, and
-the World output back to the Player. Only one Portal should be run per game instance.</p>
+  <p>The World Process is the actual game. It is responsible for handling the player interaction and managing the state
+of the game world.</p>
 
 <h2 id="configuration">Configuration</h2>
-<p>The Portal process is configured through the <code class="highlighter-rouge">config/portal.config.js</code> file. Example:</p>
+<p>The World process is configured through the <code class="highlighter-rouge">config/world.config.js</code> file. Example:</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">require</span><span class="p">(</span><span class="s1">'./config'</span><span class="p">);</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="nx">Portal</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"lucid-engine"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">World</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"lucid-engine"</span><span class="p">);</span>
 
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">Portal</span><span class="p">({</span>
-    <span class="na">host</span><span class="p">:</span> <span class="s1">'tcp://localhost:2323'</span><span class="p">,</span>
-    <span class="na">redis</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">REDIS_URL</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">World</span><span class="p">({</span>
+    <span class="na">name</span><span class="p">:</span> <span class="s1">'Example World'</span><span class="p">,</span>
+    <span class="na">transporter</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TRANSPORT_URL</span>
 <span class="p">});</span>
 </code></pre></div></div>
 
-<h3 id="host-default-tcplocalhost2323">host (default: tcp://localhost:2323)</h3>
-<p>The host that the Portal should listen on for incoming connections. Use <code class="highlighter-rouge">tcp://0.0.0.0:&lt;port&gt;</code> to listen on all 
-interfaces.</p>
+<h3 id="name">name</h3>
+<p>The World name is required, this is the name of your game or game world.</p>
 
-<h3 id="redis-default-redislocalhost6379">redis (default redis://localhost:6379)</h3>
-<p>The <a href="">Redis</a> connection to use. This <strong>must</strong> be the same Redis server as the <a href="">World</a> process.</p>
-
-<h2 id="running">Running</h2>
-<h3 id="development">Development</h3>
-<p>The Portal process can be run in development by calling <code class="highlighter-rouge">yarn portal</code></p>
-
-<h3 id="production">Production</h3>
-<p>Coming soon…</p>
+<h3 id="transporter-default-redislocalhost6379">transporter (default redis://localhost:6379)</h3>
+<p>The <a href="">Transporter</a> connection to use. This is used by Moleculer and <strong>must</strong> be the same value as used in the World 
+process. This allows the communication between the Portal and the World processes.</p>
 
 
     <div class="tags">
@@ -351,7 +344,7 @@ interfaces.</p>
             <div class="row">
                 <div class="col-lg-12 footer">
                &copy;2018 Jarod Reid. All rights reserved. <br />
- Site last generated: May 6, 2018 <br />
+ Site last generated: May 10, 2018 <br />
                 </div>
             </div>
 </footer>
