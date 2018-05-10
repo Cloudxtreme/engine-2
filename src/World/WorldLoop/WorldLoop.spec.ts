@@ -23,7 +23,8 @@ describe('WorldLoop', () => {
         mockBroker = new ServiceBroker();
 
         mockBroker.broadcast = jest.fn();
-        mockBroker.destroyService = jest.fn();
+        mockBroker.destroyService = jest.fn()
+            .mockReturnValue(Promise.resolve());
         mockBroker.createService = jest.fn();
         service = new Service(mockBroker, WorldLoop(DEFAULT_CONFIG));
     });
