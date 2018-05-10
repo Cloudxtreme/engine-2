@@ -6,6 +6,7 @@ import {ISessionMetadata} from '../../../Portal/SessionService/index';
 import {StateManager} from '../../../StateManager/index';
 
 export interface IApp {
+    appName: string,
     initialState?: object;
     started: Function;
     methods?: ServiceMethods;
@@ -25,9 +26,12 @@ export const App = (app: IApp): Function => {
             metadata: {...config},
             dependencies: [`portal.player.${config.uuid}`],
             created() {
+                this.logger.debug(`registered on 'world.player.${config.uuid}'`);
                 this.state = new StateManager(app.initialState);
             },
             started(): Bluebird<void> {
+                this.logger.debug(`started app '${app.appName}'`);
+
                 return new Promise((resolve: Function) => {
                     app.started.bind(this)();
                     resolve();

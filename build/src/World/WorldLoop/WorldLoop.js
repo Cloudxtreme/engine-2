@@ -21,11 +21,16 @@ exports.WorldLoop = (config) => {
             },
             'world.player.loadApp': function (payload) {
                 const currentApp = this.broker.getLocalService(`world.player.${payload.uuid}`);
-                if (currentApp) {
-                    this.broker.destroyService(currentApp);
-                }
                 const service = Apps_1.App(APPS[payload.app])(payload);
-                this.broker.createService(service);
+                if (currentApp) {
+                    this.broker.destroyService(currentApp)
+                        .then(() => {
+                        this.broker.createService(service);
+                    });
+                }
+                else {
+                    this.broker.createService(service);
+                }
             },
         },
         methods: {

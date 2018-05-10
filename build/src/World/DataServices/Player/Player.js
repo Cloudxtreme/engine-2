@@ -35,9 +35,6 @@ exports.Player = (config) => ({
             })
                 .then((e) => {
                 return e;
-            })
-                .catch(() => {
-                return false;
             });
         },
     },

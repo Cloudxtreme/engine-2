@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Signup = {
+    appName: 'Signup',
     initialState: {
         currentStep: 0,
     },
@@ -28,7 +29,8 @@ exports.Signup = {
                         username: this.state.getIn('username'),
                         password: this.state.getIn('password'),
                     });
-                    this.sendToScreen('Signed up!');
+                    this.sendToScreen('Signed up!\n');
+                    return this.switchApp('Login');
                 }
         }
         return this.sendStepText();

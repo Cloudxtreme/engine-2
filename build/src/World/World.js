@@ -5,7 +5,7 @@ const Player_1 = require("./DataServices/Player");
 const WorldLoop_1 = require("./WorldLoop");
 exports.DEFAULT_CONFIG = {
     redis: 'redis://localhost:6379',
-    transporter: 'nats://localhost:4222',
+    transporter: 'redis://localhost:6379',
 };
 exports.World = (options = {}) => {
     const config = Object.assign({}, exports.DEFAULT_CONFIG, options);
@@ -13,6 +13,7 @@ exports.World = (options = {}) => {
         nodeID: 'lucid-world',
         transporter: config.transporter,
         validation: true,
+        logLevel: 'debug',
         heartbeatInterval: 0.5,
         created: (broker) => {
             broker.createService(WorldLoop_1.WorldLoop(config));

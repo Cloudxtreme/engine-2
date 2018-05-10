@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const knex_1 = require("knex");
+const Knex = require("knex");
 exports.DataService = (schema) => {
     return {
         name: `data.${schema.name}`,
@@ -10,7 +10,7 @@ exports.DataService = (schema) => {
                 return schema.create.bind(this)(ctx.params);
             } }, schema.actions),
         created() {
-            this.db = knex_1.default(require(`${process.env.GAME_ROOT}/config/knexfile`));
+            this.db = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
         },
     };
 };

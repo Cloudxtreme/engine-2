@@ -116,6 +116,7 @@ describe('Signup', () => {
                         }),
                         sendToScreen: jest.fn(),
                         broker: mockBroker,
+                        switchApp: jest.fn(),
                     };
                 });
 
@@ -148,6 +149,16 @@ describe('Signup', () => {
                             username: mockService.state.getIn('username'),
                             password: mockService.state.getIn('password'),
                         });
+                    });
+
+                    it('starts the login app', () => {
+                        Signup.handleInput.bind(mockService)({message: password});
+                        expect(mockService.switchApp).toHaveBeenCalledWith('Login');
+                    });
+
+                    it ('does not call sendToScreen', () => {
+                        Signup.handleInput.bind(mockService)({message: password});
+                        expect(mockService.sendToScreen).not.toHaveBeenCalledTimes(2);
                     });
                 });
             });

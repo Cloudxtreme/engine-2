@@ -9,9 +9,11 @@ exports.App = (app) => {
             metadata: Object.assign({}, config),
             dependencies: [`portal.player.${config.uuid}`],
             created() {
+                this.logger.debug(`registered on 'world.player.${config.uuid}'`);
                 this.state = new index_1.StateManager(app.initialState);
             },
             started() {
+                this.logger.debug(`started app '${app.appName}'`);
                 return new Promise((resolve) => {
                     app.started.bind(this)();
                     resolve();

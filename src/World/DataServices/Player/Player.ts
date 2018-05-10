@@ -46,11 +46,8 @@ export const Player = (config: IWorldConfig) => ({
                 .then((data: any) => {
                     return this.validatePassword(password, data[0].password);
                 })
-                .then((e) => {
+                .then((e: boolean) => {
                     return e;
-                })
-                .catch(() => {
-                    return false;
                 });
         },
     },

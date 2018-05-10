@@ -1,5 +1,5 @@
 //tslint:disable-next-line
-import Knex from 'knex';
+import * as Knex from 'knex';
 import {
     Actions,
     Context,

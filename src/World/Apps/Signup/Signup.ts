@@ -3,6 +3,7 @@ import * as Bluebird from 'bluebird';
 import {IApp, IInputMessage} from '../App/App';
 
 export const Signup: IApp = {
+    appName: 'Signup',
     initialState: {
         currentStep: 0,
     },
@@ -31,7 +32,9 @@ export const Signup: IApp = {
                         username: this.state.getIn('username'),
                         password: this.state.getIn('password'),
                     });
-                    this.sendToScreen('Signed up!');
+                    this.sendToScreen('Signed up!\n');
+
+                    return this.switchApp('Login');
                 }
         }
 

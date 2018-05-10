@@ -14,7 +14,7 @@ export interface IPortalConfig extends IBrokerConfig {
 export const DEFAULT_CONFIG: IPortalConfig = {
     redis: 'redis://localhost:6379',
     host: 'tcp://localhost:2323',
-    transporter: 'nats://localhost:4222',
+    transporter: 'redis://localhost:6379',
 };
 
 // tslint:disable-next-line:no-object-literal-type-assertion
@@ -26,6 +26,7 @@ export const Portal: Function = (options: IPortalConfig = <IPortalConfig>{}): Br
     return {
         nodeID: 'lucid-portal',
         transporter: config.transporter,
+        logLevel: 'debug',
         heartbeatInterval: 0.5,
         created(broker: ServiceBroker) {
             if (config.created) {

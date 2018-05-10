@@ -29,11 +29,15 @@ export const WorldLoop = (config: IWorldConfig): ServiceSchema => {
             },
             'world.player.loadApp': function (payload: IAppPayload) {
                 const currentApp = this.broker.getLocalService(`world.player.${payload.uuid}`);
-                if (currentApp) {
-                    this.broker.destroyService(currentApp);
-                }
                 const service = App(APPS[payload.app])(payload);
-                this.broker.createService(service);
+                if (currentApp) {
+                    this.broker.destroyService(currentApp)
+                        .then(() => {
+                            this.broker.createService(service);
+                        });
+                } else {
+                    this.broker.createService(service);
+                }
             },
         },
         methods: {
