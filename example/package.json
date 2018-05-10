@@ -11,7 +11,7 @@
     "lucid-engine": "file:..",
     "generator-lucid-engine": "file:../generator",
     "dotenv": "^5.0.1",
-    "moleculer": "^0.12.4"
+    "moleculer": "^0.12.3"
   },
   "scripts": {
     "portal": "moleculer-runner -c ./config/portal.config.js",
