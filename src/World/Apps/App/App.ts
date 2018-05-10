@@ -6,7 +6,7 @@ import {ISessionMetadata} from '../../../Portal/SessionService/index';
 import {StateManager} from '../../../StateManager/index';
 
 export interface IApp {
-    appName: string,
+    appName: string;
     initialState?: object;
     started: Function;
     methods?: ServiceMethods;

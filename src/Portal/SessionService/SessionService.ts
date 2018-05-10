@@ -45,7 +45,7 @@ export const SessionService = (config: ISessionServiceConfig): ServiceSchema => 
                 });
             },
             cleanInput(input: string) {
-                return input.replace(/\r\n/,'');
+                return input.replace(/\r\n/, '');
             },
         },
         actions: {
