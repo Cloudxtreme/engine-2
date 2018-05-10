@@ -18,7 +18,7 @@ const { Portal } = require("lucid-engine");
 
 module.exports = Portal({
     host: 'tcp://localhost:2323',
-    redis: process.env.REDIS_URL
+    transporter: process.env.TRANSPORT_URL
 });
 ```
 
@@ -26,8 +26,9 @@ module.exports = Portal({
 The host that the Portal should listen on for incoming connections. Use `tcp://0.0.0.0:<port>` to listen on all 
 interfaces.
 
-### redis (default redis://localhost:6379)
-The [Redis]() connection to use. This **must** be the same Redis server as the [World]() process.
+### transporter (default redis://localhost:6379)
+The [Transporter]() connection to use. This is used by Moleculer and **must** be the same value as used in the World 
+process. This allows the communication between the Portal and the World processes. 
 
 ## Running
 ### Development
