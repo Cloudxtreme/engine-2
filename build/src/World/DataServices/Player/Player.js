@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const bcrypt = require("bcrypt");
-exports.Player = (config) => ({
+const DataService_1 = require("../DataService");
+exports.Player = DataService_1.DataService((config) => ({
     settings: config,
     name: 'player',
     create(object) {
@@ -43,5 +44,5 @@ exports.Player = (config) => ({
             return this.authenticate(ctx.params.username, ctx.params.password);
         },
     },
-});
+}));
 //# sourceMappingURL=Player.js.map

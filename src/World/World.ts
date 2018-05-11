@@ -3,8 +3,11 @@ import * as prettyJson from 'prettyjson';
 
 import {IBrokerConfig} from '../Broker';
 import {DataService} from './DataServices/DataService';
+import {Snapshot} from './DataServices/Snapshot';
+import {Object} from './DataServices/Object';
 import {Player} from './DataServices/Player';
 import {WorldLoop} from './WorldLoop';
+import {State} from './State';
 
 export interface IWorldConfig extends IBrokerConfig {
     name?: string;
@@ -27,8 +30,14 @@ export const World: Function = (options: IWorldConfig = <IWorldConfig>{}): Broke
         heartbeatInterval: 0.5,
         created: (broker: ServiceBroker) => {
             broker.createService(WorldLoop(config));
+
             // load data services
-            broker.createService(DataService(Player(config)));
+            broker.createService(Player(config));
+            broker.createService(Snapshot(config));
+            broker.createService(Object(config));
+
+            //load world state
+            broker.createService(State(config));
         },
     };
 };

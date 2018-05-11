@@ -1,0 +1,1 @@
+{"version":3,"file":"Object.js","sourceRoot":"","sources":["../../../../../src/World/DataServices/Object/Object.ts"],"names":[],"mappings":";;AAAA,gDAA2C;AAE9B,QAAA,MAAM,GAAG,yBAAW,CAAC,GAAG,EAAE,CAAC,CAAC;IACrC,IAAI,EAAE,QAAQ;IAEd,MAAM,CAAC,MAAW;QACd,OAAO,IAAI,CAAC,EAAE,CAAC,MAAM,CAAC,MAAM,CAAC;aACxB,IAAI,CAAC,SAAS,CAAC,CAAC;IACzB,CAAC;CACJ,CAAC,CAAC,CAAC"}

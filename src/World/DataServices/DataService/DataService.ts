@@ -1,5 +1,5 @@
 //tslint:disable-next-line
-import Knex from 'knex';
+import * as Knex from 'knex';
 import {
     Actions,
     Context,
@@ -7,8 +7,9 @@ import {
     ServiceSchema,
     ServiceSettingSchema,
 } from 'moleculer';
+import {IWorldConfig} from '../../World';
 
-interface IDataServiceSchema {
+export interface IDataServiceSchema {
     name: string;
     create: Function;
     methods?: ServiceMethods;
@@ -16,20 +17,24 @@ interface IDataServiceSchema {
     actions?: Actions;
 }
 
-export const DataService = (schema: IDataServiceSchema): ServiceSchema => {
-    return {
-        name: `data.${schema.name}`,
-        methods: schema.methods,
-        settings: schema.settings,
-        actions: {
-            create(ctx: Context) {
-                return schema.create.apply(this, ctx.params);
+export const DataService = (builder: Function): Function => {
+    return (config: IWorldConfig) => {
+        const schema = builder(config);
+
+        return {
+            name: `data.${schema.name}`,
+            methods: schema.methods,
+            settings: schema.settings,
+            actions: {
+                create(ctx: Context) {
+                    return schema.create.bind(this)({...ctx.params});
+                },
+                ...schema.actions,
             },
-            ...schema.actions,
-        },
-        created() {
-            // tslint:disable-next-line:non-literal-require
-            this.db = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
-        },
+            created() {
+                // tslint:disable-next-line:non-literal-require
+                this.db = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
+            },
+        };
     };
 };
