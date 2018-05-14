@@ -4,8 +4,8 @@ const AppManager_1 = require("./AppManager");
 const Object_1 = require("./DataServices/Object");
 const Player_1 = require("./DataServices/Player");
 const Snapshot_1 = require("./DataServices/Snapshot");
-const State_1 = require("./State");
 const ObjectService_1 = require("./Objects/ObjectService");
+const State_1 = require("./State");
 exports.DEFAULT_CONFIG = {
     redis: 'redis://localhost:6379',
     transporter: 'redis://localhost:6379',
