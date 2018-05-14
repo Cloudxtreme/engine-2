@@ -6,9 +6,9 @@ import {AppManager} from './AppManager';
 import {Object} from './DataServices/Object';
 import {Player} from './DataServices/Player';
 import {Snapshot} from './DataServices/Snapshot';
+import {ObjectService} from './Objects/ObjectService';
 import {State} from './State';
 import {WorldLoop} from './WorldLoop';
-import {ObjectService} from './Objects/ObjectService';
 
 export interface IWorldConfig extends IBrokerConfig {
     name?: string;
