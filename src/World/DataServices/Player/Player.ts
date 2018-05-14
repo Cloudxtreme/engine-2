@@ -4,6 +4,7 @@ import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
 
 import {IWorldConfig} from '../../World';
+import {DataService} from '../DataService';
 
 export interface IPlayer {
     id?: number;
@@ -12,7 +13,7 @@ export interface IPlayer {
     password?: string;
 }
 
-export const Player = (config: IWorldConfig) => ({
+export const Player = DataService((config: IWorldConfig) => ({
     settings: config,
     name: 'player',
     //tslint:disable-next-line
@@ -44,6 +45,10 @@ export const Player = (config: IWorldConfig) => ({
                 .where({username})
                 //tslint:disable-next-line:no-any
                 .then((data: any) => {
+                    if (!data[0]) {
+                        return false;
+                    }
+
                     return this.validatePassword(password, data[0].password);
                 })
                 .then((e: boolean) => {
@@ -56,4 +61,4 @@ export const Player = (config: IWorldConfig) => ({
             return this.authenticate(ctx.params.username, ctx.params.password);
         },
     },
-});
+}));

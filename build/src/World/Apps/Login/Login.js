@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Login = {
+const App_1 = require("../App");
+exports.Login = App_1.App({
     appName: 'Login',
     initialState: {
         currentStep: 0,
@@ -26,11 +27,17 @@ exports.Login = {
                 return this.sendToScreen('Enter your password:\n');
             case 2:
                 const username = this.state.getIn('username');
-                const valid = this.broker.call('data.player.authenticate', { username, password: payload.message });
-                if (valid) {
-                    return this.sendToScreen('Logged in!\n');
-                }
-                this.sendToSCreen('Invalid password\n');
+                this.broker.call('data.player.authenticate', { username, password: payload.message })
+                    .then((valid) => {
+                    if (valid) {
+                        this.switchApp('CreateCharacter');
+                    }
+                    else {
+                        this.sendToScreen('Invalid credentials\n');
+                        this.state.setIn('currentStep', 0);
+                        this.sendNextStep();
+                    }
+                });
         }
         return this.sendNextStep();
     },
@@ -46,5 +53,5 @@ exports.Login = {
             }
         },
     },
-};
+});
 //# sourceMappingURL=Login.js.map

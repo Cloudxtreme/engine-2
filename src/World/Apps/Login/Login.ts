@@ -1,6 +1,6 @@
-import {IInputMessage} from '../App/App';
+import {App, IInputMessage} from '../App';
 
-export const Login = {
+export const Login = App({
     appName: 'Login',
     initialState: {
         currentStep: 0,
@@ -28,12 +28,16 @@ export const Login = {
                 return this.sendToScreen('Enter your password:\n');
             case 2:
                 const username = this.state.getIn('username');
-                const valid = this.broker.call('data.player.authenticate', {username, password: payload.message});
-                if (valid) {
-                    return this.sendToScreen('Logged in!\n');
-                }
-                this.sendToSCreen('Invalid password\n');
-
+                this.broker.call('data.player.authenticate', {username, password: payload.message})
+                    .then((valid: boolean) => {
+                        if (valid) {
+                            this.switchApp('CreateCharacter');
+                        } else {
+                            this.sendToScreen('Invalid credentials\n');
+                            this.state.setIn('currentStep', 0);
+                            this.sendNextStep();
+                        }
+                    });
         }
 
         return this.sendNextStep();
@@ -53,4 +57,4 @@ export const Login = {
             }
         },
     },
-};
+});

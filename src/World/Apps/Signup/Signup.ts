@@ -1,8 +1,8 @@
 import * as Bluebird from 'bluebird';
 
-import {IApp, IInputMessage} from '../App/App';
+import {App, IInputMessage} from '../App';
 
-export const Signup: IApp = {
+export const Signup = App({
     appName: 'Signup',
     initialState: {
         currentStep: 0,
@@ -53,4 +53,4 @@ export const Signup: IApp = {
             }
         },
     },
-};
+});

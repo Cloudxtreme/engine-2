@@ -2,8 +2,12 @@ import {BrokerOptions, ServiceBroker} from 'moleculer';
 import * as prettyJson from 'prettyjson';
 
 import {IBrokerConfig} from '../Broker';
-import {DataService} from './DataServices/DataService';
+import {AppManager} from './AppManager';
+import {Object} from './DataServices/Object';
 import {Player} from './DataServices/Player';
+import {Snapshot} from './DataServices/Snapshot';
+import {ObjectService} from './Objects/ObjectService';
+import {State} from './State';
 import {WorldLoop} from './WorldLoop';
 
 export interface IWorldConfig extends IBrokerConfig {
@@ -26,9 +30,17 @@ export const World: Function = (options: IWorldConfig = <IWorldConfig>{}): Broke
         logLevel: 'debug',
         heartbeatInterval: 0.5,
         created: (broker: ServiceBroker) => {
-            broker.createService(WorldLoop(config));
+            // broker.createService(WorldLoop(config));
+            broker.createService(AppManager(config));
+
             // load data services
-            broker.createService(DataService(Player(config)));
+            broker.createService(Player(config));
+            broker.createService(Snapshot(config));
+            broker.createService(Object(config));
+
+            //load world state
+            broker.createService(State(config));
+            broker.createService(ObjectService(config));
         },
     };
 };

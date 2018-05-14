@@ -8,10 +8,11 @@
     "node": ">= 8.9.0"
   },
   "dependencies": {
-    "lucid-engine": "file:..",
-    "generator-lucid-engine": "file:../generator",
     "dotenv": "^5.0.1",
-    "moleculer": "^0.12.3"
+    "generator-lucid-engine": "file:../generator",
+    "lucid-engine": "file:..",
+    "moleculer": "^0.12.3",
+    "redis": "^2.8.0"
   },
   "scripts": {
     "portal": "moleculer-runner -c ./config/portal.config.js",

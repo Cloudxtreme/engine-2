@@ -28,6 +28,7 @@
     "variable-name": false,
     "no-invalid-this": false,
     "prefer-template": false,
+    "no-backbone-get-set-outside-model": false,
     "strict-boolean-expressions": [
       "allow-null-union",
       "allow-undefined-union"

@@ -1,8 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const DataService_1 = require("./DataServices/DataService");
+const AppManager_1 = require("./AppManager");
+const Object_1 = require("./DataServices/Object");
 const Player_1 = require("./DataServices/Player");
-const WorldLoop_1 = require("./WorldLoop");
+const Snapshot_1 = require("./DataServices/Snapshot");
+const ObjectService_1 = require("./Objects/ObjectService");
+const State_1 = require("./State");
 exports.DEFAULT_CONFIG = {
     redis: 'redis://localhost:6379',
     transporter: 'redis://localhost:6379',
@@ -16,8 +19,12 @@ exports.World = (options = {}) => {
         logLevel: 'debug',
         heartbeatInterval: 0.5,
         created: (broker) => {
-            broker.createService(WorldLoop_1.WorldLoop(config));
-            broker.createService(DataService_1.DataService(Player_1.Player(config)));
+            broker.createService(AppManager_1.AppManager(config));
+            broker.createService(Player_1.Player(config));
+            broker.createService(Snapshot_1.Snapshot(config));
+            broker.createService(Object_1.Object(config));
+            broker.createService(State_1.State(config));
+            broker.createService(ObjectService_1.ObjectService(config));
         },
     };
 };
