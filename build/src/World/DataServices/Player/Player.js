@@ -32,6 +32,9 @@ exports.Player = DataService_1.DataService((config) => ({
                 .from('players')
                 .where({ username })
                 .then((data) => {
+                if (!data[0]) {
+                    return false;
+                }
                 return this.validatePassword(password, data[0].password);
             })
                 .then((e) => {

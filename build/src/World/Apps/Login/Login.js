@@ -27,11 +27,17 @@ exports.Login = App_1.App({
                 return this.sendToScreen('Enter your password:\n');
             case 2:
                 const username = this.state.getIn('username');
-                const valid = this.broker.call('data.player.authenticate', { username, password: payload.message });
-                if (valid) {
-                    this.switchApp('CreateCharacter');
-                }
-                this.sendToSCreen('Invalid password\n');
+                this.broker.call('data.player.authenticate', { username, password: payload.message })
+                    .then((valid) => {
+                    if (valid) {
+                        this.switchApp('CreateCharacter');
+                    }
+                    else {
+                        this.sendToScreen('Invalid credentials\n');
+                        this.state.setIn('currentStep', 0);
+                        this.sendNextStep();
+                    }
+                });
         }
         return this.sendNextStep();
     },

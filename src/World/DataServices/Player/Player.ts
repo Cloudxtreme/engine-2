@@ -45,6 +45,10 @@ export const Player = DataService((config: IWorldConfig) => ({
                 .where({username})
                 //tslint:disable-next-line:no-any
                 .then((data: any) => {
+                    if (!data[0]) {
+                        return false;
+                    }
+
                     return this.validatePassword(password, data[0].password);
                 })
                 .then((e: boolean) => {
