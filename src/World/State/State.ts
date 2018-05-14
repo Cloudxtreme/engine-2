@@ -1,13 +1,12 @@
 import * as bluebird from 'bluebird';
-import {Actions, Context, ServiceSchema} from 'moleculer';
+import {Context, ServiceSchema} from 'moleculer';
 import * as redis from 'redis';
-import * as uuid from 'uuid';
 
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
 import {IObject} from '../Objects/Object';
-import {IWorldObject, World} from '../Objects/World';
+import {World} from '../Objects/World';
 import {IWorldConfig} from '../World';
 
 export const State = (config: IWorldConfig): ServiceSchema => ({
@@ -19,7 +18,16 @@ export const State = (config: IWorldConfig): ServiceSchema => ({
          * Creates an object of the provided objectType and immediately places that object into storage.
          */
         createAndStore(ctx: Context): IObject {
+            return this.broker.call('world.objects.create', ctx.params)
+                .then((object: IObject) => {
+                    this.logger.debug(`created object '${object.object_type}.${object.uuid}'`);
 
+                    return this.broker.call('data.object.create', object);
+
+                })
+                .then((object: IObject) => {
+                    return object;
+                });
         },
     },
     created() {
@@ -29,33 +37,32 @@ export const State = (config: IWorldConfig): ServiceSchema => ({
         this.broker.call('data.snapshot.getLatest')
         //tslint:disable-next-line
             .then((state: any) => {
-                let worldState;
                 if (!state) {
                     this.logger.warn('no existing snapshot');
-                    worldState = this.newWorld();
-                    this.logger.warn('creating initial snapshot');
 
-                    return this.broker.call('data.snapshot.create', worldState);
+                    return this.newWorld()
+                        .then((world: IObject) => {
+                            this.logger.warn('creating initial snapshot');
+
+                            return this.broker.call('data.snapshot.create', world);
+                        });
+
                 }
                 this.logger.info(`loading world from snapshot '${state.created_at}'`);
 
-                return World(state);
+                return World({...state, ...state.data});
             })
-            .then((world: IWorldObject) => this.liveLoad(world))
-            .then((world: IWorldObject) => {
+            .then((world: IObject) => this.liveLoad(world))
+            .then((world: IObject) => {
                 this.redis.set('lucid.state', JSON.stringify(world));
                 this.logger.info('world loading complete');
             });
     },
     methods: {
-        newWorld(): IWorldObject {
+        newWorld(): IObject {
             this.logger.warn('constructing new world');
 
-            return World({
-                uuid: uuid.v1(),
-                created_at: new Date(),
-                updated_at: new Date(),
-            });
+            return this.broker.call('world.state.createAndStore', World({}));
         },
         liveLoad(object: IObject) {
             if (object.live) {

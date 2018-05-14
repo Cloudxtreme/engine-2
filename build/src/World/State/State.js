@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const bluebird = require("bluebird");
 const redis = require("redis");
-const uuid = require("uuid");
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 const World_1 = require("../Objects/World");
@@ -12,6 +11,14 @@ exports.State = (config) => ({
     dependencies: ['data.snapshot'],
     actions: {
         createAndStore(ctx) {
+            return this.broker.call('world.objects.create', ctx.params)
+                .then((object) => {
+                this.logger.debug(`created object '${object.object_type}.${object.uuid}'`);
+                return this.broker.call('data.object.create', object);
+            })
+                .then((object) => {
+                return object;
+            });
         },
     },
     created() {
@@ -20,15 +27,16 @@ exports.State = (config) => ({
         this.logger.debug('loading initial world state');
         this.broker.call('data.snapshot.getLatest')
             .then((state) => {
-            let worldState;
             if (!state) {
                 this.logger.warn('no existing snapshot');
-                worldState = this.newWorld();
-                this.logger.warn('creating initial snapshot');
-                return this.broker.call('data.snapshot.create', worldState);
+                return this.newWorld()
+                    .then((world) => {
+                    this.logger.warn('creating initial snapshot');
+                    return this.broker.call('data.snapshot.create', world);
+                });
             }
             this.logger.info(`loading world from snapshot '${state.created_at}'`);
-            return World_1.World(state);
+            return World_1.World(Object.assign({}, state, state.data));
         })
             .then((world) => this.liveLoad(world))
             .then((world) => {
@@ -39,11 +47,7 @@ exports.State = (config) => ({
     methods: {
         newWorld() {
             this.logger.warn('constructing new world');
-            return World_1.World({
-                uuid: uuid.v1(),
-                created_at: new Date(),
-                updated_at: new Date(),
-            });
+            return this.broker.call('world.state.createAndStore', World_1.World({}));
         },
         liveLoad(object) {
             if (object.live) {

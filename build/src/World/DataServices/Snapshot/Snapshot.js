@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const World_1 = require("../../Objects/World");
 const DataService_1 = require("../DataService");
 exports.Snapshot = DataService_1.DataService(() => ({
     name: 'snapshot',
@@ -7,7 +8,10 @@ exports.Snapshot = DataService_1.DataService(() => ({
         return this.db.insert({
             data: data,
         })
-            .into('snapshots');
+            .into('snapshots')
+            .then(() => {
+            return World_1.World(data);
+        });
     },
     actions: {
         getLatest() {

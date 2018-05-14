@@ -1,15 +1,12 @@
 
 import {IObject, IObjectStore, Object} from '../Object';
 
-export interface IWorldObject extends IObject {
-}
-
-export const World = Object(({uuid, created_at, data}) => ({
-    uuid,
-    key: 'world',
-    object_type: 'World',
-    created_at,
-    updated_at: new Date(),
+export const World = Object((data: IObject) => ({
     ...data,
+    object_type: 'World',
+    key: 'world',
+    updated_at: new Date(),
     live: true,
+    destroyable: false,
+    objects: {},
 }));

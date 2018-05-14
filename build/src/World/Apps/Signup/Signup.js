@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Signup = {
+const App_1 = require("../App");
+exports.Signup = App_1.App({
     appName: 'Signup',
     initialState: {
         currentStep: 0,
@@ -47,5 +48,5 @@ exports.Signup = {
             }
         },
     },
-};
+});
 //# sourceMappingURL=Signup.js.map

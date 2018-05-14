@@ -15,7 +15,7 @@ exports.up = function(knex, Promise) {
             table.string('username').notNull().unique().index();
             table.string('password');
             table.dateTime('created_at').notNull().default(knex.raw('now()'));
-            table.dateTime('updated_at').notNull()
+            table.dateTime('updated_at').notNull().default(knex.raw('now()'));
         })
         .raw('CREATE TRIGGER update_players_timestamp' +
             ' BEFORE UPDATE ON players\n' +

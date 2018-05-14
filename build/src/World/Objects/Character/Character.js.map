@@ -1,1 +1,1 @@
-{"version":3,"file":"Character.js","sourceRoot":"","sources":["../../../../../src/World/Objects/Character/Character.ts"],"names":[],"mappings":";;AAAa,QAAA,SAAS,GAAG,GAAG,EAAE,CAAC,CAAC;IAC5B,IAAI,EAAE,IAAI;CACb,CAAC,CAAC"}
+{"version":3,"file":"Character.js","sourceRoot":"","sources":["../../../../../src/World/Objects/Character/Character.ts"],"names":[],"mappings":";;AAAA,sCAA0C;AAE7B,QAAA,SAAS,GAAG,eAAM,CAAC,CAAC,IAAa,EAAE,EAAE,CAAC,mBAC5C,IAAI,EACT,CAAC,CAAC"}

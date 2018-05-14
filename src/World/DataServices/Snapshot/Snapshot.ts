@@ -1,15 +1,19 @@
 import * as Bluebird from 'bluebird';
 
-import {IWorldObject} from '../../Objects/World';
+import {IObject} from '../../Objects/Object';
+import {World} from '../../Objects/World';
 import {DataService, IDataServiceSchema} from '../DataService';
 
 export const Snapshot = DataService((): IDataServiceSchema => ({
     name: 'snapshot',
-    create(data: IWorldObject) {
+    create(data: IObject) {
         return this.db.insert({
             data: data,
         })
-            .into('snapshots');
+            .into('snapshots')
+            .then(() => {
+                return World(data);
+            });
     },
     actions: {
         getLatest() {
