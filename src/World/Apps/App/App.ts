@@ -2,8 +2,8 @@ import * as Bluebird from 'bluebird';
 import {Context, ServiceMethods, ServiceSchema} from 'moleculer';
 import * as uuid from 'uuid';
 
-import {ISessionMetadata} from '../../../Portal/SessionService/index';
-import {StateManager} from '../../../StateManager/index';
+import {ISessionMetadata} from '../../../Portal/SessionService';
+import {StateManager} from '../../../StateManager';
 
 export interface IApp {
     appName: string;
@@ -13,8 +13,12 @@ export interface IApp {
     handleInput: Function;
 }
 
+export interface IAppMetadata extends ISessionMetadata {
+    playerId?: number;
+}
+
 export interface IInputMessage extends ISessionMetadata {
-    message: string;
+    message: string | number;
     messageUuid: string;
     messageCreatedAt: number;
 }

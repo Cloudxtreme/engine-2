@@ -10,7 +10,11 @@ exports.CreateCharacter = App_1.App({
         const currentStep = this.state.getIn('currentStep');
         switch (currentStep) {
             case 1:
-                this.broker.call('world.state.createAndStore', { object_type: 'Character', key: payload.message });
+                this.broker.call('world.state.createAndStore', {
+                    object_type: 'Character',
+                    key: payload.message,
+                    player_id: this.metadata.playerId,
+                });
         }
         return this.sendNextStep();
     },

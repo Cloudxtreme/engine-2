@@ -28,14 +28,27 @@ exports.Player = DataService_1.DataService((config) => ({
             return bcrypt.hash(password, 10);
         },
         authenticate(username, password) {
+            let user;
             return this.db.select('password', 'id')
                 .from('players')
                 .where({ username })
                 .then((data) => {
-                if (!data[0]) {
+                return data[0];
+            })
+                .then((u) => {
+                user = u;
+                if (!user) {
                     return false;
                 }
-                return this.validatePassword(password, data[0].password);
+                return this.validatePassword(password, user.password);
+            })
+                .then((result) => {
+                if (result) {
+                    return user.id;
+                }
+                else {
+                    return false;
+                }
             })
                 .then((e) => {
                 return e;
@@ -44,6 +57,7 @@ exports.Player = DataService_1.DataService((config) => ({
     },
     actions: {
         authenticate(ctx) {
+            this.logger.debug(`authenticating user '${ctx.params.username}'`);
             return this.authenticate(ctx.params.username, ctx.params.password);
         },
     },

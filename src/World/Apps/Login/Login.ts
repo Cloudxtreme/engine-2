@@ -29,9 +29,10 @@ export const Login = App({
             case 2:
                 const username = this.state.getIn('username');
                 this.broker.call('data.player.authenticate', {username, password: payload.message})
-                    .then((valid: boolean) => {
-                        if (valid) {
-                            this.switchApp('CreateCharacter');
+                    .then((id: number | boolean) => {
+                        if (id) {
+                            this.metadata.playerId = id;
+                            this.switchApp('SelectCharacter');
                         } else {
                             this.sendToScreen('Invalid credentials\n');
                             this.state.setIn('currentStep', 0);

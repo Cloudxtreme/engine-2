@@ -5,6 +5,7 @@ const APPS = {
     Signup: Apps_1.Signup,
     Login: Apps_1.Login,
     CreateCharacter: Apps_1.CreateCharacter,
+    SelectCharacter: Apps_1.SelectCharacter,
 };
 exports.AppManager = (config) => ({
     name: 'world.appManager',

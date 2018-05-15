@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const uuid = require("uuid");
-const index_1 = require("../../../StateManager/index");
+const StateManager_1 = require("../../../StateManager");
 exports.App = (app) => {
     return (config) => {
         return {
@@ -10,7 +10,7 @@ exports.App = (app) => {
             dependencies: [`portal.player.${config.uuid}`],
             created() {
                 this.logger.debug(`registered on 'world.player.${config.uuid}'`);
-                this.state = new index_1.StateManager(app.initialState);
+                this.state = new StateManager_1.StateManager(app.initialState);
             },
             started() {
                 this.logger.debug(`started app '${app.appName}'`);
