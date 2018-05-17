@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const AppManager_1 = require("./AppManager");
-const Object_1 = require("./DataServices/Object");
-const Player_1 = require("./DataServices/Player");
-const Snapshot_1 = require("./DataServices/Snapshot");
-const ObjectService_1 = require("./Objects/ObjectService");
-const State_1 = require("./State");
+const AppManagerService_1 = require("./Services/AppManagerService");
+const ObjectDataService_1 = require("./Services/DataServices/ObjectDataService");
+const PlayerDataService_1 = require("./Services/DataServices/PlayerDataService");
+const SnapshotDataService_1 = require("./Services/DataServices/SnapshotDataService");
+const ObjectService_1 = require("./Services/ObjectService");
+const StateService_1 = require("./Services/StateService");
 exports.DEFAULT_CONFIG = {
     redis: 'redis://localhost:6379',
     transporter: 'redis://localhost:6379',
@@ -19,11 +19,11 @@ exports.World = (options = {}) => {
         logLevel: 'debug',
         heartbeatInterval: 0.5,
         created: (broker) => {
-            broker.createService(AppManager_1.AppManager(config));
-            broker.createService(Player_1.Player(config));
-            broker.createService(Snapshot_1.Snapshot(config));
-            broker.createService(Object_1.Object(config));
-            broker.createService(State_1.State(config));
+            broker.createService(AppManagerService_1.AppManagerService(config));
+            broker.createService(PlayerDataService_1.PlayerDataService(config));
+            broker.createService(SnapshotDataService_1.SnapshotDataService(config));
+            broker.createService(ObjectDataService_1.ObjectDataService(config));
+            broker.createService(StateService_1.StateService(config));
             broker.createService(ObjectService_1.ObjectService(config));
         },
     };

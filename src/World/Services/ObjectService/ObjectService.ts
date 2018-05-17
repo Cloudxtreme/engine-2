@@ -1,8 +1,8 @@
 import {Context} from 'moleculer';
 
+import {Character} from '../../Objects/Character/index';
+import {World} from '../../Objects/World/index';
 import {IWorldConfig} from '../../World';
-import {Character} from '../Character';
-import {World} from '../World';
 
 const OBJECT_PROTOTYPES = {
     World,

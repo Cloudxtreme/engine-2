@@ -3,7 +3,7 @@ import * as bcrypt from 'bcrypt';
 import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
 
-import {IWorldConfig} from '../../World';
+import {IWorldConfig} from '../../../World';
 import {DataService} from '../DataService';
 
 export interface IPlayer {
@@ -13,7 +13,7 @@ export interface IPlayer {
     password?: string;
 }
 
-export const Player = DataService((config: IWorldConfig) => ({
+export const PlayerDataService = DataService((config: IWorldConfig) => ({
     settings: config,
     name: 'player',
     //tslint:disable-next-line
@@ -85,6 +85,7 @@ export const Player = DataService((config: IWorldConfig) => ({
     actions: {
         authenticate(ctx: Context) {
             this.logger.debug(`authenticating user '${ctx.params.username}'`);
+
             return this.authenticate(ctx.params.username, ctx.params.password);
         },
     },

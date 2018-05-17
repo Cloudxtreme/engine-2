@@ -1,9 +1,9 @@
 import {Context} from 'moleculer';
 
-import {World} from '../../Objects/World';
+import {World} from '../../../Objects/World';
 import {DataService} from '../DataService';
 
-export const Object = DataService(() => ({
+export const ObjectDataService = DataService(() => ({
     name: 'object',
     // tslint:disable-next-line
     create({key, object_type, player_id, ...data}: any) {

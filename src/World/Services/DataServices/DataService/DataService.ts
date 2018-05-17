@@ -7,7 +7,7 @@ import {
     ServiceSchema,
     ServiceSettingSchema,
 } from 'moleculer';
-import {IWorldConfig} from '../../World';
+import {IWorldConfig} from '../../../World';
 
 export interface IDataServiceSchema {
     name: string;

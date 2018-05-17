@@ -4,11 +4,11 @@ class WorldLoop<extends ServiceSchema>
 class Redis<extends ServiceSchema>
 class Mongo<extends ServiceSchema>
 class PlayMode<extends ServiceSchema>
-class State<extends ServiceSchema>
+class StateService<extends ServiceSchema>
 
 World --> WorldLoop
 World --> Redis
 World --> Mongo
-World --> State
+World --> StateService
 WorldLoop --> PlayMode
 @enduml

@@ -5,11 +5,11 @@ import * as redis from 'redis';
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-import {IObject} from '../Objects/Object';
-import {World} from '../Objects/World';
-import {IWorldConfig} from '../World';
+import {IObject} from '../../Objects/Object/index';
+import {World} from '../../Objects/World/index';
+import {IWorldConfig} from '../../World';
 
-export const State = (config: IWorldConfig): ServiceSchema => ({
+export const StateService = (config: IWorldConfig): ServiceSchema => ({
     name: 'world.state',
     metadata: {...config},
     dependencies: ['data.snapshot'],
