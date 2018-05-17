@@ -1,6 +1,6 @@
 import {Context} from 'moleculer';
 
-import {CharacterObjectType} from '../../ObjectTypes/Character/index';
+import {CharacterObjectType} from '../../ObjectTypes/CharacterObjectType/index';
 import {WorldObjectType} from '../../ObjectTypes/WorldObjectType/index';
 import {IWorldConfig} from '../../World';
 
