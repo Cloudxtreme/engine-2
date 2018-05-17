@@ -91,7 +91,7 @@
             });
         });
     </script>
-    
+
 
 </head>
 <body>
@@ -115,13 +115,13 @@
 
 
 
-                
-                
-                
+
+
+
                 <!-- entries with drop-downs appear here -->
                 <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
-                
-                
+
+
 			<li>
 
 
@@ -130,7 +130,7 @@
 
 </li>
 
-		
+
                 <!--comment out this block if you want to hide search-->
                 <li>
                     <!--start search-->
@@ -163,65 +163,65 @@
   <div id="main">
     <!-- Content Row -->
     <div class="row">
-        
-        
+
+
             <!-- Sidebar Column -->
             <div class="col-md-3" id="tg-sb-sidebar">
-                
+
 
 <ul id="mysidebar" class="nav">
   <li class="sidebarTitle">Lucid Mud Engine 0.1.0</li>
-  
-  
-  
+
+
+
   <li>
       <a href="#">Overview</a>
       <ul>
-          
-          
-          
+
+
+
           <li><a href="introduction.html">Introduction</a></li>
-          
-          
-          
-          
+
+
+
+
       </ul>
    </li>
-     
-      
-  
+
+
+
   <li>
       <a href="#">Admin Guide</a>
       <ul>
-          
-          
-          
+
+
+
           <li class="active"><a href="admin_portal_overview.html">The Portal</a></li>
-          
-          
-          
-          
+
+
+
+
       </ul>
    </li>
-     
-      
-  
+
+
+
   <li>
       <a href="#">Developer Guide</a>
       <ul>
-          
-          
-          
+
+
+
           <li><a href="portal_overview.html">The Portal</a></li>
-          
-          
-          
-          
+
+
+
+
       </ul>
    </li>
-     
-      
-      
+
+
+
       <!-- if you aren't using the accordion, uncomment this block:
          <p class="external">
              <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
@@ -233,8 +233,8 @@
 <script>$("li.active").parents('li').toggleClass("active");</script>
 
             </div>
-            
-        
+
+
 
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
@@ -246,12 +246,12 @@
 
 <div class="post-content">
 
-   
-    <div class="summary">Documentation for the Lucid Mud Engine</div>
-   
 
-    
-    
+    <div class="summary">Documentation for the Lucid Mud Engine</div>
+
+
+
+
 <!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
 <script>
 $( document ).ready(function() {
@@ -267,54 +267,54 @@ $('#toc').on('click', 'a', function() {
   $(window).scrollTop(scroll_target - 10);
   return false
 })
-  
+
 });
 </script>
 
 <div id="toc"></div>
 
-    
 
 
-    
 
 
-    
 
-  <p>The World Process is the actual game. It is responsible for handling the player interaction and managing the state
+
+
+
+  <p>The WorldObjectType Process is the actual game. It is responsible for handling the player interaction and managing the state
 of the game world.</p>
 
 <h2 id="configuration">Configuration</h2>
-<p>The World process is configured through the <code class="highlighter-rouge">config/world.config.js</code> file. Example:</p>
+<p>The WorldObjectType process is configured through the <code class="highlighter-rouge">config/world.config.js</code> file. Example:</p>
 <div class="language-javascript highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">require</span><span class="p">(</span><span class="s1">'./config'</span><span class="p">);</span>
-<span class="kd">const</span> <span class="p">{</span> <span class="nx">World</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"lucid-engine"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="p">{</span> <span class="nx">WorldObjectType</span> <span class="p">}</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">"lucid-engine"</span><span class="p">);</span>
 
-<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">World</span><span class="p">({</span>
-    <span class="na">name</span><span class="p">:</span> <span class="s1">'Example World'</span><span class="p">,</span>
+<span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="nx">WorldObjectType</span><span class="p">({</span>
+    <span class="na">name</span><span class="p">:</span> <span class="s1">'Example WorldObjectType'</span><span class="p">,</span>
     <span class="na">transporter</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TRANSPORT_URL</span>
 <span class="p">});</span>
 </code></pre></div></div>
 
 <h3 id="name">name</h3>
-<p>The World name is required, this is the name of your game or game world.</p>
+<p>The WorldObjectType name is required, this is the name of your game or game world.</p>
 
 <h3 id="transporter-default-redislocalhost6379">transporter (default redis://localhost:6379)</h3>
-<p>The <a href="">Transporter</a> connection to use. This is used by Moleculer and <strong>must</strong> be the same value as used in the World 
-process. This allows the communication between the Portal and the World processes.</p>
+<p>The <a href="">Transporter</a> connection to use. This is used by Moleculer and <strong>must</strong> be the same value as used in the WorldObjectType
+process. This allows the communication between the Portal and the WorldObjectType processes.</p>
 
 
     <div class="tags">
-        
+
         <b>Tags: </b>
-        
-        
-        
-        
-        
+
+
+
+
+
         <a href="tag_admin_guide.html" class="btn btn-default navbar-btn cursorNorm" role="button">admin_guide</a>
-        
-        
-        
+
+
+
     </div>
 
 

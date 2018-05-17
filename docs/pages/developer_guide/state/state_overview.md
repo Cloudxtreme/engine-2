@@ -1,5 +1,5 @@
 ---
-title: "Lucid Mud Engine Developer Guide - World StateService"
+title: "Lucid Mud Engine Developer Guide - WorldObjectType StateService"
 keywords: luicid mud engine, mud, mux, moo
 tags: [world]
 sidebar: mydoc_sidebar
@@ -7,7 +7,7 @@ permalink: world_overview.html
 summary: Documentation for the Lucid Mud Engine
 ---
 
-The World StateService is managed in the pattern set out by [Flux](https://facebook.github.io/flux/) and 
+The WorldObjectType StateService is managed in the pattern set out by [Flux](https://facebook.github.io/flux/) and 
 [Redux](https://redux.js.org/). In essence state management in the LME follows the same three principles as Redux.
 
 ## Three Principles
@@ -28,15 +28,15 @@ a reducer. Because the outcome of the action is entirely dependent on the indivi
 was called against, the action will be executed directly against the service representing that object.
 
 ## Persistence
-The World StateService is persisted first and foremost to Redis. Because multiple world processes can be run in parallel, the
-state in Redis represents the single source of truth for the entire state of the World. This happens once every 
+The WorldObjectType StateService is persisted first and foremost to Redis. Because multiple world processes can be run in parallel, the
+state in Redis represents the single source of truth for the entire state of the WorldObjectType. This happens once every 
 [WorldLoop](). A snapshot of the state is also persisted to MongoDB once every WorldLoop. 
 
 ## StateService Tree
 ```json
 {
   "_id": "mongo_id_of_snapshot",
-  "name": "Your World Name",
+  "name": "Your WorldObjectType Name",
   "snapshotTime": 1212342121,
   "storage": {},
 }

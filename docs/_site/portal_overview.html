@@ -91,7 +91,7 @@
             });
         });
     </script>
-    
+
 
 </head>
 <body>
@@ -115,13 +115,13 @@
 
 
 
-                
-                
-                
+
+
+
                 <!-- entries with drop-downs appear here -->
                 <!-- conditional logic to control which topnav appears for the audience defined in the configuration file.-->
-                
-                
+
+
 			<li>
 
 
@@ -130,7 +130,7 @@
 
 </li>
 
-		
+
                 <!--comment out this block if you want to hide search-->
                 <li>
                     <!--start search-->
@@ -163,65 +163,65 @@
   <div id="main">
     <!-- Content Row -->
     <div class="row">
-        
-        
+
+
             <!-- Sidebar Column -->
             <div class="col-md-3" id="tg-sb-sidebar">
-                
+
 
 <ul id="mysidebar" class="nav">
   <li class="sidebarTitle">Lucid Mud Engine 0.1.0</li>
-  
-  
-  
+
+
+
   <li>
       <a href="#">Overview</a>
       <ul>
-          
-          
-          
+
+
+
           <li><a href="introduction.html">Introduction</a></li>
-          
-          
-          
-          
+
+
+
+
       </ul>
    </li>
-     
-      
-  
+
+
+
   <li>
       <a href="#">Admin Guide</a>
       <ul>
-          
-          
-          
+
+
+
           <li><a href="admin_portal_overview.html">The Portal</a></li>
-          
-          
-          
-          
+
+
+
+
       </ul>
    </li>
-     
-      
-  
+
+
+
   <li>
       <a href="#">Developer Guide</a>
       <ul>
-          
-          
-          
+
+
+
           <li class="active"><a href="portal_overview.html">The Portal</a></li>
-          
-          
-          
-          
+
+
+
+
       </ul>
    </li>
-     
-      
-      
+
+
+
       <!-- if you aren't using the accordion, uncomment this block:
          <p class="external">
              <a href="#" id="collapseAll">Collapse All</a> | <a href="#" id="expandAll">Expand All</a>
@@ -233,8 +233,8 @@
 <script>$("li.active").parents('li').toggleClass("active");</script>
 
             </div>
-            
-        
+
+
 
         <!-- Content Column -->
         <div class="col-md-9" id="tg-sb-content">
@@ -246,12 +246,12 @@
 
 <div class="post-content">
 
-   
-    <div class="summary">Documentation for the Lucid Mud Engine</div>
-   
 
-    
-    
+    <div class="summary">Documentation for the Lucid Mud Engine</div>
+
+
+
+
 <!-- this handles the automatic toc. use ## for subheads to auto-generate the on-page minitoc. if you use html tags, you must supply an ID for the heading element in order for it to appear in the minitoc. -->
 <script>
 $( document ).ready(function() {
@@ -267,25 +267,25 @@ $('#toc').on('click', 'a', function() {
   $(window).scrollTop(scroll_target - 10);
   return false
 })
-  
+
 });
 </script>
 
 <div id="toc"></div>
 
-    
 
 
-    
 
 
-    
 
-  <p>The Portal process handles the incoming connections from the player and proxies the player input to the <a href="">World</a>, and
-the World output back to the Player. Only one Portal should be run per game instance.</p>
+
+
+
+  <p>The Portal process handles the incoming connections from the player and proxies the player input to the <a href="">WorldObjectType</a>, and
+the WorldObjectType output back to the Player. Only one Portal should be run per game instance.</p>
 
 <h2 id="portal-architecture">Portal Architecture</h2>
-<p>The Portal is a <a href="">Moleculer Service Broker</a> that runs a single <a href="">TelnetService</a> under <code class="highlighter-rouge">portal.telnet</code> and dynamically 
+<p>The Portal is a <a href="">Moleculer Service Broker</a> that runs a single <a href="">TelnetService</a> under <code class="highlighter-rouge">portal.telnet</code> and dynamically
 spools up <a href="">SessionService</a> instances for every connection under <code class="highlighter-rouge">portal.player.&lt;uuid&gt;</code>. These SessionService instances
 are automatically destroyed when the session disconnects.</p>
 
@@ -300,13 +300,13 @@ are automatically destroyed when the session disconnects.</p>
 
 
     <div class="tags">
-        
+
         <b>Tags: </b>
-        
-        
-        
-        
-        
+
+
+
+
+
     </div>
 
 

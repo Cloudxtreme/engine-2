@@ -7,24 +7,24 @@ permalink: admin_portal_overview.html
 summary: Documentation for the Lucid Mud Engine
 ---
 
-The World Process is the actual game. It is responsible for handling the player interaction and managing the state
+The WorldObjectType Process is the actual game. It is responsible for handling the player interaction and managing the state
 of the game world.
 
 ## Configuration
-The World process is configured through the `config/world.config.js` file. Example:
+The WorldObjectType process is configured through the `config/world.config.js` file. Example:
 ```javascript
 require('./config');
-const { World } = require("lucid-engine");
+const { WorldObjectType } = require("lucid-engine");
 
-module.exports = World({
-    name: 'Example World',
+module.exports = WorldObjectType({
+    name: 'Example WorldObjectType',
     transporter: process.env.TRANSPORT_URL
 });
 ```
 
 ### name
-The World name is required, this is the name of your game or game world.
+The WorldObjectType name is required, this is the name of your game or game world.
 
 ### transporter (default redis://localhost:6379)
-The [Transporter]() connection to use. This is used by Moleculer and **must** be the same value as used in the World 
-process. This allows the communication between the Portal and the World processes. 
+The [Transporter]() connection to use. This is used by Moleculer and **must** be the same value as used in the WorldObjectType 
+process. This allows the communication between the Portal and the WorldObjectType processes. 

@@ -13,7 +13,7 @@ export interface IObject {
     destroyable?: boolean;
     live?: boolean;
 }
-export const Object = (objectType: Function): Function => {
+export const ObjectType = (objectType: Function): Function => {
     return (config: IObject): IObject => {
         return objectType(config);
     };

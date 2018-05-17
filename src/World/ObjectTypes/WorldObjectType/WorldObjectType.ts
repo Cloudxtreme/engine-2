@@ -1,7 +1,7 @@
 
-import {IObject, IObjectStore, Object} from '../Object';
+import {IObject, IObjectStore, ObjectType} from '../ObjectType';
 
-export const World = Object((data: IObject) => ({
+export const WorldObjectType = ObjectType((data: IObject) => ({
     ...data,
     object_type: 'World',
     key: 'world',

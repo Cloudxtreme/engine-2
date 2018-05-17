@@ -1,12 +1,12 @@
 import {Context} from 'moleculer';
 
-import {Character} from '../../Objects/Character/index';
-import {World} from '../../Objects/World/index';
+import {CharacterObjectType} from '../../ObjectTypes/Character/index';
+import {WorldObjectType} from '../../ObjectTypes/WorldObjectType/index';
 import {IWorldConfig} from '../../World';
 
 const OBJECT_PROTOTYPES = {
-    World,
-    Character,
+    World: WorldObjectType,
+    Character: CharacterObjectType,
 };
 
 export const ObjectService = (config: IWorldConfig) => ({

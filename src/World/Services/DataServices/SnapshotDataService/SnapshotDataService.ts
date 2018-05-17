@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird';
 
-import {IObject} from '../../../Objects/Object/index';
-import {World} from '../../../Objects/World/index';
+import {IObject} from '../../../ObjectTypes/ObjectType/index';
+import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType/index';
 import {DataService, IDataServiceSchema} from '../DataService/index';
 
 export const SnapshotDataService = DataService((): IDataServiceSchema => ({
@@ -12,7 +12,7 @@ export const SnapshotDataService = DataService((): IDataServiceSchema => ({
         })
             .into('snapshots')
             .then(() => {
-                return World(data);
+                return WorldObjectType(data);
             });
     },
     actions: {

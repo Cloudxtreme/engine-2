@@ -1,6 +1,6 @@
 import {Context} from 'moleculer';
 
-import {World} from '../../../Objects/World';
+import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType';
 import {DataService} from '../DataService';
 
 export const ObjectDataService = DataService(() => ({
@@ -16,7 +16,7 @@ export const ObjectDataService = DataService(() => ({
             })
             .into('objects')
             .then((uuid: [string]) => {
-                return World({
+                return WorldObjectType({
                     uuid,
                     key,
                     object_type,

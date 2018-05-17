@@ -5,8 +5,8 @@ import * as redis from 'redis';
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-import {IObject} from '../../Objects/Object/index';
-import {World} from '../../Objects/World/index';
+import {IObject} from '../../ObjectTypes/ObjectType/index';
+import {WorldObjectType} from '../../ObjectTypes/WorldObjectType/index';
 import {IWorldConfig} from '../../World';
 
 export const StateService = (config: IWorldConfig): ServiceSchema => ({
@@ -50,7 +50,7 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
                 }
                 this.logger.info(`loading world from snapshot '${state.created_at}'`);
 
-                return World({...state, ...state.data});
+                return WorldObjectType({...state, ...state.data});
             })
             .then((world: IObject) => this.liveLoad(world))
             .then((world: IObject) => {
@@ -62,7 +62,7 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
         newWorld(): IObject {
             this.logger.warn('constructing new world');
 
-            return this.broker.call('world.state.createAndStore', World({}));
+            return this.broker.call('world.state.createAndStore', WorldObjectType({}));
         },
         liveLoad(object: IObject) {
             if (object.live) {

@@ -1,5 +1,5 @@
 ---
-title: "Lucid Mud Engine Developer Guide - The World Process"
+title: "Lucid Mud Engine Developer Guide - The WorldObjectType Process"
 keywords: luicid mud engine, mud, mux, moo
 tags: [world]
 sidebar: mydoc_sidebar
