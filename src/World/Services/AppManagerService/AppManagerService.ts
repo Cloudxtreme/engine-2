@@ -2,10 +2,10 @@ import {ServiceSchema} from 'moleculer';
 
 import {ISessionMetadata} from '../../../Portal/SessionService/index';
 import {
-    CreateCharacter,
-    Login,
-    SelectCharacter,
-    Signup,
+    CreateCharacterApp,
+    LoginApp,
+    SelectCharacterApp,
+    SignupApp,
 } from '../../Apps/index';
 import {IWorldConfig} from '../../World';
 
@@ -14,10 +14,10 @@ interface IAppPayload extends ISessionMetadata {
 }
 
 const APPS = {
-    Signup,
-    Login,
-    CreateCharacter,
-    SelectCharacter,
+    Signup: SignupApp,
+    Login: LoginApp,
+    CreateCharacter: CreateCharacterApp,
+    SelectCharacter: SelectCharacterApp,
 };
 
 export const AppManagerService = (config: IWorldConfig): ServiceSchema => ({

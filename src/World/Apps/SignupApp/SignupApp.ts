@@ -2,8 +2,8 @@ import * as Bluebird from 'bluebird';
 
 import {App, IInputMessage} from '../App';
 
-export const Signup = App({
-    appName: 'Signup',
+export const SignupApp = App({
+    appName: 'SignupApp',
     initialState: {
         currentStep: 0,
     },

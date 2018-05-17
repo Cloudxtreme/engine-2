@@ -1,6 +1,6 @@
 import {App, IInputMessage} from '../App';
 
-export const Login = App({
+export const LoginApp = App({
     appName: 'Login',
     initialState: {
         currentStep: 0,
@@ -15,7 +15,7 @@ export const Login = App({
         switch (currentStep) {
             case 1:
                 if (payload.message === '1') {
-                    this.switchApp('Signup');
+                    this.switchApp('SignupApp');
                     break;
                 }
                 if (payload.message === '2') {
@@ -32,7 +32,7 @@ export const Login = App({
                     .then((id: number | boolean) => {
                         if (id) {
                             this.metadata.playerId = id;
-                            this.switchApp('SelectCharacter');
+                            this.switchApp('SelectCharacterApp');
                         } else {
                             this.sendToScreen('Invalid credentials\n');
                             this.state.setIn('currentStep', 0);

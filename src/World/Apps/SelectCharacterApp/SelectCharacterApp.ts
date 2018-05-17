@@ -7,8 +7,8 @@ interface ICharacterData {
     character: IObject;
 }
 
-export const SelectCharacter = App({
-    appName: 'SelectCharacter',
+export const SelectCharacterApp = App({
+    appName: 'SelectCharacterApp',
     started() {
         this.broker.call('data.object.findForPlayer', {
             player_id: this.metadata.playerId,

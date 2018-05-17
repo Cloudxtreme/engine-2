@@ -1,6 +1,6 @@
 import {App, IInputMessage} from '../App';
 
-export const CreateCharacter = App({
+export const CreateCharacterApp = App({
     appName: 'CreateCharacter',
     initialState: {
         currentStep: 0,
