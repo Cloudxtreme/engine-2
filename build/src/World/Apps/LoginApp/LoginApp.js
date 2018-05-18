@@ -31,7 +31,7 @@ exports.LoginApp = App_1.App({
                     .then((id) => {
                     if (id) {
                         this.metadata.playerId = id;
-                        this.switchApp('SelectCharacterApp');
+                        this.switchApp('SelectCharacter');
                     }
                     else {
                         this.sendToScreen('Invalid credentials\n');

@@ -32,7 +32,7 @@ export const LoginApp = App({
                     .then((id: number | boolean) => {
                         if (id) {
                             this.metadata.playerId = id;
-                            this.switchApp('SelectCharacterApp');
+                            this.switchApp('SelectCharacter');
                         } else {
                             this.sendToScreen('Invalid credentials\n');
                             this.state.setIn('currentStep', 0);
