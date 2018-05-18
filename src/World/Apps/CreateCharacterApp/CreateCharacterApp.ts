@@ -10,7 +10,7 @@ export const CreateCharacterApp = App({
         // tslint:disable-next-line:switch-default
         switch (currentStep) {
             case 1:
-                this.broker.call('world.state.createAndStore', {
+                this.broker.call('world.objects.buildAndCreate', {
                         object_type: 'Character',
                         key: payload.message,
                         player_id: this.metadata.playerId,
