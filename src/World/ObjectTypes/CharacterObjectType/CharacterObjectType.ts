@@ -9,6 +9,9 @@ export const CharacterObjectType = ObjectType((data: IObject) => ({
             presence: true,
             uniqueKey: 'A character with that name already exists',
         },
+        player_id: {
+            presence: true,
+        },
     },
     ...data,
 }));

@@ -16,7 +16,7 @@ exports.ObjectType = (objectType) => {
             schema = Object.assign({}, schema, object.schema);
             delete object.schema;
         }
-        return Object.assign({ schema }, objectType(config));
+        return Object.assign({ schema }, object);
     };
 };
 //# sourceMappingURL=ObjectType.js.map

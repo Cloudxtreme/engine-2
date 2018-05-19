@@ -6,5 +6,8 @@ exports.CharacterObjectType = ObjectType_1.ObjectType((data) => (Object.assign({
             presence: true,
             uniqueKey: 'A character with that name already exists',
         },
+        player_id: {
+            presence: true,
+        },
     } }, data)));
 //# sourceMappingURL=CharacterObjectType.js.map

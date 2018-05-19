@@ -43,7 +43,7 @@ export const ObjectType = (objectType: Function): Function => {
 
         return {
             schema,
-            ...objectType(config),
+            ...object,
         };
     };
 };

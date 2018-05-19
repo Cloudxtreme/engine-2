@@ -30,7 +30,9 @@ export const ObjectService = (config: IWorldConfig) => ({
         },
         buildAndCreate(ctx: Context): Bluebird<IObject> {
             return this.build(ctx.params)
-                .then((object: IObject) => (this.create(object)));
+                .then((object: IObject) => {
+                    return this.create(object);
+                });
         },
     },
     methods: {
@@ -54,7 +56,10 @@ export const ObjectService = (config: IWorldConfig) => ({
         create(object: ICreateObject): Bluebird<IObject> {
             this.logger.debug(`saving '${object.object_type}:${object.key}'`);
 
-            const success = (attributes: IObject) => (attributes);
+            const success = (attributes: IObject) => {
+                return this.broker.call('data.object.create', attributes);
+            };
+
             const error = (errors: Error | IError) => {
                 if (errors instanceof Error) {
                     this.logger.error(errors);
@@ -66,7 +71,7 @@ export const ObjectService = (config: IWorldConfig) => ({
                     if (object.playerUuid) {
                         return this.broker.call(
                             `world.player.${object.playerUuid}.sendToScreen`,
-                            `${errors.key[0].replace('Key', '')}\n`,
+                            `${errors.key[0].replace('Key ', '')}\n`,
                         );
                     }
 
@@ -83,7 +88,7 @@ export const ObjectService = (config: IWorldConfig) => ({
             return new Promise((resolve: Function) => {
                 return this.broker.call('data.object.keyExists', value)
                     .then((exists: boolean) => {
-                        if (exists) {
+                        if (!exists) {
                             resolve();
                         } else {
                             resolve(errorString);

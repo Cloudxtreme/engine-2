@@ -15,7 +15,9 @@ exports.ObjectService = (config) => ({
         },
         buildAndCreate(ctx) {
             return this.build(ctx.params)
-                .then((object) => (this.create(object)));
+                .then((object) => {
+                return this.create(object);
+            });
         },
     },
     methods: {
@@ -25,7 +27,9 @@ exports.ObjectService = (config) => ({
         },
         create(object) {
             this.logger.debug(`saving '${object.object_type}:${object.key}'`);
-            const success = (attributes) => (attributes);
+            const success = (attributes) => {
+                return this.broker.call('data.object.create', attributes);
+            };
             const error = (errors) => {
                 if (errors instanceof Error) {
                     this.logger.error(errors);
@@ -34,7 +38,7 @@ exports.ObjectService = (config) => ({
                 else {
                     this.logger.warn(errors);
                     if (object.playerUuid) {
-                        return this.broker.call(`world.player.${object.playerUuid}.sendToScreen`, `${errors.key[0].replace('Key', '')}\n`);
+                        return this.broker.call(`world.player.${object.playerUuid}.sendToScreen`, `${errors.key[0].replace('Key ', '')}\n`);
                     }
                     return false;
                 }
@@ -48,7 +52,7 @@ exports.ObjectService = (config) => ({
             return new Promise((resolve) => {
                 return this.broker.call('data.object.keyExists', value)
                     .then((exists) => {
-                    if (exists) {
+                    if (!exists) {
                         resolve();
                     }
                     else {
