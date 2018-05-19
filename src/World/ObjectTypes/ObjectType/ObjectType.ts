@@ -1,3 +1,5 @@
+import * as lodash from 'lodash';
+
 export interface IObjectStore {
     [key: string]: IObject;
 }
@@ -12,9 +14,36 @@ export interface IObject {
     home?: string;
     destroyable?: boolean;
     live?: boolean;
+    //tslint:disable-next-line
+    schema?: any
 }
+
 export const ObjectType = (objectType: Function): Function => {
+    let schema = {
+        key: {
+            presence: true,
+            uniqueKey: 'An object with key \'%{value}\' already exists.',
+        },
+        object_type: {
+            presence: true,
+        },
+    };
+
     return (config: IObject): IObject => {
-        return objectType(config);
+        const object = objectType(config);
+
+        if (object.schema) {
+            schema = {
+                ...schema,
+                ...object.schema,
+            };
+
+            delete object.schema;
+        }
+
+        return {
+            schema,
+            ...objectType(config),
+        };
     };
 };

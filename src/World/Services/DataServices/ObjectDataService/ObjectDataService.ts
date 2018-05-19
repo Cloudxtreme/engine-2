@@ -1,7 +1,12 @@
+import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
 
 import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType';
 import {DataService} from '../DataService';
+
+interface ICount {
+    count: string;
+}
 
 export const ObjectDataService = DataService(() => ({
     name: 'object',
@@ -32,6 +37,14 @@ export const ObjectDataService = DataService(() => ({
                 // tslint:disable-next-line
                 .then((data: [any]) => {
                     return data;
+                });
+        },
+        keyExists(ctx: Context): Bluebird<boolean> {
+            return this.db.count('*')
+                .where({key: ctx.params})
+                .from('objects')
+                .then((result: [ICount]) => {
+                    return parseInt(result[0].count, 10) > 0;
                 });
         },
     },

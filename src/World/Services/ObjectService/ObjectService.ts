@@ -1,12 +1,20 @@
 import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
-
+import * as validate from 'validate.js';
 import {
     CharacterObjectType,
     IObject,
     WorldObjectType,
 } from '../../ObjectTypes';
 import {IWorldConfig} from '../../World';
+
+interface ICreateObject extends IObject {
+    playerUuid?: string;
+}
+
+interface IError {
+    [index: string]: [string]
+}
 
 const OBJECT_PROTOTYPES = {
     World: WorldObjectType,
@@ -40,13 +48,48 @@ export const ObjectService = (config: IWorldConfig) => ({
         /**
          * Saves an object to the database. When objects are saved to the database, they will be restored to their
          * "home" position when the containing object is reloaded.
-         * @param {IObject} props
+         * @param {IObject} object
          * @returns {Bluebird<IObject>}
          */
-        create(object: IObject): Bluebird<IObject> {
+        create(object: ICreateObject): Bluebird<IObject> {
             this.logger.debug(`saving '${object.object_type}:${object.key}'`);
 
-            return this.broker.call('data.object.create', object);
+            const success = (attributes: IObject) => (attributes);
+            const error = (errors: Error | IError) => {
+                if (errors instanceof Error) {
+                    this.logger.error(errors);
+
+                    return false;
+                } else {
+                    this.logger.warn(errors);
+
+                    if (object.playerUuid) {
+                        return this.broker.call(
+                            `world.player.${object.playerUuid}.sendToScreen`,
+                            `${errors.key[0].replace('Key', '')}\n`,
+                        );
+                    }
+
+                    return false;
+                }
+            };
+
+            return validate.async(object, object.schema)
+                .then(success, error);
         },
+    },
+    created() {
+        validate.validators.uniqueKey = (value: string, errorString: string): Bluebird<string | void> => {
+            return new Promise((resolve: Function) => {
+                return this.broker.call('data.object.keyExists', value)
+                    .then((exists: boolean) => {
+                        if (exists) {
+                            resolve();
+                        } else {
+                            resolve(errorString);
+                        }
+                    });
+            });
+        };
     },
 });

@@ -68,7 +68,8 @@
     "prettyjson": "^1.2.1",
     "redis": "^2.8.0",
     "root-require": "^0.3.1",
-    "uuid": "^3.2.1"
+    "uuid": "^3.2.1",
+    "validate.js": "file:../validate.js"
   },
   "main": "./build/src/index.js",
   "scripts": {

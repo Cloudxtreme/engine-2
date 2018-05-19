@@ -14,6 +14,7 @@ exports.CreateCharacterApp = App_1.App({
                     object_type: 'Character',
                     key: payload.message,
                     player_id: this.metadata.playerId,
+                    playerUuid: payload.uuid,
                 });
         }
         return this.sendNextStep();
