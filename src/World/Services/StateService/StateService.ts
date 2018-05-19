@@ -5,31 +5,16 @@ import * as redis from 'redis';
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-import {IObject} from '../../ObjectTypes/ObjectType/index';
-import {WorldObjectType} from '../../ObjectTypes/WorldObjectType/index';
+import {
+    IObject,
+    WorldObjectType,
+} from '../../ObjectTypes';
 import {IWorldConfig} from '../../World';
 
 export const StateService = (config: IWorldConfig): ServiceSchema => ({
     name: 'world.state',
     metadata: {...config},
     dependencies: ['data.snapshot'],
-    actions: {
-        /**
-         * Creates an object of the provided objectType and immediately places that object into storage.
-         */
-        createAndStore(ctx: Context): IObject {
-            return this.broker.call('world.objects.create', ctx.params)
-                .then((object: IObject) => {
-                    this.logger.debug(`created object '${object.object_type}.${object.uuid}'`);
-
-                    return this.broker.call('data.object.create', object);
-
-                })
-                .then((object: IObject) => {
-                    return object;
-                });
-        },
-    },
     created() {
         this.logger.debug('creating redis connection');
         this.redis = redis.createClient(config.redis);
@@ -62,7 +47,7 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
         newWorld(): IObject {
             this.logger.warn('constructing new world');
 
-            return this.broker.call('world.state.createAndStore', WorldObjectType({}));
+            return this.broker.call('world.objects.buildAndCreate', WorldObjectType({}));
         },
         liveLoad(object: IObject) {
             if (object.live) {

@@ -1,5 +1,4 @@
 import {BrokerOptions, ServiceBroker} from 'moleculer';
-import * as prettyJson from 'prettyjson';
 
 import {IBrokerConfig} from '../Broker';
 import {AppManagerService} from './Services/AppManagerService';
@@ -8,7 +7,6 @@ import {PlayerDataService} from './Services/DataServices/PlayerDataService';
 import {SnapshotDataService} from './Services/DataServices/SnapshotDataService';
 import {ObjectService} from './Services/ObjectService';
 import {StateService} from './Services/StateService';
-import {WorldLoop} from './Services/WorldLoop';
 
 export interface IWorldConfig extends IBrokerConfig {
     name?: string;

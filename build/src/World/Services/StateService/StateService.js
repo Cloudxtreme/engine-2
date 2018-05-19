@@ -4,23 +4,11 @@ const bluebird = require("bluebird");
 const redis = require("redis");
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
-const index_1 = require("../../ObjectTypes/WorldObjectType/index");
+const ObjectTypes_1 = require("../../ObjectTypes");
 exports.StateService = (config) => ({
     name: 'world.state',
     metadata: Object.assign({}, config),
     dependencies: ['data.snapshot'],
-    actions: {
-        createAndStore(ctx) {
-            return this.broker.call('world.objects.create', ctx.params)
-                .then((object) => {
-                this.logger.debug(`created object '${object.object_type}.${object.uuid}'`);
-                return this.broker.call('data.object.create', object);
-            })
-                .then((object) => {
-                return object;
-            });
-        },
-    },
     created() {
         this.logger.debug('creating redis connection');
         this.redis = redis.createClient(config.redis);
@@ -36,7 +24,7 @@ exports.StateService = (config) => ({
                 });
             }
             this.logger.info(`loading world from snapshot '${state.created_at}'`);
-            return index_1.WorldObjectType(Object.assign({}, state, state.data));
+            return ObjectTypes_1.WorldObjectType(Object.assign({}, state, state.data));
         })
             .then((world) => this.liveLoad(world))
             .then((world) => {
@@ -47,7 +35,7 @@ exports.StateService = (config) => ({
     methods: {
         newWorld() {
             this.logger.warn('constructing new world');
-            return this.broker.call('world.state.createAndStore', index_1.WorldObjectType({}));
+            return this.broker.call('world.objects.buildAndCreate', ObjectTypes_1.WorldObjectType({}));
         },
         liveLoad(object) {
             if (object.live) {
