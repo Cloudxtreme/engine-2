@@ -1,5 +1,6 @@
 import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
+import * as path from 'path';
 import * as validate from 'validate.js';
 import {
     CharacterObjectType,
@@ -13,7 +14,7 @@ interface ICreateObject extends IObject {
 }
 
 interface IError {
-    [index: string]: [string]
+    [index: string]: [string];
 }
 
 const OBJECT_PROTOTYPES = {
@@ -25,13 +26,50 @@ export const ObjectService = (config: IWorldConfig) => ({
     name: 'world.objects',
     metadata: config,
     actions: {
-        build(ctx: Context): Bluebird<IObject> {
-            return this.create(ctx.params);
+        /**
+         * registers an object type
+         */
+        registerObjectType(ctx: Context): boolean {
+            const t = path.basename(ctx.params.file).replace('.js', '');
+            this.logger.info(`registering ObjectType '${t}' @ '${ctx.params.file}'`);
+            //tslint:disable-next-line:non-literal-require
+            OBJECT_PROTOTYPES[t] = require(ctx.params.file);
+
+            return true;
         },
+        /**
+         * builds a transient game object.
+         */
+        build(ctx: Context): Bluebird<IObject> {
+            return this.build(ctx.params);
+        },
+        /**
+         * builds a transient game object, and immediately save that object to the object table.
+         */
         buildAndCreate(ctx: Context): Bluebird<IObject> {
             return this.build(ctx.params)
                 .then((object: IObject) => {
                     return this.create(object);
+                });
+        },
+        /**
+         * creates or updates an object in the object table.
+         */
+        createOrUpdate(ctx: Context): Bluebird<IObject> {
+            this.logger.info(`creating or updating room '${ctx.params.key}' in object table`);
+            this.logger.info(`checking if '${ctx.params.key}' exists in the object table`);
+
+            return this.broker.call('data.object.keyExists', ctx.params.key)
+                .then((exists: boolean) => {
+                    if (exists) {
+                        this.logger.debug(`object '${ctx.params.key}' exists, updating record`);
+
+                        return this.update(ctx.params);
+                    } else {
+                        this.logger.debug(`object '${ctx.params.key}' does not exist, creating record`);
+
+                        return this.broker.call('world.objects.buildAndCreate', ctx.params);
+                    }
                 });
         },
     },
@@ -60,7 +98,29 @@ export const ObjectService = (config: IWorldConfig) => ({
                 return this.broker.call('data.object.create', attributes);
             };
 
-            const error = (errors: Error | IError) => {
+            return this.validate(object, object.schema)
+                .then(success, this.validationError);
+        },
+        /**
+         * Updates an object in the database with the given attributes using the object key.
+         * @param {IObject} props the attributes with which to update
+         * @returns {Bluebird<IObject>}
+         */
+        update(props: IObject): Bluebird<IObject> {
+            const success = (attributes: IObject) => {
+                return this.broker.call('data.object.updateForKey', {key: props.key, props: attributes});
+            };
+
+            // we don't validate the key on update
+            const schema = {...props.schema};
+            delete schema.key;
+
+            return this.validate(props, schema)
+                .then(success, this.validationError);
+
+        },
+        validationError(object: ICreateObject): Function {
+            return (errors: Error | IError): boolean | Bluebird<IObject> => {
                 if (errors instanceof Error) {
                     this.logger.error(errors);
 
@@ -78,9 +138,10 @@ export const ObjectService = (config: IWorldConfig) => ({
                     return false;
                 }
             };
-
-            return validate.async(object, object.schema)
-                .then(success, error);
+        },
+        // tslint:disable-next-line:no-any
+        validate(props: IObject, schema: any) {
+            return validate.async(props, schema);
         },
     },
     created() {

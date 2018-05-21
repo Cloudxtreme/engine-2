@@ -47,5 +47,10 @@ export const ObjectDataService = DataService(() => ({
                     return parseInt(result[0].count, 10) > 0;
                 });
         },
+        updateForKey(ctx: Context): Bluebird<boolean> {
+            return this.db.update(ctx.params.props)
+                .from('objects')
+                .where({key: ctx.params.key});
+        },
     },
 }));

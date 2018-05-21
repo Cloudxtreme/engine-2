@@ -1,6 +1,11 @@
-import {IObject, ObjectType} from '../ObjectType';
+import {
+    IObject,
+    ObjectType,
+} from '../ObjectType';
 
-interface IRoom extends IObject {
+import {compose} from '../../../utils';
+
+export interface IRoom extends IObject {
     title: string;
     description: string;
     shortDescription: string;
@@ -16,10 +21,35 @@ interface IExitList {
     exit: IExit;
 }
 
-export const RoomObjectType = ObjectType((data: IRoom) => ({
-    ...data,
-    live: true,
-    object_type: 'Room',
-    destroyable: false,
-    updateOnRestart: true,
-}));
+let RoomObjectType = (data: IRoom) => {
+    const schema = {
+        data: {
+            presence: true,
+        },
+        'data.attributes.title': {
+            presence: true,
+        },
+        'data.attributes.description': {
+            presence: true,
+        },
+        'data.attributes.shortDescription': {
+            presence: true,
+        },
+    };
+
+    const key = data.key;
+    delete data.key;
+
+    return {
+        key,
+        schema,
+        data,
+        live: true,
+        destroyable: false,
+        updateOnRestart: true,
+    };
+};
+
+RoomObjectType = compose(ObjectType, RoomObjectType);
+
+export {RoomObjectType};

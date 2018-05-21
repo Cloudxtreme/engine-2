@@ -1,5 +1,6 @@
 import {Portal} from './Portal';
 import {VERSION} from './version';
-import {World} from './World';
+export * from './World';
+export * from './utils';
 
-export {Portal, World, VERSION};
+export {Portal, VERSION};

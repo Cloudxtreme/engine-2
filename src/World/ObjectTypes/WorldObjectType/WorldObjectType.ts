@@ -1,7 +1,10 @@
+import {compose} from '../../../utils';
+import {
+    IObject,
+    ObjectType,
+} from '../ObjectType';
 
-import {IObject, IObjectStore, ObjectType} from '../ObjectType';
-
-export const WorldObjectType = ObjectType((data: IObject) => ({
+let WorldObjectType = (data: IObject) => ({
     ...data,
     object_type: 'World',
     key: 'world',
@@ -9,4 +12,8 @@ export const WorldObjectType = ObjectType((data: IObject) => ({
     live: true,
     destroyable: false,
     objects: {},
-}));
+});
+
+WorldObjectType = compose(ObjectType, WorldObjectType);
+
+export {WorldObjectType};

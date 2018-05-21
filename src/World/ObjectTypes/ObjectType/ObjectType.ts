@@ -18,8 +18,10 @@ export interface IObject {
     schema?: any
 }
 
-export const ObjectType = (objectType: Function): Function => {
-    let schema = {
+export const ObjectType = (props: IObject): IObject => {
+    const schema = {
+        ...{},
+        ...props.schema,
         key: {
             presence: true,
             uniqueKey: 'An object with key \'%{value}\' already exists.',
@@ -29,21 +31,8 @@ export const ObjectType = (objectType: Function): Function => {
         },
     };
 
-    return (config: IObject): IObject => {
-        const object = objectType(config);
-
-        if (object.schema) {
-            schema = {
-                ...schema,
-                ...object.schema,
-            };
-
-            delete object.schema;
-        }
-
-        return {
-            schema,
-            ...object,
-        };
+    return {
+        schema,
+        ...props,
     };
 };

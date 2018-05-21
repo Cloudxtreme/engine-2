@@ -38,6 +38,11 @@ exports.ObjectDataService = DataService_1.DataService(() => ({
                 return parseInt(result[0].count, 10) > 0;
             });
         },
+        updateForKey(ctx) {
+            return this.db.update(ctx.params.props)
+                .from('objects')
+                .where({ key: ctx.params.key });
+        },
     },
 }));
 //# sourceMappingURL=ObjectDataService.js.map

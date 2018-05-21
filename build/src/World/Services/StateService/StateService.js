@@ -1,9 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const bluebird = require("bluebird");
+const Bluebird = require("bluebird");
+const glob = require("glob-fs");
+const path = require("path");
+const g = glob();
 const redis = require("redis");
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
+Bluebird.promisifyAll(redis.RedisClient.prototype);
+Bluebird.promisifyAll(redis.Multi.prototype);
 const ObjectTypes_1 = require("../../ObjectTypes");
 exports.StateService = (config) => ({
     name: 'world.state',
@@ -29,13 +32,44 @@ exports.StateService = (config) => ({
             .then((world) => this.liveLoad(world))
             .then((world) => {
             this.redis.set('lucid.state', JSON.stringify(world));
-            this.logger.info('world loading complete');
+        })
+            .then(() => (this.loadRooms()))
+            .then(() => this.logger.info('world loading complete'))
+            .catch((e) => {
+            this.logger.fatal(e);
+            process.exit(1);
         });
     },
     methods: {
         newWorld() {
             this.logger.warn('constructing new world');
             return this.broker.call('world.objects.buildAndCreate', ObjectTypes_1.WorldObjectType({}));
+        },
+        loadRooms() {
+            this.logger.info('registering rooms with object service');
+            return g.readdirPromise('rooms/*.js')
+                .then((files) => {
+                return Promise.all(files.map((file) => {
+                    this.logger.info(`registering '${file}'`);
+                    return this.broker.call('world.objects.registerObjectType', { file })
+                        .then(() => {
+                        return file;
+                    });
+                }));
+            })
+                .then((files) => {
+                this.logger.info('syncing rooms to object table');
+                return Promise.all(files.map((file) => {
+                    const t = path.basename(file).replace('.js', '');
+                    const room = require(file)();
+                    this.logger.debug(`syncing '${room.key}'`);
+                    return this.broker.call('world.objects.createOrUpdate', Object.assign({}, room, { object_type: t }));
+                }));
+            })
+                .catch((e) => {
+                this.logger.error(e);
+                process.exit(1);
+            });
         },
         liveLoad(object) {
             if (object.live) {

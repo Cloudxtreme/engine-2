@@ -1,22 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ObjectType = (objectType) => {
-    let schema = {
-        key: {
+exports.ObjectType = (props) => {
+    const schema = Object.assign({}, props.schema, { key: {
             presence: true,
             uniqueKey: 'An object with key \'%{value}\' already exists.',
-        },
-        object_type: {
+        }, object_type: {
             presence: true,
-        },
-    };
-    return (config) => {
-        const object = objectType(config);
-        if (object.schema) {
-            schema = Object.assign({}, schema, object.schema);
-            delete object.schema;
-        }
-        return Object.assign({ schema }, object);
-    };
+        } });
+    return Object.assign({ schema }, props);
 };
 //# sourceMappingURL=ObjectType.js.map
