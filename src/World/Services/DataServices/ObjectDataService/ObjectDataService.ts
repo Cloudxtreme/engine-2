@@ -1,9 +1,9 @@
 import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
 
+import {IObject} from '../../../ObjectTypes/ObjectType';
 import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType';
 import {DataService} from '../DataService';
-import {IObject} from '../../../ObjectTypes/ObjectType';
 
 interface ICount {
     count: string;
