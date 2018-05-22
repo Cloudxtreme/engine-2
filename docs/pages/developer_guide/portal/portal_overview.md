@@ -7,8 +7,8 @@ permalink: portal_overview.html
 summary: Documentation for the Lucid Mud Engine
 ---
 
-The Portal process handles the incoming connections from the player and proxies the player input to the [World](), and
-the World output back to the Player. Only one Portal should be run per game instance. 
+The Portal process handles the incoming connections from the player and proxies the player input to the [WorldObjectType](), and
+the WorldObjectType output back to the Player. Only one Portal should be run per game instance. 
 
 ## Portal Architecture
 The Portal is a [Moleculer Service Broker]() that runs a single [TelnetService]() under `portal.telnet` and dynamically 

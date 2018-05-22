@@ -61,6 +61,9 @@ export const App = (app: IApp): Function => {
 
                     return true;
                 },
+                sendToScreen(ctx: Context): Bluebird<void> {
+                    return this.sendToScreen(ctx.params);
+                },
             },
         };
     };

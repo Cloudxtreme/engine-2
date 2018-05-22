@@ -1,14 +1,14 @@
 import {App} from './App';
 
-import {CreateCharacter} from './CreateCharacter';
-import {Login} from './Login';
-import {SelectCharacter} from './SelectCharacter';
-import {Signup} from './Signup';
+import {CreateCharacterApp} from './CreateCharacterApp';
+import {LoginApp} from './LoginApp';
+import {SelectCharacterApp} from './SelectCharacterApp';
+import {SignupApp} from './SignupApp';
 
 export {
     App,
-    Signup,
-    Login,
-    CreateCharacter,
-    SelectCharacter,
+    SignupApp,
+    LoginApp,
+    CreateCharacterApp,
+    SelectCharacterApp,
 };

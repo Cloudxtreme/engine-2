@@ -30,6 +30,9 @@ exports.App = (app) => {
                     app.handleInput.bind(this)(ctx.params);
                     return true;
                 },
+                sendToScreen(ctx) {
+                    return this.sendToScreen(ctx.params);
+                },
             },
         };
     };

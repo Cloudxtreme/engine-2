@@ -1,14 +1,14 @@
 @startuml
-class World<extends BrokerSchema>
+class WorldObjectType<extends BrokerSchema>
 class WorldLoop<extends ServiceSchema>
 class Redis<extends ServiceSchema>
 class Mongo<extends ServiceSchema>
 class PlayMode<extends ServiceSchema>
-class State<extends ServiceSchema>
+class StateService<extends ServiceSchema>
 
-World --> WorldLoop
-World --> Redis
-World --> Mongo
-World --> State
+WorldObjectType --> WorldLoop
+WorldObjectType --> Redis
+WorldObjectType --> Mongo
+WorldObjectType --> StateService
 WorldLoop --> PlayMode
 @enduml
