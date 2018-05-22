@@ -1,10 +1,12 @@
 import * as Bluebird from 'bluebird';
 import * as glob from 'glob-fs';
-import * as path from 'path';
+import {fromJS} from 'immutable';
+import * as objectPath from 'object-path';
 
 const g = glob();
 
 import {
+    Context,
     ServiceSchema,
 } from 'moleculer';
 import * as redis from 'redis';
@@ -14,48 +16,65 @@ Bluebird.promisifyAll(redis.Multi.prototype);
 
 import {
     IObject,
-    IRoom,
     WorldObjectType,
 } from '../../ObjectTypes';
 import {IWorldConfig} from '../../World';
+import {RoomService} from './RoomService';
+import {WorldService} from './WorldService';
 
 export const StateService = (config: IWorldConfig): ServiceSchema => ({
     name: 'world.state',
     metadata: {...config},
     dependencies: ['data.snapshot'],
+    mixins: [WorldService, RoomService],
     created() {
         this.logger.debug('creating redis connection');
         this.redis = redis.createClient(config.redis);
-        this.logger.debug('loading initial world state');
-        this.broker.call('data.snapshot.getLatest')
-        //tslint:disable-next-line
-            .then((state: any) => {
-                if (!state) {
-                    this.logger.warn('no existing snapshot');
+    },
+    actions: {
+        placeObjectIn(ctx: Context): Bluebird<void> {
+            return this.broker.call('world.state.getIn', {path: `${ctx.params.path}.objects`})
+                .then((state: any) => {
+                    state[ctx.params.object.key] = ctx.params.object.data;
 
-                    return this.newWorld()
-                        .then((world: IObject) => {
-                            this.logger.warn('creating initial snapshot');
+                    return state;
+                })
+                .then((object: any) => {
+                    return this.broker.call('world.state.setIn', {path: `${ctx.params.path}.objects`, object});
+                })
+                .then(() => {
+                    this.logger.info(`indexing location of '${ctx.params.object.key}:${ctx.params.object.object_type}'`);
 
-                            return this.broker.call('data.snapshot.create', world);
-                        });
+                    return this.redis.hsetAsync(
+                        'lucid.objectLocations',
+                        ctx.params.object.key,
+                        ctx.params.object.data.location,
+                    );
+                })
+                .then(() => {
+                    if (ctx.params.object.live) {
+                        this.liveLoad(ctx.params.object);
+                    }
+                });
+        },
+        getIn(ctx: Context): Bluebird<void> {
+            this.logger.debug(`loading '${ctx.params.path}' from state`);
 
-                }
-                this.logger.info(`loading world from snapshot '${state.created_at}'`);
-
-                return WorldObjectType({...state, ...state.data});
-            })
-            .then((world: IObject) => this.liveLoad(world))
-            .then((world: IObject) => {
-                this.redis.set('lucid.state', JSON.stringify(world));
-            })
-            .then(() => (this.loadRooms()))
-            .then(() => this.logger.info('world loading complete'))
-            .catch((e: Error) => {
-                this.logger.fatal(e);
-
-                process.exit(1);
-            });
+            return this.redis.getAsync('lucid.state')
+                .then((state: string) => (
+                    objectPath.get(JSON.parse(state), ctx.params.path)
+                ));
+        },
+        setIn(ctx: Context): Bluebird<void> {
+            return this.broker.call('world.state.getIn', {path: 'world'})
+                .then((state: IWorldConfig) => {
+                    objectPath.set(state, ctx.params.path.replace('world.', ''), ctx.params.object);
+                    this.redis.set(
+                        'lucid.state',
+                        JSON.stringify({world: state}),
+                    );
+                });
+        },
     },
     methods: {
         newWorld(): IObject {
@@ -63,38 +82,9 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
 
             return this.broker.call('world.objects.buildAndCreate', WorldObjectType({}));
         },
-        loadRooms(): Bluebird<void> {
-            this.logger.info('registering rooms with object service');
-
-            return g.readdirPromise('rooms/*.js')
-                .then((files: [string]): Bluebird<IRoom[]> => {
-
-                    return Promise.all(files.map((file: string) => {
-                        this.logger.info(`registering '${file}'`);
-
-                        return this.broker.call('world.objects.registerObjectType', {file})
-                            .then(() => {
-                                return file;
-                            });
-                    }));
-                })
-                .then((files: string[]): Bluebird<IRoom[]> => {
-                    this.logger.info('syncing rooms to object table');
-
-                    return Promise.all(files.map((file: string): Bluebird<IRoom> => {
-                        const t = path.basename(file).replace('.js', '');
-                        //tslint:disable-next-line:non-literal-require
-                        const room = require(file)();
-                        this.logger.debug(`syncing '${room.key}'`);
-
-                        return this.broker.call('world.objects.createOrUpdate', {...room, object_type: t});
-                    }));
-                })
-                .catch((e: Error) => {
-                    this.logger.error(e);
-                    process.exit(1);
-                });
-
+        placeObject(object: IObject) {
+            this.logger.info(`placing '${object.key}:${object.object_type}' into word @ '${object.data.location}'`);
+            this.broker.call('world.state.placeObjectIn', {path: object.data.location, object});
         },
         liveLoad(object: IObject) {
             if (object.live) {

@@ -2,6 +2,7 @@ const {RoomObjectType, compose} = require('lucid-engine');
 
 let LimboRoom = () => ({
     key: 'limbo',
+    location: 'world',
     attributes: {
         title: 'In Limbo',
         description: 'You see nothing but blackness.',

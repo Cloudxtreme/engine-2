@@ -16,10 +16,12 @@ export interface IObject {
     live?: boolean;
     //tslint:disable-next-line
     schema?: any
+    //tslint:disable-next-line
+    data: any;
 }
 
 export const ObjectType = (props: IObject): IObject => {
-    const schema = {
+    let schema = {
         ...{},
         ...props.schema,
         key: {
@@ -29,7 +31,10 @@ export const ObjectType = (props: IObject): IObject => {
         object_type: {
             presence: true,
         },
+        uuid: {},
     };
+
+    schema = {...{}, ...props.schema, ...schema};
 
     return {
         schema,

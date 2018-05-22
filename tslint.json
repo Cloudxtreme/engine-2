@@ -29,6 +29,7 @@
     "no-invalid-this": false,
     "prefer-template": false,
     "no-backbone-get-set-outside-model": false,
+    "no-any": false,
     "strict-boolean-expressions": [
       "allow-null-union",
       "allow-undefined-union"

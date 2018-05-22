@@ -26,6 +26,9 @@ let RoomObjectType = (data: IRoom) => {
         data: {
             presence: true,
         },
+        'data.location': {
+            presence: true,
+        },
         'data.attributes.title': {
             presence: true,
         },

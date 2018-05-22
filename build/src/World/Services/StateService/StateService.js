@@ -2,74 +2,64 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Bluebird = require("bluebird");
 const glob = require("glob-fs");
-const path = require("path");
+const objectPath = require("object-path");
 const g = glob();
 const redis = require("redis");
 Bluebird.promisifyAll(redis.RedisClient.prototype);
 Bluebird.promisifyAll(redis.Multi.prototype);
 const ObjectTypes_1 = require("../../ObjectTypes");
+const RoomService_1 = require("./RoomService");
+const WorldService_1 = require("./WorldService");
 exports.StateService = (config) => ({
     name: 'world.state',
     metadata: Object.assign({}, config),
     dependencies: ['data.snapshot'],
+    mixins: [WorldService_1.WorldService, RoomService_1.RoomService],
     created() {
         this.logger.debug('creating redis connection');
         this.redis = redis.createClient(config.redis);
-        this.logger.debug('loading initial world state');
-        this.broker.call('data.snapshot.getLatest')
-            .then((state) => {
-            if (!state) {
-                this.logger.warn('no existing snapshot');
-                return this.newWorld()
-                    .then((world) => {
-                    this.logger.warn('creating initial snapshot');
-                    return this.broker.call('data.snapshot.create', world);
-                });
-            }
-            this.logger.info(`loading world from snapshot '${state.created_at}'`);
-            return ObjectTypes_1.WorldObjectType(Object.assign({}, state, state.data));
-        })
-            .then((world) => this.liveLoad(world))
-            .then((world) => {
-            this.redis.set('lucid.state', JSON.stringify(world));
-        })
-            .then(() => (this.loadRooms()))
-            .then(() => this.logger.info('world loading complete'))
-            .catch((e) => {
-            this.logger.fatal(e);
-            process.exit(1);
-        });
+    },
+    actions: {
+        placeObjectIn(ctx) {
+            return this.broker.call('world.state.getIn', { path: `${ctx.params.path}.objects` })
+                .then((state) => {
+                state[ctx.params.object.key] = ctx.params.object.data;
+                return state;
+            })
+                .then((object) => {
+                return this.broker.call('world.state.setIn', { path: `${ctx.params.path}.objects`, object });
+            })
+                .then(() => {
+                this.logger.info(`indexing location of '${ctx.params.object.key}:${ctx.params.object.object_type}'`);
+                return this.redis.hsetAsync('lucid.objectLocations', ctx.params.object.key, ctx.params.object.data.location);
+            })
+                .then(() => {
+                if (ctx.params.object.live) {
+                    this.liveLoad(ctx.params.object);
+                }
+            });
+        },
+        getIn(ctx) {
+            this.logger.debug(`loading '${ctx.params.path}' from state`);
+            return this.redis.getAsync('lucid.state')
+                .then((state) => (objectPath.get(JSON.parse(state), ctx.params.path)));
+        },
+        setIn(ctx) {
+            return this.broker.call('world.state.getIn', { path: 'world' })
+                .then((state) => {
+                objectPath.set(state, ctx.params.path.replace('world.', ''), ctx.params.object);
+                this.redis.set('lucid.state', JSON.stringify({ world: state }));
+            });
+        },
     },
     methods: {
         newWorld() {
             this.logger.warn('constructing new world');
             return this.broker.call('world.objects.buildAndCreate', ObjectTypes_1.WorldObjectType({}));
         },
-        loadRooms() {
-            this.logger.info('registering rooms with object service');
-            return g.readdirPromise('rooms/*.js')
-                .then((files) => {
-                return Promise.all(files.map((file) => {
-                    this.logger.info(`registering '${file}'`);
-                    return this.broker.call('world.objects.registerObjectType', { file })
-                        .then(() => {
-                        return file;
-                    });
-                }));
-            })
-                .then((files) => {
-                this.logger.info('syncing rooms to object table');
-                return Promise.all(files.map((file) => {
-                    const t = path.basename(file).replace('.js', '');
-                    const room = require(file)();
-                    this.logger.debug(`syncing '${room.key}'`);
-                    return this.broker.call('world.objects.createOrUpdate', Object.assign({}, room, { object_type: t }));
-                }));
-            })
-                .catch((e) => {
-                this.logger.error(e);
-                process.exit(1);
-            });
+        placeObject(object) {
+            this.logger.info(`placing '${object.key}:${object.object_type}' into word @ '${object.data.location}'`);
+            this.broker.call('world.state.placeObjectIn', { path: object.data.location, object });
         },
         liveLoad(object) {
             if (object.live) {

@@ -22,6 +22,7 @@ const OBJECT_PROTOTYPES = {
     Character: CharacterObjectType,
 };
 
+//tslint:disable-next-line:max-func-body-length
 export const ObjectService = (config: IWorldConfig) => ({
     name: 'world.objects',
     metadata: config,
@@ -114,6 +115,7 @@ export const ObjectService = (config: IWorldConfig) => ({
             // we don't validate the key on update
             const schema = {...props.schema};
             delete schema.key;
+            delete schema.uuid;
 
             return this.validate(props, schema)
                 .then(success, this.validationError);

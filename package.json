@@ -65,6 +65,7 @@
     "moleculer": "^0.12.3",
     "mongoose": "^5.0.17",
     "nats": "^0.8.10",
+    "object-path": "^0.11.4",
     "pg": "^7.4.1",
     "prettyjson": "^1.2.1",
     "redis": "^2.8.0",

@@ -3,6 +3,7 @@ import {Context} from 'moleculer';
 
 import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType';
 import {DataService} from '../DataService';
+import {IObject} from '../../../ObjectTypes/ObjectType';
 
 interface ICount {
     count: string;
@@ -48,9 +49,13 @@ export const ObjectDataService = DataService(() => ({
                 });
         },
         updateForKey(ctx: Context): Bluebird<boolean> {
-            return this.db.update(ctx.params.props)
+            return this.db.returning('uuid')
+                .update(ctx.params.props)
                 .from('objects')
-                .where({key: ctx.params.key});
+                .where({key: ctx.params.key})
+                .then((object: IObject) => {
+                    return {uuid: object[0], ...ctx.params.props};
+                });
         },
     },
 }));

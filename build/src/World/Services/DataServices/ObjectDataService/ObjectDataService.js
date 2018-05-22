@@ -39,9 +39,13 @@ exports.ObjectDataService = DataService_1.DataService(() => ({
             });
         },
         updateForKey(ctx) {
-            return this.db.update(ctx.params.props)
+            return this.db.returning('uuid')
+                .update(ctx.params.props)
                 .from('objects')
-                .where({ key: ctx.params.key });
+                .where({ key: ctx.params.key })
+                .then((object) => {
+                return Object.assign({ uuid: object[0] }, ctx.params.props);
+            });
         },
     },
 }));

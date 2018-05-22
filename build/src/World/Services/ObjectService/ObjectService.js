@@ -61,6 +61,7 @@ exports.ObjectService = (config) => ({
             };
             const schema = Object.assign({}, props.schema);
             delete schema.key;
+            delete schema.uuid;
             return this.validate(props, schema)
                 .then(success, this.validationError);
         },
