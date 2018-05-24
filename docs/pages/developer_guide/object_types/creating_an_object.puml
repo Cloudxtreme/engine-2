@@ -1,0 +1,17 @@
+@startuml
+title: World Object Creation
+(*) ---> "create"
+"create" ---> "validate"
+if "valid?" then
+    -->[true] if "tableName?" then
+        -left->[true] "persist to Database"
+    else
+        -right->[false] "createUUID"
+    endif
+endif
+"createUUID" ---> "createTimestamps"
+"createTimestamps" ---> "index Key"
+"index Key" ---> "drop in location"
+"persist to Database" ---> "index Key"
+"drop in location"---> (*)
+@enduml

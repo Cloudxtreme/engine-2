@@ -72,6 +72,9 @@ exports.StateService = (config) => ({
             this.redis.hset('lucid.objectIndex', object.key, object.uuid);
             return object;
         },
+        create(object) {
+            this.logger.info(`creating object '${object.object_type}'`);
+        }
     },
 });
 //# sourceMappingURL=StateService.js.map

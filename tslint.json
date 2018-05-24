@@ -29,7 +29,9 @@
     "no-invalid-this": false,
     "prefer-template": false,
     "no-backbone-get-set-outside-model": false,
+    "no-object-literal-type-assertion": false,
     "no-any": false,
+    "curly": false,
     "strict-boolean-expressions": [
       "allow-null-union",
       "allow-undefined-union"

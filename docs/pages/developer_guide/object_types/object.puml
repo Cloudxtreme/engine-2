@@ -1,0 +1,36 @@
+@startuml
+title: Object
+class ObjectType {
+    uuid: string
+    objectType: string
+    location: string
+    createdAt: Date
+    updatedAt: Date
+    +onCreate()
+    +onDestroy()
+}
+
+class LiveObjectType extends ObjectType {
+    live: boolean
+    methods?: ServiceMethods
+    actions?: ServiceActions
+    events:? ServiceEvents
+    +onStart()
+    +onStop()
+    +onMessage()
+}
+
+class ContainableObjectType extends ObjectType {
+    objects: <key: string>: IObject
+    +onObjectEnter(ObjectType)
+    +onObjectLeave(ObjectType)
+}
+
+ContainableObjectType *-- ObjectType: contains
+
+class CharacterObjectType extends LiveObjectType
+class RoomObjectType extends LiveObjectType
+
+ContainableObjectType <|-- CharacterObjectType
+ContainableObjectType <|-- RoomObjectType
+@enduml

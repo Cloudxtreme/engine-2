@@ -1,6 +1,5 @@
 import * as Bluebird from 'bluebird';
 import * as glob from 'glob-fs';
-import {fromJS} from 'immutable';
 import * as objectPath from 'object-path';
 
 const g = glob();
@@ -99,5 +98,14 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
 
             return object;
         },
+        /**
+         * creates an object and drops it into the worldspace
+         * @param {IObject}
+         * @returns {Bluebird<void>}
+         */
+        create(object: IObject): Bluebird<void> {
+            this.logger.info(`creating object '${object.object_type}'`);
+
+        }
     },
 });
