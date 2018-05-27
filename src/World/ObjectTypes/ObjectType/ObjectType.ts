@@ -1,6 +1,7 @@
 import * as Bluebird from 'bluebird';
 import * as lodash from 'lodash';
 import * as uuid from 'uuid';
+import * as validate from 'validate.js';
 
 export interface IObjectSchema {
     [key: string]: IObjectConstraints;
@@ -12,6 +13,7 @@ interface IObjectConstraints {
         validator: Function;
         errorMessage: string;
     };
+    format?: RegExp;
 }
 
 export interface IObject {
@@ -21,6 +23,7 @@ export interface IObject {
     createdAt: Date;
     updatedAt: Date;
     schema: IObjectSchema;
+    beforeValidate: Function;
 }
 
 export interface IObjectArgs {
@@ -30,23 +33,25 @@ export interface IObjectArgs {
     createdAt?: Date;
     updatedAt?: Date;
     schema?: IObjectSchema;
+    beforeValidate?: Function;
 }
 
 export type IObjectBuilder = (props: IObjectArgs) => IObject;
+type IExtendResult = (props: IObjectArgs) => Bluebird<IObject>;
 
-const uniquenessValidator = (key: string): Bluebird<boolean> => {
-    return new Promise((resolve: Function): Bluebird<boolean> => {
-        return this.broker.call('world.index.exists', key)
-            .then((exists: boolean) => {
-                if (exists) return resolve(false);
-
-                return resolve(true);
-            });
+const validateObject = (object: IObject, schema: IObjectSchema): Bluebird<Object> => {
+    return new Promise((resolve: (value: any) => any, reject: (reason: any) => any) => {
+        return validate.async(object, schema, {cleanAttributes: false})
+            .then(
+                resolve,
+                reject,
+            );
     });
 };
 
 /**
- * The base ObjectType is the template used to create all world objects. All other ObjectTypes extend this type.
+ * ObjectType is the base type from which all other objects are derived. World objects are never created from
+ * ObjectType, but instead are created with the various extensions of this type.
  */
 export const ObjectType = (props: IObjectArgs): IObject => {
     const schema: IObjectSchema = {
@@ -55,10 +60,6 @@ export const ObjectType = (props: IObjectArgs): IObject => {
         },
         key: {
             presence: true,
-            unique: {
-                validator: uniquenessValidator.bind(this),
-                errorMessage: 'An object with key \'%{value}\' already exists.',
-            },
         },
         objectType: {
             presence: true,
@@ -69,6 +70,13 @@ export const ObjectType = (props: IObjectArgs): IObject => {
     if (!props.createdAt) props.createdAt = new Date();
     if (!props.updatedAt) props.updatedAt = props.createdAt;
     if (props.schema) props.schema = lodash.merge(schema, props.schema);
+    if (!props.key) {
+        const prefix = props.objectType.replace('ObjectType', '').toLowerCase();
+        const suffix = lodash.last(props.uuid.split('-'));
+        props.key = `${prefix}-${suffix}`;
+    }
+
+    if (!props.beforeValidate) props.beforeValidate = (p: IObject) => Promise.resolve(p);
 
     return {
         schema,
@@ -76,21 +84,48 @@ export const ObjectType = (props: IObjectArgs): IObject => {
     };
 };
 
-export const extend = (...types: IObjectBuilder[]): IObjectBuilder => {
-    if (types.length === 1) {
-        return (props: IObjectArgs) => {
-            const objectType = types[0].name;
+export const createObjectType = (...types: IObjectBuilder[]): IExtendResult => {
+    let objectType;
+    let object;
 
-            return ObjectType(types[0]({...props, objectType}));
-        };
-    }
+    return (props: any) => {
+        if (types.length === 1) {
+            objectType = types[0].name;
+            object = ObjectType(types[0]({...props, objectType}));
 
-    return (props: IObjectArgs): IObject => {
-        return ObjectType(types.reverse().reduce(
-            (object: IObject, t: Function) => {
-                return lodash.merge({...{}}, {...object, ...t(object)});
-            },
-            props,
-        ));
+            return Bluebird.reduce(
+                [
+                    object.beforeValidate(object),
+                    validateObject(object, object.schema),
+                ],
+                (p: IObject) => (Promise.resolve(p)),
+            );
+        }
+        const reversedTypes = types.reverse();
+        const beforeValidateFunctions = [];
+        objectType = reversedTypes[0].name;
+
+        object = ObjectType({
+            ...types.reduce(
+                (params: IObject, func: Function): IObject => {
+                    const o = func(params);
+                    if (o.beforeValidate) beforeValidateFunctions.push(o.beforeValidate);
+
+                    return <IObject>o;
+                },
+                <IObject>props,
+            ), objectType,
+        });
+
+        return Bluebird.reduce(
+            [
+                ...beforeValidateFunctions.map(
+                    (func: Function): Bluebird<IObject> => (func(object)),
+                ),
+                validateObject(object, object.schema),
+            ],
+            (p: IObject) => (Promise.resolve(p)),
+        );
+
     };
 };

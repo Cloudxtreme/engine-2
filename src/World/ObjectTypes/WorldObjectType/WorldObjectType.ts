@@ -6,6 +6,6 @@ import {
 
 let WorldObjectType = (props: IObject): IObject => props;
 
-WorldObjectType = extend(ObjectType, WorldObjectType);
+WorldObjectType = extend(WorldObjectType);
 
 export {WorldObjectType};

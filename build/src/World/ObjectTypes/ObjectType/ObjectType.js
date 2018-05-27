@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Bluebird = require("bluebird");
 const lodash = require("lodash");
 const uuid = require("uuid");
 const uniquenessValidator = (key) => {
@@ -36,19 +37,22 @@ exports.ObjectType = (props) => {
         props.updatedAt = props.createdAt;
     if (props.schema)
         props.schema = lodash.merge(schema, props.schema);
+    if (!props.key) {
+        const prefix = props.objectType.replace('ObjectType', '').toLowerCase();
+        const suffix = lodash.last(props.uuid.split('-'));
+        props.key = `${prefix}-${suffix}`;
+    }
+    if (!props.beforeCreate)
+        props.beforeCreate = (p) => Promise.resolve(p);
     return Object.assign({ schema }, props);
 };
 exports.extend = (...types) => {
-    if (types.length === 1) {
-        return (props) => {
-            const objectType = types[0].name;
-            return exports.ObjectType(types[0](Object.assign({}, props, { objectType })));
-        };
-    }
     return (props) => {
-        return exports.ObjectType(types.reverse().reduce((object, t) => {
-            return lodash.merge(Object.assign({}), Object.assign({}, object, t(object)));
-        }, props));
+        const objectType = types[0].name;
+        const object = exports.ObjectType(types[0](Object.assign({}, props, { objectType })));
+        return Bluebird.reduce([
+            object.beforeCreate(object),
+        ], (p) => (Promise.resolve(p)));
     };
 };
 //# sourceMappingURL=ObjectType.js.map
