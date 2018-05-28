@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
 
-import {IObject} from '../../../ObjectTypes/ObjectType';
+import {IObjectType} from '../../../ObjectTypes/ObjectType';
 import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType';
 import {DataService} from '../DataService';
 
@@ -53,7 +53,7 @@ export const ObjectDataService = DataService(() => ({
                 .update(ctx.params.props)
                 .from('objects')
                 .where({key: ctx.params.key})
-                .then((object: IObject) => {
+                .then((object: IObjectType) => {
                     return {uuid: object[0], ...ctx.params.props};
                 });
         },

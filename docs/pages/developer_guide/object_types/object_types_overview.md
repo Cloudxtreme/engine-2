@@ -15,6 +15,7 @@ understand object typing system, that allows the developer to create custom type
 ObjectType is the base type from which all other objects are derived. World objects are never created from ObjectType,
 but instead are created with the various extensions of this type. Every object has the following properties defined:
 
+### Properties 
 * **uuid** - this is the unique ID for the object. The UUID is never set by the developer but instead determined by the
   world.
 * **key** - the unique name of the object in the world. The key is similar to the UUID as it must be 100% unique,
@@ -29,11 +30,20 @@ but instead are created with the various extensions of this type. Every object h
   the schema. The schema itself is set by every ObjectType the parent extends, as well as itself.
 * **createdAt** - the `Date` at which the object was created.
 * **updatedAt** - the `Date` at which the object was last updated.
+
+### Life Cycle Hooks
 * **beforeCreate(props, config)** - beforeCreate is a function that should return a promise that resolves to the object 
   props and is called before an object is created. It is passed the World  configuration This is useful for doing 
   things before the object is placed in the world.
   
-## Defining Custom ObjectTypes
+## ContainerObjectType
+A `ContainerObjectType` can contain other objects. This can be anything from a backpack to an alternate dimension, the
+object type simply adds functionality allowing inherited types to receive and contain their own objects.
+
+### Properties
+* **objects** - the objects this object contains.
+  
+## Custom ObjectTypes
 Custom ObjectTypes can be defined in the `object_types`  directory of the game. An ObjectType file consists of at least
 two parts:
 
@@ -169,4 +179,6 @@ it can be required to be globally unique for the given prop name.
 * **global (boolean)** - if `true`, the the field will be required to be unique across all objects. For example, the `key`
   field is globally unique. If `false`, the field value will only be unique to the ObjectType.
 
- 
+* **validObjectType (boolean | string)** - if `true`, the value must also validate as a valid ObjectType. If `array`
+  the validator will validate each item in the array. If `object`, the validator will validate all of the values of
+  the object.

@@ -14,7 +14,7 @@ Bluebird.promisifyAll(redis.RedisClient.prototype);
 Bluebird.promisifyAll(redis.Multi.prototype);
 
 import {
-    IObject,
+    IObjectType,
     WorldObjectType,
 } from '../../ObjectTypes';
 import {IWorldConfig} from '../../World';
@@ -76,16 +76,16 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
         },
     },
     methods: {
-        newWorld(): IObject {
+        newWorld(): IObjectType {
             this.logger.warn('constructing new world');
 
             return this.broker.call('world.objects.buildAndCreate', WorldObjectType({}));
         },
-        placeObject(object: IObject) {
+        placeObject(object: IObjectType) {
             this.logger.info(`placing '${object.key}:${object.object_type}' into word @ '${object.data.location}'`);
             this.broker.call('world.state.placeObjectIn', {path: object.data.location, object});
         },
-        liveLoad(object: IObject) {
+        liveLoad(object: IObjectType) {
             if (object.live) {
                 this.logger.debug(`starting live service for '${object.object_type}.${object.uuid}'`);
                 this.broker.createService({
@@ -100,10 +100,10 @@ export const StateService = (config: IWorldConfig): ServiceSchema => ({
         },
         /**
          * creates an object and drops it into the worldspace
-         * @param {IObject}
+         * @param {IObjectType}
          * @returns {Bluebird<void>}
          */
-        create(object: IObject): Bluebird<void> {
+        create(object: IObjectType): Bluebird<void> {
             this.logger.info(`creating object '${object.object_type}'`);
 
         },

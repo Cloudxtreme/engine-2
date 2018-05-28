@@ -21,7 +21,7 @@ class LiveObjectType extends ObjectType {
 }
 
 class ContainableObjectType extends ObjectType {
-    objects: <key: string>: IObject
+    objects: <key: string>: IObjectType
     +onObjectEnter(ObjectType)
     +onObjectLeave(ObjectType)
 }

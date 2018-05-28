@@ -1,10 +1,10 @@
-import {IObject} from '../../ObjectTypes/ObjectType';
+import {IObjectType} from '../../ObjectTypes/ObjectType';
 import {App, IInputMessage} from '../App';
 
 interface ICharacterData {
     name: string;
     template: string;
-    character: IObject;
+    character: IObjectType;
 }
 
 export const SelectCharacterApp = App({
@@ -14,9 +14,9 @@ export const SelectCharacterApp = App({
             player_id: this.metadata.playerId,
             object_type: 'Character',
         })
-            .then((characters: [IObject]) => {
+            .then((characters: [IObjectType]) => {
                 if (characters.length > 0) {
-                    const chars = characters.map((character: IObject, index: number) => {
+                    const chars = characters.map((character: IObjectType, index: number) => {
                         return {
                             name: character.key,
                             template: `   ${index + 1}. ${character.key}\n`,
@@ -44,7 +44,7 @@ export const SelectCharacterApp = App({
             player_id: this.metadata.playerId,
             object_type: 'Character',
         })
-            .then((characters: [IObject]) => {
+            .then((characters: [IObjectType]) => {
                 if (characters[<number>payload.message - 1]) {
                     this.sendToScreen(`You selected '${payload.message}'\n`);
                 } else if (payload.message === 'create') {

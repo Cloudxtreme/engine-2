@@ -1,12 +1,12 @@
 import * as Bluebird from 'bluebird';
 
-import {IObject} from '../../../ObjectTypes/ObjectType/index';
+import {IObjectType} from '../../../ObjectTypes/ObjectType/index';
 import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType/index';
 import {DataService, IDataServiceSchema} from '../DataService/index';
 
 export const SnapshotDataService = DataService((): IDataServiceSchema => ({
     name: 'snapshot',
-    create(data: IObject) {
+    create(data: IObjectType) {
         return this.db.insert({
             data: data,
         })

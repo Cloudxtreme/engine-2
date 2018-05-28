@@ -30,6 +30,7 @@
     "prefer-template": false,
     "no-backbone-get-set-outside-model": false,
     "no-object-literal-type-assertion": false,
+    "no-unnecessary-callback-wrapper": false,
     "no-any": false,
     "curly": false,
     "strict-boolean-expressions": [

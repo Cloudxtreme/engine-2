@@ -4,12 +4,12 @@ import * as path from 'path';
 import * as validate from 'validate.js';
 import {
     CharacterObjectType,
-    IObject,
+    IObjectType,
     WorldObjectType,
 } from '../../ObjectTypes';
 import {IWorldConfig} from '../../World';
 
-interface ICreateObject extends IObject {
+interface ICreateObject extends IObjectType {
     playerUuid?: string;
 }
 
@@ -41,22 +41,22 @@ export const ObjectService = (config: IWorldConfig) => ({
         /**
          * builds a transient game object.
          */
-        build(ctx: Context): Bluebird<IObject> {
+        build(ctx: Context): Bluebird<IObjectType> {
             return this.build(ctx.params);
         },
         /**
          * builds a transient game object, and immediately save that object to the object table.
          */
-        buildAndCreate(ctx: Context): Bluebird<IObject> {
+        buildAndCreate(ctx: Context): Bluebird<IObjectType> {
             return this.build(ctx.params)
-                .then((object: IObject) => {
+                .then((object: IObjectType) => {
                     return this.create(object);
                 });
         },
         /**
          * creates or updates an object in the object table.
          */
-        createOrUpdate(ctx: Context): Bluebird<IObject> {
+        createOrUpdate(ctx: Context): Bluebird<IObjectType> {
             this.logger.info(`creating or updating room '${ctx.params.key}' in object table`);
             this.logger.info(`checking if '${ctx.params.key}' exists in the object table`);
 
@@ -78,10 +78,10 @@ export const ObjectService = (config: IWorldConfig) => ({
         /**
          * Creates a transient object, transient objects are not persisted, and will not survive a state reset of
          * what ever parent object it is placed in.
-         * @param {IObject} props the object props. Requires a key (which must be unique), and the object_type
-         * @returns {IObject}
+         * @param {IObjectType} props the object props. Requires a key (which must be unique), and the object_type
+         * @returns {IObjectType}
          */
-        build(props: IObject): Bluebird<IObject> {
+        build(props: IObjectType): Bluebird<IObjectType> {
             this.logger.debug(`building '${props.object_type}' object`);
 
             return Promise.resolve(OBJECT_PROTOTYPES[props.object_type](props));
@@ -89,13 +89,13 @@ export const ObjectService = (config: IWorldConfig) => ({
         /**
          * Saves an object to the database. When objects are saved to the database, they will be restored to their
          * "home" position when the containing object is reloaded.
-         * @param {IObject} object
-         * @returns {Bluebird<IObject>}
+         * @param {IObjectType} object
+         * @returns {Bluebird<IObjectType>}
          */
-        create(object: ICreateObject): Bluebird<IObject> {
+        create(object: ICreateObject): Bluebird<IObjectType> {
             this.logger.debug(`saving '${object.object_type}:${object.key}'`);
 
-            const success = (attributes: IObject) => {
+            const success = (attributes: IObjectType) => {
                 return this.broker.call('data.object.create', attributes);
             };
 
@@ -104,11 +104,11 @@ export const ObjectService = (config: IWorldConfig) => ({
         },
         /**
          * Updates an object in the database with the given attributes using the object key.
-         * @param {IObject} props the attributes with which to update
-         * @returns {Bluebird<IObject>}
+         * @param {IObjectType} props the attributes with which to update
+         * @returns {Bluebird<IObjectType>}
          */
-        update(props: IObject): Bluebird<IObject> {
-            const success = (attributes: IObject) => {
+        update(props: IObjectType): Bluebird<IObjectType> {
+            const success = (attributes: IObjectType) => {
                 return this.broker.call('data.object.updateForKey', {key: props.key, props: attributes});
             };
 
@@ -122,7 +122,7 @@ export const ObjectService = (config: IWorldConfig) => ({
 
         },
         validationError(object: ICreateObject): Function {
-            return (errors: Error | IError): boolean | Bluebird<IObject> => {
+            return (errors: Error | IError): boolean | Bluebird<IObjectType> => {
                 if (errors instanceof Error) {
                     this.logger.error(errors);
 
@@ -142,7 +142,7 @@ export const ObjectService = (config: IWorldConfig) => ({
             };
         },
         // tslint:disable-next-line:no-any
-        validate(props: IObject, schema: any) {
+        validate(props: IObjectType, schema: any) {
             return validate.async(props, schema);
         },
     },

@@ -1,9 +1,9 @@
 import {
-    IObject,
+    IObjectType,
     ObjectType,
 } from '../ObjectType';
 
-export const CharacterObjectType = ObjectType((data: IObject) => ({
+export const CharacterObjectType = ObjectType((data: IObjectType) => ({
     schema: {
         key: {
             presence: true,

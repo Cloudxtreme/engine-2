@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import {ServiceSchema} from 'moleculer';
 
-import {IObject, IRoom} from '../../../ObjectTypes';
+import {IObjectType, IRoom} from '../../../ObjectTypes';
 
 const g = glob();
 
@@ -45,7 +45,7 @@ export const RoomService: ServiceSchema = {
                         this.logger.debug(`syncing '${room.key}'`);
 
                         return this.broker.call('world.objects.createOrUpdate', {...room, object_type: t})
-                            .then((object: IObject) => (
+                            .then((object: IObjectType) => (
                                 {...object, ...room, object_type: t}))
                             ;
                     }));

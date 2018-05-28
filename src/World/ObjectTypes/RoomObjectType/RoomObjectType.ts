@@ -1,11 +1,11 @@
 import {
-    IObject,
+    IObjectType,
     ObjectType,
 } from '../ObjectType';
 
 import {compose} from '../../../utils';
 
-export interface IRoom extends IObject {
+export interface IRoom extends IObjectType {
     title: string;
     description: string;
     shortDescription: string;

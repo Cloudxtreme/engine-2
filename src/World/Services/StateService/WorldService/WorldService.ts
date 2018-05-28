@@ -1,7 +1,7 @@
 import {ServiceSchema} from 'moleculer';
 import * as validate from 'validate.js';
 
-import {IObject, WorldObjectType} from '../../../ObjectTypes';
+import {IObjectType, WorldObjectType} from '../../../ObjectTypes';
 
 export const WorldService: ServiceSchema = {
     name: 'world.state.world',
@@ -15,7 +15,7 @@ export const WorldService: ServiceSchema = {
                     this.logger.warn('no existing snapshot');
 
                     return this.newWorld()
-                        .then((world: IObject) => {
+                        .then((world: IObjectType) => {
                             this.logger.warn('creating initial snapshot');
 
                             return this.broker.call('data.snapshot.create', world);
@@ -26,8 +26,8 @@ export const WorldService: ServiceSchema = {
 
                 return WorldObjectType({...state, ...state.data});
             })
-            .then((world: IObject) => this.liveLoad(world))
-            .then((world: IObject) => {
+            .then((world: IObjectType) => this.liveLoad(world))
+            .then((world: IObjectType) => {
                 const worldAttributes = validate.cleanAttributes(world, world.schema);
                 delete worldAttributes.updated_at;
                 this.redis.set('lucid.state', JSON.stringify({world: worldAttributes}));

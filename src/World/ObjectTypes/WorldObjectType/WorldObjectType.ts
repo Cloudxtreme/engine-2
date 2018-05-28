@@ -1,10 +1,10 @@
 import {
     extend,
-    IObject,
+    IObjectType,
     ObjectType,
 } from '../ObjectType';
 
-let WorldObjectType = (props: IObject): IObject => props;
+let WorldObjectType = (props: IObjectType): IObjectType => props;
 
 WorldObjectType = extend(WorldObjectType);
 
