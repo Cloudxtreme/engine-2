@@ -1,3 +1,4 @@
+import * as Bluebird from 'bluebird';
 import * as lodash from 'lodash';
 
 import {
@@ -46,22 +47,58 @@ const AnotherTestObject = (props: ITestObjectArgs): IObjectType => (<IObjectType
 });
 
 describe('createObjectType', () => {
+    const BasicTestObjectType = (props: IObjectArgs): IObjectType => (<IObjectType>props);
     let instance;
     beforeEach(() => {
-        instance = createObjectType(TestObjectType)(<IObjectArgs>{foo: 'bar'});
+        instance = createObjectType(BasicTestObjectType)({});
     });
 
     it('builds an object with the correct objectType', () => {
         return instance
-            .then((props: IObjectType) => expect(props.objectType).toEqual('TestObjectType'));
+            .then((props: IObjectType) => expect(props.objectType).toEqual('BasicTestObjectType'));
     });
 
-    it('calls beforeCreate on the objectType', () => {
+    it('sets a uuid', () => {
         return instance
-            .then((props: IObjectType) => (expect(mockFunction1).toHaveBeenCalledWith(props)));
+            .then((props: IObjectType) => expect(props.uuid).toBeDefined());
     });
 
-    describe('multi extend', () => {
+    it('sets a key', () => {
+        return instance
+            .then((props: IObjectType) => expect(props.key).toEqual(`basic-test:${props.uuid.slice(-5)}`));
+    });
+
+    it('sets createdAt', () => {
+        return instance
+            .then((props: IObjectType) => expect(props.createdAt).toBeDefined());
+    });
+
+    it('sets updatedAt', () => {
+        return instance
+            .then((props: IObjectType) => expect(props.updatedAt).toBeDefined());
+    });
+
+    describe('beforeValidate', () => {
+        const CallbackTestObjectType = (props: IObjectArgs): IObjectType => ({
+            ...<IObjectType>props,
+            beforeValidate() {
+                return Bluebird.resolve(mockFunction1(this));
+            },
+        });
+        beforeEach(() => {
+            instance = createObjectType(CallbackTestObjectType)({});
+        });
+
+        it('should have called beforeValidate', () => {
+            instance
+                .then((props: IObjectType) => {
+                    expect(mockFunction1).toHaveBeenCalledWith(props);
+                });
+        });
+
+    });
+
+    describe('multi inheritance', () => {
         beforeEach(() => {
             instance = createObjectType(AnotherTestObject, TestObjectType)(<IObjectArgs>{foo: 'bar'});
         });

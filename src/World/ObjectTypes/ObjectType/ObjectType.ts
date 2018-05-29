@@ -24,7 +24,7 @@ export interface IObjectType {
     createdAt: Date;
     updatedAt: Date;
     schema: IObjectSchema;
-    beforeValidate: Function;
+    beforeValidate: IObjectBuilder;
 }
 
 export interface IObjectArgs {
@@ -34,11 +34,11 @@ export interface IObjectArgs {
     createdAt?: Date;
     updatedAt?: Date;
     schema?: IObjectSchema;
-    beforeValidate?: Function;
+    beforeValidate?: IObjectBuilder;
 }
 
-export type IObjectBuilder = (props: IObjectArgs) => IObjectType;
-type IExtendResult = (props: IObjectArgs) => Bluebird<IObjectType>;
+export type IObjectBuilder = (props: IObjectArgs) => Bluebird<IObjectType>;
+export type IBasicObjectBuilder = (props: IObjectArgs) => IObjectType;
 
 export interface IObjectSet {
     [key: string]: IObjectType;
@@ -103,9 +103,9 @@ export const ObjectType = (props: IObjectArgs): IObjectType => {
     if (!props.updatedAt) props.updatedAt = props.createdAt;
     if (props.schema) props.schema = lodash.merge(ObjectSchema, props.schema);
     if (!props.key) {
-        const prefix = props.objectType.replace('ObjectType', '').toLowerCase();
-        const suffix = lodash.last(props.uuid.split('-'));
-        props.key = `${prefix}-${suffix}`;
+        const prefix = lodash.kebabCase(props.objectType.replace('ObjectType', ''));
+        const suffix = props.uuid.slice(-5);
+        props.key = `${prefix}:${suffix}`;
     }
 
     if (!props.beforeValidate) props.beforeValidate = (p: IObjectType) => Promise.resolve(p);
@@ -116,48 +116,73 @@ export const ObjectType = (props: IObjectArgs): IObjectType => {
     };
 };
 
-export const createObjectType = (...types: IObjectBuilder[]): IExtendResult => {
-    let objectType;
-    let object;
+export const createObjectType = (...types: (IBasicObjectBuilder | IObjectBuilder)[]): IObjectBuilder => {
+    return (props: IObjectArgs): Bluebird<IObjectType> => {
+        const objectType = lodash.last(types).name;
+        const beforeValidateHooks: IObjectBuilder[] = [];
 
-    return (props: any) => {
-        if (types.length === 1) {
-            objectType = types[0].name;
-            object = ObjectType(types[0]({...props, objectType}));
+        const preparedTypes = types.map((t: IBasicObjectBuilder): IObjectBuilder => {
+            if (typeof t === 'function') {
+                return (p: IObjectType) => (Bluebird.resolve(t(p)));
+            }
 
-            return Bluebird.reduce(
-                [
-                    object.beforeValidate(object),
-                    validateObject(object, object.schema),
-                ],
-                (p: IObjectType) => (Promise.resolve(p)),
-            );
-        }
-        const reversedTypes = types.reverse();
-        const beforeValidateFunctions = [];
-        objectType = reversedTypes[0].name;
-
-        object = ObjectType({
-            ...types.reduce(
-                (params: IObjectType, func: Function): IObjectType => {
-                    const o = func(params);
-                    if (o.beforeValidate) beforeValidateFunctions.push(o.beforeValidate);
-
-                    return <IObjectType>o;
-                },
-                <IObjectType>props,
-            ), objectType,
+            return t;
         });
 
         return Bluebird.reduce(
-            [
-                ...beforeValidateFunctions.map(
-                    (func: Function): Bluebird<IObjectType> => (func(object)),
-                ),
-                validateObject(object, object.schema),
-            ],
-            (p: IObjectType) => (Promise.resolve(p)),
-        );
+            preparedTypes,
+            (p: IObjectType, t: IObjectBuilder) => {
+                if (p.beforeValidate) beforeValidateHooks.push(p.beforeValidate);
+
+                return t(p);
+            },
+            {objectType, ...<IObjectType>props},
+        )
+            .then((p: IObjectType) => ObjectType(p))
+            .then((p: IObjectType) => (
+                Bluebird.reduce(
+                    beforeValidateHooks,
+                    (object: IObjectType, hook: IObjectBuilder): IObjectType => (hook.bind(object)()),
+                    p,
+                )
+            ));
+        // if (types.length === 1) {
+        //     objectType = types[0].name;
+        //     object = ObjectType(types[0]({...<IObjectType>props, objectType}));
+        //
+        //     return Bluebird.reduce(
+        //         [
+        //             object.beforeValidate(object),
+        //             validateObject(object, object.schema),
+        //         ],
+        //         (p: IObjectType) => (Promise.resolve(p)),
+        //     );
+        // }
+        // const reversedTypes = types.reverse();
+        // const beforeValidateFunctions = [];
+        // objectType = reversedTypes[0].name;
+        //
+        // object = ObjectType({
+        //     ...types.reduce(
+        //         (params: IObjectType, func: Function): IObjectType => {
+        //             const o = func(params);
+        //             if (o.beforeValidate) beforeValidateFunctions.push(o.beforeValidate);
+        //
+        //             return <IObjectType>o;
+        //         },
+        //         <IObjectType>props,
+        //     ), objectType,
+        // });
+        //
+        // return Bluebird.reduce(
+        //     [
+        //         ...beforeValidateFunctions.map(
+        //             (func: Function): Bluebird<IObjectType> => (func(object)),
+        //         ),
+        //         validateObject(object, object.schema),
+        //     ],
+        //     (p: IObjectType) => (Promise.resolve(p)),
+        // );
 
     };
 };

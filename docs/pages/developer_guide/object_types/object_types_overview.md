@@ -22,7 +22,7 @@ but instead are created with the various extensions of this type. Every object h
   however unlike the UUID specific ObjectType classes can determine what the key. For example a Character's key is
   the character name. If the key is not defined by the class, the object will be given a key named after the ObjectType
   appended with the last characters of the object's UUID. For example, if the name of the ObjectType were 
-  SwordObjectType, the generated key for the object would be `sword-<uuid>` where \<uuid\> is the last character set of
+  SwordObjectType, the generated key for the object would be `sword:<uuid>` where \<uuid\> is the last character set of
   that objects UUID.
 * **objectType** - the name of the objects ObjectType. In the example of the SwordObject type, the objectType is set to
   `"SwordObjectType"`.
@@ -165,7 +165,6 @@ const SomeObjectType  = (props) => ({
 Fired before the object is created, and before it is validated. This is useful for setting up traits or attributes
 before validation happens.
 
-
 ### Validation
 Objects are validated using [validate.js](https://validatejs.org/#validate-async), and each ObjectType can define it's 
 validations in the `schema` prop following the the standards in the validate.js documentation. In addition to the 
@@ -179,6 +178,6 @@ it can be required to be globally unique for the given prop name.
 * **global (boolean)** - if `true`, the the field will be required to be unique across all objects. For example, the `key`
   field is globally unique. If `false`, the field value will only be unique to the ObjectType.
 
-* **validObjectType (boolean | string)** - if `true`, the value must also validate as a valid ObjectType. If `array`
+* **objectType (boolean | string)** - if `true`, the value must also validate as a valid ObjectType. If `array`
   the validator will validate each item in the array. If `object`, the validator will validate all of the values of
   the object.

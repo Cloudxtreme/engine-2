@@ -1,4 +1,5 @@
 import {
+    createObjectType,
     IObjectArgs,
     IObjectSet,
     IObjectType,
@@ -8,7 +9,7 @@ interface IContainerObjectType extends IObjectType {
     objects: IObjectSet | {};
 }
 
-const ContainerObjectType = (props: IObjectArgs): IContainerObjectType => {
+export const ContainerObjectType = createObjectType((props: IObjectArgs) => {
     const schema = {
         objects: {
             presence: true,
@@ -17,8 +18,8 @@ const ContainerObjectType = (props: IObjectArgs): IContainerObjectType => {
     };
 
     return {
+        objects: {},
         ...<IObjectType>props,
         schema,
-        objects: {},
     };
-};
+});
