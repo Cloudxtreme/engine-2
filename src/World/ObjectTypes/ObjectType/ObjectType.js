@@ -3,6 +3,8 @@ const Bluebird = require("bluebird");
 const lodash = require("lodash");
 const uuid = require("uuid");
 const validate = require("validate.js");
+
+
 const ObjectSchema = {
     uuid: {
         presence: true,
@@ -14,48 +16,46 @@ const ObjectSchema = {
         presence: true,
     },
 };
+
 const validateObject = (object, schema) => {
     return new Promise((resolve, reject) => {
         return validate.async(object, schema, { cleanAttributes: false })
             .then(resolve, reject);
     });
 };
+
 validate.validators.objectType = (value, options) => {
     return new Promise((resolve, reject) => {
-        if (!value)
-            return resolve();
+        if (!value) return resolve();
+
         if (options === true) {
             const t = value;
             return validateObject(t, t.schema)
                 .then(() => resolve())
                 .catch((e) => resolve(e));
-        }
-        else if (options === 'array') {
+        } else if (options === 'array') {
             const t = value;
             return Bluebird.all(t.map((v) => (validateObject(v, v.schema))))
                 .then(() => resolve())
                 .catch((e) => resolve(e));
-        }
-        else if (options === 'object') {
+        } else if (options === 'object') {
             const t = value;
             return Bluebird.all(lodash.values(t).map((v) => (validateObject(v, v.schema))))
                 .then(() => resolve())
                 .catch((e) => resolve(e));
-        }
-        else {
+        } else {
             return reject('invalid option');
         }
     });
 };
+
 exports.ObjectType = (props) => {
     if (!props.uuid)
         props.uuid = uuid.v1();
-    if (!props.createdAt)
-        props.createdAt = new Date();
-    if (!props.updatedAt)
-        props.updatedAt = props.createdAt;
-    if (props.schema)
-        props.schema = lodash.merge(ObjectSchema, props.schema);
+    if (!props.createdAt) props.createdAt = new Date();
+    if (!props.updatedAt) props.updatedAt = props.createdAt;
+    if (props.schema) props.schema = lodash.merge(ObjectSchema, props.schema);
+
     if (!props.key) {
         const prefix = lodash.kebabCase(props.objectType.replace('ObjectType', ''));
         const suffix = props.uuid.slice(-5);
@@ -65,6 +65,7 @@ exports.ObjectType = (props) => {
         props.beforeValidate = (p) => Promise.resolve(p);
     return Object.assign({ schema: ObjectSchema }, props);
 };
+
 exports.createObjectType = (...types) => {
     return (props) => {
         const objectType = lodash.last(types).name;
@@ -84,4 +85,3 @@ exports.createObjectType = (...types) => {
             .then((p) => (Bluebird.reduce(beforeValidateHooks, (object, hook) => (hook.bind(object)()), p)));
     };
 };
-//# sourceMappingURL=ObjectType.js.map

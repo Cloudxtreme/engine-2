@@ -1,25 +1,24 @@
 import {
     createObjectType,
     IObjectArgs,
-    IObjectSet,
     IObjectType,
-} from '../ObjectType';
+} from '../ObjectType/index';
 
-interface IContainerObjectType extends IObjectType {
-    objects: IObjectSet | {};
-}
-
-export const ContainerObjectType = createObjectType((props: IObjectArgs) => {
+let ContainerObjectType = (props: IObjectArgs): IObjectType => {
     const schema = {
         objects: {
             presence: true,
-            validObjectType: 'object',
+            validateObjectType: 'object',
         },
     };
 
     return {
-        objects: {},
         ...<IObjectType>props,
         schema,
+        objects: {},
     };
-});
+};
+
+ContainerObjectType = createObjectType(ContainerObjectType);
+
+export {ContainerObjectType};

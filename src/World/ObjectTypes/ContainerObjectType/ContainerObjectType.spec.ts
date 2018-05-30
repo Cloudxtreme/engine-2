@@ -1,4 +1,4 @@
-import {createObjectType} from '../ObjectType';
+import {createObjectType} from '../ObjectType/index';
 import {ContainerObjectType} from './ContianerObjectType';
 
 describe('ContainerObjectType', () => {

@@ -74,7 +74,7 @@ exports.StateService = (config) => ({
         },
         create(object) {
             this.logger.info(`creating object '${object.object_type}'`);
-        }
+        },
     },
 });
 //# sourceMappingURL=StateService.js.map

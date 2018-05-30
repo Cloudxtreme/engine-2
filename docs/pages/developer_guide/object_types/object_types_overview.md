@@ -178,6 +178,10 @@ it can be required to be globally unique for the given prop name.
 * **global (boolean)** - if `true`, the the field will be required to be unique across all objects. For example, the `key`
   field is globally unique. If `false`, the field value will only be unique to the ObjectType.
 
-* **objectType (boolean | string)** - if `true`, the value must also validate as a valid ObjectType. If `array`
-  the validator will validate each item in the array. If `object`, the validator will validate all of the values of
-  the object.
+
+#### objectType
+Validates a field as a valid ObjectType based on that type's schema. This can be applied to a plain object, an object 
+whose values are ObjectTypes, or an array of ObjectTypes. `true`, the value must also validate as a valid ObjectType. If 
+`'array'` the validator will validate each item in the array. If `'object'`, the validator will validate all of the values 
+of the object.
+
