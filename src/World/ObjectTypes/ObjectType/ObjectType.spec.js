@@ -1,20 +1,21 @@
 const Bluebird = require('bluebird');
 const lodash = require('lodash');
 
-const {createObjectType,} = require('./ObjectType');
+import {combine} from "./ObjectType";
+
 
 const mockFunction1 = jest.fn();
 const mockFunction2 = jest.fn();
 
 describe('createObjectType', () => {
-    
     const BasicTestObjectType = (props) => ({
         ...props,
         foo: 'bar',
     });
+
     let instance;
     beforeEach(() => {
-        instance = createObjectType(BasicTestObjectType)({});
+        instance = combine()(BasicTestObjectType)({});
     });
 
     it('builds an object with the correct objectType', () => {
@@ -50,11 +51,11 @@ describe('createObjectType', () => {
             },
         });
         beforeEach(() => {
-            instance = createObjectType(CallbackTestObjectType)({});
+            instance = combine()(CallbackTestObjectType)({});
         });
 
         it('should have called beforeValidate', () => {
-            instance
+            return instance
                 .then((props) => {
                     expect(mockFunction1).toHaveBeenCalledWith(props);
                 });
@@ -68,7 +69,7 @@ describe('createObjectType', () => {
             bar: 'baz',
         });
         beforeEach(() => {
-            instance = createObjectType(BasicTestObjectType, SecondaryTestObjectType)({});
+            instance = combine(BasicTestObjectType)(SecondaryTestObjectType)({});
         });
 
         it('sets the correct objectType', () => {
@@ -90,7 +91,7 @@ describe('createObjectType', () => {
                 foo: 'bing',
             });
 
-            instance = createObjectType(BasicTestObjectType, SecondaryTestObjectType, ThirdTestObjectType)({});
+            instance = combine(BasicTestObjectType, SecondaryTestObjectType)(ThirdTestObjectType)({});
 
             return instance
                 .then((props) => {

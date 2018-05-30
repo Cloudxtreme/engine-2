@@ -52,7 +52,7 @@ two parts:
    (example: `WeaponObjectType`). The ObjectService will automatically load and register object types and make them 
    available to the ObjectService.
  
- 2. A `createObjectType` statement. This function does the heavy lifting of combining the traits of various object
+ 2. A `combine` statement. This function does the heavy lifting of combining the traits of various object
     types together, validation, and life cycle management, It returns a function that when called will build an object
     of the prepared type.
 
@@ -61,13 +61,11 @@ An ObjecType function is simply  a function that accepts a set of props (a [POJO
 The only argument passed the function will be the combined `props` passed down from the ObjecTypes higher up the chain
  as well as the props passed in during object creation.
 
-### createObjectType
-The `createObjectType` function is used to combine the traits and behaviors into a new object type. It accepts any
+### combine
+The `combine` function is used to combine the traits and behaviors into a new object type. It accepts any
 number of ObjectType functions and combines them into a new composite of the combined result. When an object is created,
-each ObjectType is called in the order it was listed. **They very last ObjecType function should be the final ObjectType 
-that the definition represents.  In the `MolotovCocktailObjectType` example, the final ObjecType is, 
-`MolotovCocktailObjectType`. 
-
+each ObjectType is called in the order it was listed.
+ 
 ### Basic Object Types
 A basic object type is simply defined as a function. In the following example we create a simple glass bottle:
 
@@ -78,7 +76,7 @@ const GlassObjectType = function(props) {
    }
 }
 
-module.exports = createObjectType(GlassBottleObjectType)
+module.exports = combine(GlassBottleObjectType)
 ```
 
 When objects are created from this ObjectType they will inherit the attributes of the type:
@@ -113,7 +111,7 @@ const BottleObjectType = function(props) {
     ...props
 }
 
-module.exports = createObjectType(GlassObjectType, BottleObjectType)
+module.exports = combine(GlassObjectType, BottleObjectType)
 ```
 
 Any Bottle created will inherit both the `GlassObjectType` and the `BottleObjectType`. We can enhance this further by
@@ -128,7 +126,7 @@ const MolotovCocktailObjectType = function(props) {
     }
 }
 
-module.exports = createObjectType(BottleObjectType, WeaponObjectType, MolotovCocktailObjectType)
+module.exports = combine(BottleObjectType, WeaponObjectType, MolotovCocktailObjectType)
 ```
 
 Now we have an ObjectType that inherits traits from the Bottle and Weapon ObjectTypes as well as defining its own new 

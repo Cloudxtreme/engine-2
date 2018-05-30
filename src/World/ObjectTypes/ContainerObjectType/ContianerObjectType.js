@@ -1,10 +1,6 @@
-import {
-    createObjectType,
-    IObjectArgs,
-    IObjectType,
-} from '../ObjectType/index';
+const { createObjectType } = require('../ObjectType');
 
-let ContainerObjectType = (props: IObjectArgs): IObjectType => {
+let  ContainerObjectType = (props) => {
     const schema = {
         objects: {
             presence: true,
@@ -13,7 +9,7 @@ let ContainerObjectType = (props: IObjectArgs): IObjectType => {
     };
 
     return {
-        ...<IObjectType>props,
+        ...props,
         schema,
         objects: {},
     };
@@ -21,4 +17,4 @@ let ContainerObjectType = (props: IObjectArgs): IObjectType => {
 
 ContainerObjectType = createObjectType(ContainerObjectType);
 
-export {ContainerObjectType};
+export { ContainerObjectType };
