@@ -1,25 +1,23 @@
-import * as Bluebird from 'bluebird';
-import * as lodash  from 'lodash';
-import * as validate from 'validate.js';
+import * as Bluebird from "bluebird";
+import * as lodash from "lodash";
+import * as validate from "validate.js";
 import * as uuid from "uuid";
-
 
 const ObjectSchema = {
     uuid: {
-        presence: true,
+        presence: true
     },
     key: {
-        presence: true,
+        presence: true
     },
     objectType: {
-        presence: true,
-    },
+        presence: true
+    }
 };
 
 const validateObject = (object, schema) => {
     return new Promise((resolve, reject) => {
-        return validate.async(object, schema, { cleanAttributes: false })
-            .then(resolve, reject);
+        return validate.async(object, schema, { cleanAttributes: false }).then(resolve, reject);
     });
 };
 
@@ -31,19 +29,19 @@ validate.validators.objectType = (value, options) => {
             const t = value;
             return validateObject(t, t.schema)
                 .then(() => resolve())
-                .catch((e) => resolve(e));
-        } else if (options === 'array') {
+                .catch(e => resolve(e));
+        } else if (options === "array") {
             const t = value;
-            return Bluebird.all(t.map((v) => (validateObject(v, v.schema))))
+            return Bluebird.all(t.map(v => validateObject(v, v.schema)))
                 .then(() => resolve())
-                .catch((e) => resolve(e));
-        } else if (options === 'object') {
+                .catch(e => resolve(e));
+        } else if (options === "object") {
             const t = value;
-            return Bluebird.all(lodash.values(t).map((v) => (validateObject(v, v.schema))))
+            return Bluebird.all(lodash.values(t).map(v => validateObject(v, v.schema)))
                 .then(() => resolve())
-                .catch((e) => resolve(e));
+                .catch(e => resolve(e));
         } else {
-            return reject('invalid option');
+            return reject("invalid option");
         }
     });
 };
@@ -57,7 +55,7 @@ validate.validators.objectType = (value, options) => {
  * @param {object} traits the traits of the newly created object
  * @returns {object} the created object along with uuid.
  */
-const ObjectType = (traits) => {
+const ObjectType = traits => {
     // set the defaults
     if (!traits.uuid) traits.uuid = uuid.v1();
     if (!traits.createdAt) traits.createdAt = new Date();
@@ -68,15 +66,15 @@ const ObjectType = (traits) => {
 
     // auto generate the key if not present
     if (!traits.key) {
-        const prefix = lodash.kebabCase(traits.objectType.replace('ObjectType', ''));
+        const prefix = lodash.kebabCase(traits.objectType.replace("ObjectType", ""));
         const suffix = traits.uuid.slice(-5);
         traits.key = `${prefix}:${suffix}`;
     }
 
     // add a default beforeValidate hook
-    if (!traits.beforeValidate) traits.beforeValidate = (p) => Promise.resolve(p);
+    if (!traits.beforeValidate) traits.beforeValidate = p => Promise.resolve(p);
 
-    return {schema: ObjectSchema , ...traits};
+    return { schema: ObjectSchema, ...traits };
 };
 
 /**
@@ -85,23 +83,27 @@ const ObjectType = (traits) => {
  * @returns {function} an object type combinator
  */
 export const combine = (...types) => {
-    return (type) => {
-        const objectType = (type).name;
-        return (props) => {
-            const beforeValidateHooks = [];
-            const preparedTypes = [...types, type].map((t) => {
-                if (typeof t === 'function') {
-                    return (p) => (Bluebird.resolve(t(p)));
-                }
-                return t;
-            });
-            return Bluebird.reduce(preparedTypes, (p, t) => {
-                if (p.beforeValidate)
-                    beforeValidateHooks.push(p.beforeValidate);
-                return t(p);
-            }, Object.assign({objectType}, props))
-                .then((p) => ObjectType(p))
-                .then((p) => (Bluebird.reduce(beforeValidateHooks, (object, hook) => (hook.bind(object)()), p)));
-        };
-    }
+    const objectType = lodash.last(types).name;
+    return (traits = {}) => {
+        const beforeValidateHooks = [];
+
+        const preparedTypes = types.map(type => {
+            if (typeof type === "function") return trts => Bluebird.resolve(type(trts));
+            return type;
+        });
+
+        return Bluebird.reduce(
+            preparedTypes,
+            (aggregateType, type) => {
+                return type(aggregateType)
+                    .then(t => {
+                        if (t.beforeValidate) beforeValidateHooks.push(t.beforeValidate);
+                        return t
+                    })
+            },
+            { ...traits, objectType }
+        )
+            .then(newObject => ObjectType(newObject))
+            .then(newObject => Bluebird.reduce(beforeValidateHooks, (r, hook) => hook(r), newObject));
+    };
 };

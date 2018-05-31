@@ -7,7 +7,7 @@ import {combine} from "./ObjectType";
 const mockFunction1 = jest.fn();
 const mockFunction2 = jest.fn();
 
-describe('createObjectType', () => {
+describe('combine', () => {
     const BasicTestObjectType = (props) => ({
         ...props,
         foo: 'bar',
@@ -15,7 +15,7 @@ describe('createObjectType', () => {
 
     let instance;
     beforeEach(() => {
-        instance = combine()(BasicTestObjectType)({});
+        instance = combine(BasicTestObjectType)();
     });
 
     it('builds an object with the correct objectType', () => {
@@ -51,7 +51,7 @@ describe('createObjectType', () => {
             },
         });
         beforeEach(() => {
-            instance = combine()(CallbackTestObjectType)({});
+            instance = combine(CallbackTestObjectType)();
         });
 
         it('should have called beforeValidate', () => {
@@ -69,7 +69,7 @@ describe('createObjectType', () => {
             bar: 'baz',
         });
         beforeEach(() => {
-            instance = combine(BasicTestObjectType)(SecondaryTestObjectType)({});
+            instance = combine(BasicTestObjectType, SecondaryTestObjectType)();
         });
 
         it('sets the correct objectType', () => {
@@ -91,7 +91,7 @@ describe('createObjectType', () => {
                 foo: 'bing',
             });
 
-            instance = combine(BasicTestObjectType, SecondaryTestObjectType)(ThirdTestObjectType)({});
+            instance = combine(BasicTestObjectType, SecondaryTestObjectType,ThirdTestObjectType)();
 
             return instance
                 .then((props) => {
