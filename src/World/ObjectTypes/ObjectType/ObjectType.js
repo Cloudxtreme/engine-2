@@ -12,7 +12,7 @@ const ObjectSchema = {
     },
     objectType: {
         presence: true
-    }
+    },
 };
 
 const validateObject = (object, schema) => {
@@ -46,23 +46,11 @@ validate.validators.objectType = (value, options) => {
     });
 };
 
-/**
- * ObjectType is the base type from which all other objects are derived. World objects are never created from
- * ObjectType, but instead are created with the various extensions of this type. If a key is not passed, then
- * a key will be generated for the object, as well as a date for createdAt and updatedAt if they are not explicitly
- * passed.
- *
- * @param {object} traits the traits of the newly created object
- * @returns {object} the created object along with uuid.
- */
 const ObjectType = traits => {
     // set the defaults
     if (!traits.uuid) traits.uuid = uuid.v1();
     if (!traits.createdAt) traits.createdAt = new Date();
     if (!traits.updatedAt) traits.updatedAt = traits.createdAt;
-
-    // merge the schema with the ObjectSchema
-    if (traits.schema) traits.schema = lodash.merge(ObjectSchema, traits.schema);
 
     // auto generate the key if not present
     if (!traits.key) {
@@ -74,20 +62,28 @@ const ObjectType = traits => {
     // add a default beforeValidate hook
     if (!traits.beforeValidate) traits.beforeValidate = p => Promise.resolve(p);
 
-    return { schema: lodash.merge(traits.schema, ObjectSchema), ...traits };
+    return {
+        schema: lodash.merge({}, traits.schema || {}, ObjectSchema),
+        ...traits,
+        inherits(nameOrType) {
+            if (typeof nameOrType === "function") {
+                nameOrType = nameOrType.name;
+            }
+
+            return lodash.indexOf(this.inherited, nameOrType) !== -1;
+        }
+    };
 };
 
-/**
- * combines the traits of the provided ObjectTypes with the given type.
- * @param types a list of types to combine
- * @returns {function} an object type combinator
- */
 export const combine = (...types) => {
     const objectType = lodash.last(types).name;
     return (traits = {}) => {
         const beforeValidateHooks = [];
+        const afterValidateHooks = [];
+        const inherited = [];
 
         const preparedTypes = types.map(type => {
+            inherited.push(type.name);
             if (typeof type === "function") return trts => Bluebird.resolve(type(trts));
             return type;
         });
@@ -97,29 +93,30 @@ export const combine = (...types) => {
             (aggregateType, type) => {
                 return type(aggregateType).then(t => {
                     if (t.beforeValidate) beforeValidateHooks.push(t.beforeValidate);
-                    return t;
+                    if (t.afterValidate) afterValidateHooks.push(t.afterValidate);
+                    return {...{}, ...t, objectType};
                 });
             },
-            { ...traits, objectType }
+            { ...traits, objectType, inherited }
         )
             .then(newObject => ObjectType(newObject))
             .then(newObject => {
-                lodash.keys(newObject).forEach((key) => {
+                lodash.keys(newObject).forEach(key => {
                     const value = newObject[key];
-                    if (typeof value === 'function') {
-                        newObject[key] = value.bind(newObject)
+                    if (typeof value === "function") {
+                        newObject[key] = value.bind(newObject);
                     }
                 });
 
-                return newObject
+                return newObject;
             })
             .then(newObject =>
                 Bluebird.reduce(beforeValidateHooks, (r, hook) => hook(r), newObject)
             )
+            .then(newObject => Bluebird.each(afterValidateHooks, (hook) => hook.bind(newObject)()).then(() => newObject))
             .then(newObject => {
-                    if (!newObject.schema) return;
-                    return validate.async(newObject, newObject.schema, {cleanAttributes: false});
-                }
-            );
+                if (!newObject.schema) return;
+                return validate.async(newObject, newObject.schema, { cleanAttributes: false });
+            });
     };
 };

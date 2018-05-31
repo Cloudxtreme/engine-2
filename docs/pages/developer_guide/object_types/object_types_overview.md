@@ -1,21 +1,26 @@
 ---
-title: "Lucid Mud Engine Developer Guide - Object Types"
+title: "Lucid Mud Engine Developer Guide - ObjectTypes"
 keywords: luicid mud engine, mud, mux, moo
 tags: [world]
 sidebar: mydoc_sidebar
 permalink: object_types.html
 summary: Documentation for the Lucid Mud Engine
 ---
-Every world is made up of objects. These are the items that the player interacts with, the creatures through otu the 
-world, the rooms that make up the world, and even the actual player Character. The LME sports a powerful, yet simple to
-understand object typing system, that allows the developer to create custom types with ease.
+Every world is made up of objects. These are the items that the player interacts with, the creatures throughout the 
+world, the rooms that make up the world, and even the actual player Character. Objects are created from factory 
+functions called `ObjectTypes`. These functions take a set of properties or **traits** as an argument, and return the
+completed object.
 
+Every object is made up of **traits**, these are the various properties and functions that make up a complete object.
+Traits are inherited from the object's ObjectType, which in turn itself can be a combination of any number of 
+ObjectTypes.
+
+The various core object types available to the developer are listed below.
 
 ## ObjectType
 ObjectType is the base type from which all other objects are derived. World objects are never created from ObjectType,
 but instead are created with the various extensions of this type. Every object has the following properties defined:
-
-### Properties 
+### Traits 
 * **uuid** - this is the unique ID for the object. The UUID is never set by the developer but instead determined by the
   world.
 * **key** - the unique name of the object in the world. The key is similar to the UUID as it must be 100% unique,
@@ -30,18 +35,41 @@ but instead are created with the various extensions of this type. Every object h
   the schema. The schema itself is set by every ObjectType the parent extends, as well as itself.
 * **createdAt** - the `Date` at which the object was created.
 * **updatedAt** - the `Date` at which the object was last updated.
+* **inherits(nameOrType)** - function that returns `true` if the object inherits from the given `ObjectType`.
 
 ### Life Cycle Hooks
-* **beforeCreate(props, config)** - beforeCreate is a function that should return a promise that resolves to the object 
-  props and is called before an object is created. It is passed the World  configuration This is useful for doing 
-  things before the object is placed in the world.
+* **beforeValidate(traits)** - beforeValidate is a function that should return a promise that resolves to the 
+  object traits and is called before an object is validated. This function is passed the traits that may or may not
+  have been modified from any previous `beforeValidate` callbacks. This hook is useful for modifying traits before
+  validation occurs.
+* **afterValidate()** - afterValidate is a function that should return a promise that resolves or rejects and runs after
+  the object has validated. **Note:** any changes to traits that happen within this hook are ignored.
   
-## ContainerObjectType
+## ContainerObjectType 
+_(EventedObectType)_
+
 A `ContainerObjectType` can contain other objects. This can be anything from a backpack to an alternate dimension, the
 object type simply adds functionality allowing inherited types to receive and contain their own objects.
 
-### Properties
+### Traits 
 * **objects** - the objects this object contains.
+
+### Events
+
+* **object.removed (object)** - fired when an object is removed from the container
+* **object.added (object)** - fired when an object is fired on the container
+* **object.removedFromDescendant ({key: keypath, object: object})** - fired when a container object that this object 
+  contains has had an object removed from it.
+* **object.addedToDescendant ({key: keypath, object: object})** - fired when a container object that this object
+  contains has an object added to it.
+
+## EventedObjectType
+An `EventedObjectType` has the ability to define event listeners and emit events to those listeners.
+
+### Traits
+* **emitter** - the `EventEmitter` instance
+* **on(event, callback)** - a function that adds an event listener with the given callback.
+* **emit(event, ...args)** - emits an event with the provided arguments to the emitter.
   
 ## Custom ObjectTypes
 Custom ObjectTypes can be defined in the `object_types`  directory of the game. An ObjectType file consists of at least
@@ -91,13 +119,6 @@ For example:
 ```javascript
 const bottle = createObject('GlassBottle', {key: 'bottleOfTonic'})
 ```
-
-### EventedObjectType
-EventedObjectType simply provides an event emitter within the object.
-
-#### Functions
-* **on(name, callback)** - adds the given callback as a listener for the given name.
-* **emit(name, args)** - emits the given event.
 
 ### Composite Object Types
 

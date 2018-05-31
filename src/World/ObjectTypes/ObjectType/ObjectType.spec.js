@@ -1,10 +1,8 @@
 const Bluebird = require("bluebird");
-const lodash = require("lodash");
 
 import { combine } from "./ObjectType";
 
 const mockFunction1 = jest.fn();
-const mockFunction2 = jest.fn();
 
 describe("combine", () => {
     const BasicTestObjectType = props => ({
@@ -57,6 +55,23 @@ describe("combine", () => {
         });
     });
 
+    describe("afterValidate", () => {
+        const CallbackTestObjectType = props => ({
+            ...props,
+            afterValidate() {
+                return Bluebird.resolve(mockFunction1());
+            }
+        });
+
+        beforeEach(() => {
+            instance = combine(CallbackTestObjectType)();
+        });
+
+        it("should have called afterValidate", () => {
+            return instance.then(() => expect(mockFunction1).toHaveBeenCalled() )
+        })
+    });
+
     describe("multi inheritance", () => {
         const SecondaryTestObjectType = props => ({
             ...props,
@@ -68,9 +83,18 @@ describe("combine", () => {
 
         it("sets the correct objectType", () => {
             return instance.then(props =>
-                expect(props.objectType).toEqual("SecondaryTestObjectType")
+                expect(props.objectType).toEqual("SecondaryObjectType")
             );
         });
+
+        it("returns the correct responses for inherits", () => {
+            return instance.then(props => {
+                    expect(props.inherits('BasicTestObjectType')).toBeTruthy();
+                    expect(props.inherits(SecondaryTestObjectType)).toBeTruthy();
+                    expect(props.inherits('NotAnObjectType')).toBeFalsy()
+                }
+            );
+        })
 
         it("merges the traits of both inherited types", () => {
             return instance.then(props => {
