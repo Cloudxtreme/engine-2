@@ -92,6 +92,13 @@ For example:
 const bottle = createObject('GlassBottle', {key: 'bottleOfTonic'})
 ```
 
+### EventedObjectType
+EventedObjectType simply provides an event emitter within the object.
+
+#### Functions
+* **on(name, callback)** - adds the given callback as a listener for the given name.
+* **emit(name, args)** - emits the given event.
+
 ### Composite Object Types
 
 A composite ObjectType can be created by combining several  object types together when registering the ObjectType. This

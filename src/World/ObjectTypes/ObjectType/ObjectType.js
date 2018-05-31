@@ -103,9 +103,23 @@ export const combine = (...types) => {
             { ...traits, objectType }
         )
             .then(newObject => ObjectType(newObject))
+            .then(newObject => {
+                lodash.keys(newObject).forEach((key) => {
+                    const value = newObject[key];
+                    if (typeof value === 'function') {
+                        newObject[key] = value.bind(newObject)
+                    }
+                });
+
+                return newObject
+            })
             .then(newObject =>
                 Bluebird.reduce(beforeValidateHooks, (r, hook) => hook(r), newObject)
             )
-            .then(newObject => validate.async(newObject, newObject.schema, {cleanAttributes: false}))
+            .then(newObject => {
+                    if (!newObject.schema) return;
+                    return validate.async(newObject, newObject.schema, {cleanAttributes: false});
+                }
+            );
     };
 };

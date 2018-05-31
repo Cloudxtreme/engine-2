@@ -1,20 +1,21 @@
-const { createObjectType } = require('../ObjectType');
+import {combine} from "../ObjectType";
+
 
 let  ContainerObjectType = (traits) => {
     const schema = {
         objects: {
             presence: true,
-            validateObjectType: 'object',
+            objectType: 'object',
         },
     };
 
     return {
+        objects: {},
         ...traits,
         schema,
-        objects: {},
     };
 };
 
-ContainerObjectType = createObjectType(ContainerObjectType);
+ContainerObjectType = combine(ContainerObjectType);
 
 export { ContainerObjectType };
