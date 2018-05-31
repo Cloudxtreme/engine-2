@@ -58,5 +58,27 @@ describe("ContainerObjectType", () => {
                 });
             });
         });
+
+        it("calls the object.addedToDescendant on the ancestor container", () => {
+            return  ContainerObjectType({key: 'ancientAncestor'}).then(ancientAncestorContainer => {
+                return ContainerObjectType({key: "ancestor"}).then(ancestorContainer => {
+                    return BaseObjectType().then(base => {
+                        return ContainerObjectType({key: "parent"}).then(parent => {
+                            ancientAncestorContainer.on("object.addedToDescendant", ({key, object}) => {
+                                mockFunction(key, object);
+                            });
+                            ancestorContainer.addObject(parent);
+                            ancientAncestorContainer.addObject(ancestorContainer);
+                            parent.addObject(base);
+                            expect(mockFunction).toHaveBeenCalledWith(
+                                `ancestor.parent.${base.key}`,
+                                expect.objectContaining(base)
+                            );
+                        });
+                    });
+                });
+            });
+        });
+
     });
 });
