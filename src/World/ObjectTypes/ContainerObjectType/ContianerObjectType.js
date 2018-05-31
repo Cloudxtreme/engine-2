@@ -1,6 +1,6 @@
 const { createObjectType } = require('../ObjectType');
 
-let  ContainerObjectType = (props) => {
+let  ContainerObjectType = (traits) => {
     const schema = {
         objects: {
             presence: true,
@@ -9,7 +9,7 @@ let  ContainerObjectType = (props) => {
     };
 
     return {
-        ...props,
+        ...traits,
         schema,
         objects: {},
     };

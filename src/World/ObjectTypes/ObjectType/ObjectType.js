@@ -74,7 +74,7 @@ const ObjectType = traits => {
     // add a default beforeValidate hook
     if (!traits.beforeValidate) traits.beforeValidate = p => Promise.resolve(p);
 
-    return { schema: ObjectSchema, ...traits };
+    return { schema: lodash.merge(traits.schema, ObjectSchema), ...traits };
 };
 
 /**
@@ -95,15 +95,17 @@ export const combine = (...types) => {
         return Bluebird.reduce(
             preparedTypes,
             (aggregateType, type) => {
-                return type(aggregateType)
-                    .then(t => {
-                        if (t.beforeValidate) beforeValidateHooks.push(t.beforeValidate);
-                        return t
-                    })
+                return type(aggregateType).then(t => {
+                    if (t.beforeValidate) beforeValidateHooks.push(t.beforeValidate);
+                    return t;
+                });
             },
             { ...traits, objectType }
         )
             .then(newObject => ObjectType(newObject))
-            .then(newObject => Bluebird.reduce(beforeValidateHooks, (r, hook) => hook(r), newObject));
+            .then(newObject =>
+                Bluebird.reduce(beforeValidateHooks, (r, hook) => hook(r), newObject)
+            )
+            .then(newObject => validate.async(newObject, newObject.schema, {cleanAttributes: false}))
     };
 };
