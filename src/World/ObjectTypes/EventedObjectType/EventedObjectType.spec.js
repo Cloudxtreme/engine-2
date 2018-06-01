@@ -1,6 +1,5 @@
-import {EventEmitter} from 'events';
-
-import {EventedObjectType} from "./EventedObjectType";
+const {EventEmitter} =  require('events');
+const {EventedObjectType}  = require("./EventedObjectType");
 
 describe('EventedObjectType', () => {
     it('should have an event emitter', () => {

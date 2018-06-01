@@ -1,1 +1,1 @@
-export * from "./EventedObjectType";
+module.exports = require("./EventedObjectType");

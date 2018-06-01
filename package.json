@@ -21,7 +21,8 @@
   "eslintConfig": {
     "env": {
       "node": true,
-      "browser": false
+      "browser": false,
+      "jest": true
     },
     "parserOptions": {
       "ecmaVersion": 7,
@@ -32,29 +33,12 @@
         "experimentalObjectRestSpread": true,
         "experimentalDecorators": true
       }
-    }
-  },
-  "babel": {
-    "plugins": [
-      "transform-object-rest-spread",
-      "transform-decorators"
-    ],
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": "8.11"
-          }
-        }
-      ],
-      "latest"
-    ]
+    },
+    "extends": "eslint:recommended"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
-    "babel-jest": "^23.0.1",
     "babel-plugin-transform-decorators": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.7.0",

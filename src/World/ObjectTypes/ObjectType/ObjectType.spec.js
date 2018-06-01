@@ -1,6 +1,6 @@
 const Bluebird = require("bluebird");
 
-import { combine } from "./ObjectType";
+const { combine }  = require("./ObjectType");
 
 const mockFunction1 = jest.fn();
 

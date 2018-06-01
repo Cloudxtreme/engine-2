@@ -1,7 +1,7 @@
-import * as Bluebird from "bluebird";
-import * as lodash from "lodash";
-import * as validate from "validate.js";
-import * as uuid from "uuid";
+const Bluebird = require("bluebird");
+const lodash = require("lodash");
+const validate = require("validate.js");
+const uuid = require("uuid");
 
 const ObjectSchema = {
     uuid: {
@@ -12,7 +12,7 @@ const ObjectSchema = {
     },
     objectType: {
         presence: true
-    },
+    }
 };
 
 const validateObject = (object, schema) => {
@@ -75,7 +75,7 @@ const ObjectType = traits => {
     };
 };
 
-export const combine = (...types) => {
+module.exports.combine = (...types) => {
     const objectType = lodash.last(types).name;
     return (traits = {}) => {
         const beforeValidateHooks = [];
@@ -94,7 +94,7 @@ export const combine = (...types) => {
                 return type(aggregateType).then(t => {
                     if (t.beforeValidate) beforeValidateHooks.push(t.beforeValidate);
                     if (t.afterValidate) afterValidateHooks.push(t.afterValidate);
-                    return {...{}, ...t, objectType};
+                    return { ...{}, ...t, objectType };
                 });
             },
             { ...traits, objectType, inherited }
@@ -113,7 +113,11 @@ export const combine = (...types) => {
             .then(newObject =>
                 Bluebird.reduce(beforeValidateHooks, (r, hook) => hook(r), newObject)
             )
-            .then(newObject => Bluebird.each(afterValidateHooks, (hook) => hook.bind(newObject)()).then(() => newObject))
+            .then(newObject =>
+                Bluebird.each(afterValidateHooks, hook => hook.bind(newObject)()).then(
+                    () => newObject
+                )
+            )
             .then(newObject => {
                 if (!newObject.schema) return;
                 return validate.async(newObject, newObject.schema, { cleanAttributes: false });

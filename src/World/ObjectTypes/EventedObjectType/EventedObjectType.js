@@ -1,5 +1,5 @@
-import { EventEmitter } from "events";
-import { combine } from "../ObjectType";
+const { EventEmitter } =  require("events");
+const { combine } = require("../ObjectType");
 
 let EventedObjectType = traits => ({
     ...traits,
@@ -12,6 +12,4 @@ let EventedObjectType = traits => ({
     }
 });
 
-EventedObjectType = combine(EventedObjectType);
-
-export { EventedObjectType };
+module.exports.EventedObjectType = combine(EventedObjectType);
