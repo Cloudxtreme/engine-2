@@ -55,7 +55,6 @@ object type simply adds functionality allowing inherited types to receive and co
 * **objects** - the objects this object contains.
 
 ### Events
-
 * **object.removed (object)** - fired when an object is removed from the container
 * **object.added (object)** - fired when an object is fired on the container
 * **object.removedFromDescendant ({key: keypath, object: object})** - fired when a container object that this object 
@@ -70,6 +69,21 @@ An `EventedObjectType` has the ability to define event listeners and emit events
 * **emitter** - the `EventEmitter` instance
 * **on(event, callback)** - a function that adds an event listener with the given callback.
 * **emit(event, ...args)** - emits an event with the provided arguments to the emitter.
+
+
+## ServiceObjectType
+_(EventedObjectType)_
+
+A `ServiceObjectype`  is an object type that will register it's own [Moleculer]() service. This is useful for building
+interactive objects, such as [mobs](), player characters, rooms or areas. For a ServiceObjectType to be created it must
+be registered with the broker. This will happen after the object is validated. 
+
+### Traits
+* **methods** - the [moleculer]() service methods.
+* **actions** - service actions available to the object.
+* **events** - moleculer service events
+
+### Functions
   
 ## Custom ObjectTypes
 Custom ObjectTypes can be defined in the `object_types`  directory of the game. An ObjectType file consists of at least
