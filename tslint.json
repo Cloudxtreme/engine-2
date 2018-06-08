@@ -29,7 +29,18 @@
     "no-invalid-this": false,
     "prefer-template": false,
     "no-backbone-get-set-outside-model": false,
+    "no-default-export": false,
+    "member-access": [true, "no-public"],
+    "quotemark": [true, "double"],
+    "curly": [true, "ignore-same-line"],
+    "no-object-literal-type-assertion": false,
     "no-any": false,
+    "align": [
+      true,
+      "statements",
+      "elements",
+      "members"
+    ],
     "strict-boolean-expressions": [
       "allow-null-union",
       "allow-undefined-union"

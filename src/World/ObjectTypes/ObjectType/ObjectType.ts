@@ -1,43 +1,35 @@
-import * as lodash from 'lodash';
+import * as lodash from "lodash";
+import * as uuid from "uuid";
 
-export interface IObjectStore {
-    [key: string]: IObject;
+export interface IObjectType {
+    uuid: string;
+    key: string;
+    objectType: string;
+    parent: IObjectType;
 }
 
-export interface IObject {
-    uuid?: string;
-    key?: string;
-    object_type?: string;
-    created_at?: number;
-    updated_at?: number;
-    objects?: IObjectStore;
-    home?: string;
-    destroyable?: boolean;
-    live?: boolean;
-    //tslint:disable-next-line
-    schema?: any
-    //tslint:disable-next-line
-    data: any;
+export type TConstructor<T = {}> = new (...args: any[]) => T;
+
+export abstract class ObjectType implements IObjectType {
+    readonly uuid: string;
+    readonly key: string;
+    readonly objectType: string;
+    parent: ObjectType;
+
+    constructor(props: IObjectType | {} = <IObjectType>{}) {
+        this.uuid = props.uuid;
+        if (!this.uuid) this.uuid = uuid.v1();
+        this.objectType = this.constructor.name;
+        this.key = props.key;
+        if (!this.key) {
+            this.key = `${lodash.kebabCase(
+                this.objectType.replace("ObjectType", ""),
+            )}:${this.uuid.slice(-5, -1)}`;
+        }
+    }
+
 }
 
-export const ObjectType = (props: IObject): IObject => {
-    let schema = {
-        ...{},
-        ...props.schema,
-        key: {
-            presence: true,
-            uniqueKey: 'An object with key \'%{value}\' already exists.',
-        },
-        object_type: {
-            presence: true,
-        },
-        uuid: {},
-    };
-
-    schema = {...{}, ...props.schema, ...schema};
-
-    return {
-        schema,
-        ...props,
-    };
+export const traits = (...types: any[]) => {
+    return lodash.flowRight(...types);
 };
