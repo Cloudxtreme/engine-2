@@ -1,6 +1,7 @@
-import {EventEmitterObjectTrait, TConstructor} from "../";
-import {compose, IObjectType} from "../../ObjectTypes";
 import * as lodash from "lodash";
+
+import { EventEmitterObjectTrait, TConstructor } from "../";
+import { IObjectType, traits } from "../../ObjectTypes";
 
 type TObjectContainer = {
     [key: string]: IObjectType;
@@ -32,6 +33,6 @@ let ContainerObjectTrait = function<TBase extends TConstructor>(Base: TBase) {
     };
 };
 
-ContainerObjectTrait = compose(EventEmitterObjectTrait, ContainerObjectTrait);
+ContainerObjectTrait = traits(EventEmitterObjectTrait, ContainerObjectTrait);
 
 export { ContainerObjectTrait };

@@ -1,9 +1,8 @@
-import { compose, ObjectType } from "../../ObjectTypes";
+import { ObjectType, traits } from "../../ObjectTypes";
 import { ContainerObjectTrait } from "./ContainerObjectTrait";
 
-class TestObjectType extends ObjectType {}
-
-const ContainerObjectType = compose(ContainerObjectTrait)(TestObjectType);
+@traits(ContainerObjectTrait)
+class ContainerObjectType extends ObjectType {}
 
 describe("ContainerObjectType", () => {
     let instance;
