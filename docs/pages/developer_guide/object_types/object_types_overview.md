@@ -31,5 +31,5 @@ extend an object type with multiple traits, you should use `ObjectTraits` instea
 `ObjectTraits` are functions that extend the functionality of an `ObjectType` in specified ways. There are a number of
 built in ObjectTraits, and additional ObjectTraits can be defined by the developer.
 
-### EventEmitterObjectTrait
+### EventedObjectType
 
