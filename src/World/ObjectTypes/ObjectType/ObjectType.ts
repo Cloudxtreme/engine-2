@@ -38,6 +38,10 @@ export abstract class ObjectType implements IObjectType {
             const newProps = new traits[name](props);
             lodash.keys(newProps).forEach((k: string) => {
                 if (!that[k]) that[k] = newProps[k];
+                if (typeof newProps[k] === "function") {
+
+                    that[k] = newProps[k];
+                }
             });
         });
     }

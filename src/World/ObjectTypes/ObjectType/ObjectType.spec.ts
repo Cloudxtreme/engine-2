@@ -48,15 +48,20 @@ describe("ObjectType", () => {
                 mockFunction(traits);
                 this.foo = "bar";
                 this.baz = "bar";
+                this.test = jest.fn()
             }
         }
 
+
+        // tslint:disable-next-line:max-classes-per-file
         @compose(OneObjectType)
         class TwoObjectType extends ObjectType {
             constructor(traits: any) {
                 super(traits);
                 this.baz = "baz";
             }
+
+            test() {}
         }
 
         beforeEach(() => {
@@ -73,6 +78,11 @@ describe("ObjectType", () => {
 
         it("does not override properties defined later types", () => {
             expect(instance.baz).toEqual("baz");
+        });
+
+        it("doesn't override functions higher up in the chain", () => {
+            instance.test();
+            expect(instance.test).toHaveBeenCalled();
         });
 
         it("does not change the objectType", () => {
