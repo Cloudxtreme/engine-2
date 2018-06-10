@@ -1,7 +1,6 @@
 import { ServiceBroker } from "moleculer";
 
-import { ObjectType, traits } from "../../ObjectTypes";
-import { ServiceObjectTrait } from "./ServiceObjectTrait";
+import { ServiceObjectType } from "./ServiceObjectType";
 
 const mockLogger = {
     debug: jest.fn(),
@@ -11,9 +10,6 @@ const mockService = {
 };
 global.broker = new ServiceBroker();
 global.broker.createService = jest.fn().mockReturnValue(mockService);
-
-@traits(ServiceObjectTrait)
-class ServiceObjectType extends ObjectType {}
 
 describe("ServiceObjectTrait", () => {
     let instance;

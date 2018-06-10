@@ -34,6 +34,7 @@
     "quotemark": [true, "double"],
     "curly": [true, "ignore-same-line"],
     "no-object-literal-type-assertion": false,
+    "no-empty": false,
     "no-any": false,
     "align": [
       true,
