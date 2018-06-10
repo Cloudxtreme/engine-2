@@ -15,7 +15,13 @@ class ObjectType {
     }
 }
 exports.ObjectType = ObjectType;
-exports.traits = (...types) => {
-    return lodash.flowRight(...types);
+exports.compose = (...types) => {
+    return (base) => {
+        const prototype = types.reverse().reduce((r, t) => {
+            return lodash.merge(r, t);
+        }, {});
+        base.prototype = prototype;
+        return base;
+    };
 };
 //# sourceMappingURL=ObjectType.js.map
