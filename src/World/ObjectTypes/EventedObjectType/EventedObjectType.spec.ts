@@ -1,4 +1,3 @@
-import { ObjectType } from "../../ObjectTypes";
 import { EventedObjectType } from "./";
 
 describe("EventedObject", () => {

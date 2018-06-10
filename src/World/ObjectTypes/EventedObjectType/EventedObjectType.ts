@@ -1,13 +1,14 @@
 import { EventEmitter } from "events";
 
-import { ObjectType} from "../";
+import { ObjectType } from "../";
 
 export interface IEventedObjectType {
     on(event: string, cb: Function): void;
     emit(event: string, ...args: any[]): void;
 }
 
-export class EventedObjectType extends ObjectType implements IEventedObjectType {
+export class EventedObjectType extends ObjectType
+    implements IEventedObjectType {
     private readonly emitter: Emitter = new EventEmitter();
 
     on(event: string, cb: Function) {

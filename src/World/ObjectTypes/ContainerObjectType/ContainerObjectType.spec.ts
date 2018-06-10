@@ -1,8 +1,4 @@
-import { ObjectType, traits } from "../../ObjectTypes";
-import { ContainerObjectTrait } from "./ContainerObjectTrait";
-
-@traits(ContainerObjectTrait)
-class ContainerObjectType extends ObjectType {}
+import { ContainerObjectType } from "./ContainerObjectType";
 
 describe("ContainerObjectType", () => {
     let instance;
@@ -45,10 +41,10 @@ describe("ContainerObjectType", () => {
             const child = new ContainerObjectType({
                 key: "child",
             });
-            instance.emitter.emit = jest.fn();
+            instance.emit = jest.fn();
 
             instance.add(child);
-            expect(instance.emitter.emit).toHaveBeenCalledWith(
+            expect(instance.emit).toHaveBeenCalledWith(
                 "objectAdded",
                 expect.objectContaining(child),
             );
