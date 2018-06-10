@@ -1,18 +1,39 @@
-import { Actions, ServiceEvents, ServiceMethods } from "moleculer";
+import {
+    Actions,
+    LoggerInstance,
+    Service,
+    ServiceEvents,
+    ServiceMethods,
+} from "moleculer";
 
 import { TConstructor } from "../";
 import { IObjectType } from "../../ObjectTypes";
 
+export interface IServiceObject {
+    methods: ServiceMethods;
+    actions: Actions;
+    events: ServiceEvents;
+    service: Service;
+    logger: LoggerInstance;
+    created?: Function;
+    started?: Function;
+}
+
 // tslint:disable-next-line:function-name
 export function ServiceObjectTrait<TBase extends TConstructor>(Base: TBase) {
-    return class extends Base {
-        methods: ServiceMethods = {};
-        actions: Actions = {};
-        events: ServiceEvents = {};
+    return class extends Base implements IServiceObject {
+        readonly methods: ServiceMethods = {};
+        readonly actions: Actions = {};
+        readonly events: ServiceEvents = {};
+        readonly service: Service;
+        readonly logger: LoggerInstance;
 
         constructor(traits: IObjectType) {
             super(traits);
-            global.broker.createService(this._serviceDefinition());
+            this.service = global.broker.createService(
+                this._serviceDefinition(),
+            );
+            this.logger = this.service.logger;
         }
 
         // tslint:disable-next-line:no-empty
@@ -22,18 +43,14 @@ export function ServiceObjectTrait<TBase extends TConstructor>(Base: TBase) {
         started(): void {}
 
         // tslint:disable-next-line:function-name
-        _serviceDefinition() {
+        private _serviceDefinition() {
             return {
                 name: this.key,
-                methods: this.methods,
-                actions: this.actions,
-                events: this.events,
-                created: function() {
-                    this.created.apply(this);
-                },
-                started: function() {
-                    this.started.apply(this);
-                },
+                methods: { ...{}, ...this.methods },
+                actions: { ...{}, ...this.actions },
+                events: { ...{}, ...this.events },
+                created: this.created,
+                started: this.started,
             };
         }
     };

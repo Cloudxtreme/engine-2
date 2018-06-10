@@ -1,18 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = require("../../../utils");
+const tslib_1 = require("tslib");
+const ObjectTraits_1 = require("../../ObjectTraits");
 const ObjectType_1 = require("../ObjectType");
-let WorldObjectType = (data) => {
-    let schema = {
-        updated_at: {},
-        objects: {
-            presence: true,
-        },
-    };
-    schema = Object.assign({}, data.schema, schema);
-    delete data.schema;
-    return Object.assign({}, data, { schema, object_type: 'World', key: 'world', updated_at: new Date(), live: true, destroyable: false, objects: {} });
+let WorldObjectType = class WorldObjectType extends ObjectType_1.ObjectType {
+    constructor() {
+        super(...arguments);
+        this.key = "world";
+    }
 };
+WorldObjectType = tslib_1.__decorate([
+    ObjectType_1.traits(ObjectTraits_1.ContainerObjectTrait, ObjectTraits_1.ServiceObjectTrait)
+], WorldObjectType);
 exports.WorldObjectType = WorldObjectType;
-exports.WorldObjectType = WorldObjectType = utils_1.compose(ObjectType_1.ObjectType, WorldObjectType);
 //# sourceMappingURL=WorldObjectType.js.map

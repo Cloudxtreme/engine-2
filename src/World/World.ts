@@ -1,44 +1,52 @@
-import {BrokerOptions, ServiceBroker} from 'moleculer';
+import { BrokerOptions, ServiceBroker } from "moleculer";
 
-import {IBrokerConfig} from '../Broker';
-import {AppManagerService} from './Services/AppManagerService';
-import {ObjectDataService} from './Services/DataServices/ObjectDataService';
-import {PlayerDataService} from './Services/DataServices/PlayerDataService';
-import {SnapshotDataService} from './Services/DataServices/SnapshotDataService';
-import {ObjectService} from './Services/ObjectService';
-import {StateService} from './Services/StateService';
+import { IBrokerConfig } from "../Broker";
+import { AppManagerService } from "./Services/AppManagerService";
+import { ObjectDataService } from "./Services/DataServices/ObjectDataService";
+import { PlayerDataService } from "./Services/DataServices/PlayerDataService";
+import { SnapshotDataService } from "./Services/DataServices/SnapshotDataService";
+import { ObjectService } from "./Services/ObjectService";
+import { StateService } from "./Services/StateService";
+import { WorldObjectType } from "./ObjectTypes/WorldObjectType";
 
 export interface IWorldConfig extends IBrokerConfig {
     name?: string;
 }
 
 export const DEFAULT_CONFIG: IWorldConfig = {
-    redis: 'redis://localhost:6379',
-    transporter: 'redis://localhost:6379',
+    redis: "redis://localhost:6379",
+    transporter: "redis://localhost:6379",
 };
 
 // tslint:disable-next-line:no-object-literal-type-assertion
-export const World: Function = (options: IWorldConfig = <IWorldConfig>{}): BrokerOptions => {
-    const config = {...DEFAULT_CONFIG, ...options};
+export const World: Function = (
+    options: IWorldConfig = <IWorldConfig>{},
+): BrokerOptions => {
+    const config = { ...DEFAULT_CONFIG, ...options };
 
     return {
-        nodeID: 'lucid-world',
+        nodeID: "lucid-world",
         transporter: config.transporter,
         validation: true,
-        logLevel: 'debug',
+        logLevel: "debug",
         heartbeatInterval: 0.5,
         created: (broker: ServiceBroker) => {
-            // broker.createService(WorldLoop(config));
-            broker.createService(AppManagerService(config));
+            global.broker = broker;
+            global.config = config;
 
-            // load data services
-            broker.createService(PlayerDataService(config));
-            broker.createService(SnapshotDataService(config));
-            broker.createService(ObjectDataService(config));
-
-            //load world state
-            broker.createService(StateService(config));
-            broker.createService(ObjectService(config));
+            broker.logger.debug("creating world...");
+            this.world = new WorldObjectType();
+            // // broker.createService(WorldLoop(config));
+            // broker.createService(AppManagerService(config));
+            //
+            // // load data services
+            // broker.createService(PlayerDataService(config));
+            // broker.createService(SnapshotDataService(config));
+            // broker.createService(ObjectDataService(config));
+            //
+            // //load world state
+            // broker.createService(StateService(config));
+            // broker.createService(ObjectService(config));
         },
     };
 };

@@ -3,13 +3,18 @@ import * as lodash from "lodash";
 import { EventEmitterObjectTrait, TConstructor } from "../";
 import { IObjectType, traits } from "../../ObjectTypes";
 
-type TObjectContainer = {
+export type TObjectContainer = {
     [key: string]: IObjectType;
 };
 
+export interface IContainerObject {
+    objects: TObjectContainer;
+    add: Function;
+}
+
 // tslint:disable-next-line
 let ContainerObjectTrait = function<TBase extends TConstructor>(Base: TBase) {
-    return class extends Base {
+    return class extends Base implements IContainerObject {
         readonly objects: TObjectContainer = {};
 
         add(pathOrObject: string | IObjectType, object: IObjectType) {
