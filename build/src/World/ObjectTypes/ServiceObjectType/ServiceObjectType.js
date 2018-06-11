@@ -8,9 +8,7 @@ class ServiceObjectType extends ObjectType_1.ObjectType {
         this.actions = {};
         this.events = {};
     }
-    initialize(traits) {
-        this.created = traits.created;
-        this.started = traits.started;
+    initialize(props) {
         this.service = global.broker.createService(this._serviceDefinition());
         this.logger = this.service.logger;
     }

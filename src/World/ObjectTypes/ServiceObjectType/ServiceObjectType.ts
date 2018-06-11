@@ -26,10 +26,8 @@ export class ServiceObjectType extends ObjectType
     readonly service: Service;
     readonly logger: LoggerInstance;
 
-    initialize(traits: IObjectType) {
-        this.created = traits.created;
-        this.started = traits.started;
-        this.service = global.broker.createService(this._serviceDefinition());
+    initialize(props: IObjectType) {
+        this.service = global.broker.createService(this._serviceDefinition())
         this.logger = this.service.logger;
     }
 

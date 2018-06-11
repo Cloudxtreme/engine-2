@@ -46,7 +46,12 @@ export const compose = (...types: any[]) => {
         });
 
         if (initializers.length > 0) {
-            base.prototype._initialize = lodash.flowRight(...initializers);
+            // tslint:disable-next-line:no-function-expression
+            base.prototype._initialize = function(props: IObjectType) {
+                return lodash.flowRight(
+                    ...initializers.map((i: Function) => i.bind(this)),
+                )(props);
+            };
         }
 
         return base;

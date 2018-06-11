@@ -1,13 +1,13 @@
 import { BrokerOptions, ServiceBroker } from "moleculer";
 
 import { IBrokerConfig } from "../Broker";
+import { WorldObjectType } from "./ObjectTypes/WorldObjectType";
 import { AppManagerService } from "./Services/AppManagerService";
 import { ObjectDataService } from "./Services/DataServices/ObjectDataService";
 import { PlayerDataService } from "./Services/DataServices/PlayerDataService";
 import { SnapshotDataService } from "./Services/DataServices/SnapshotDataService";
 import { ObjectService } from "./Services/ObjectService";
 import { StateService } from "./Services/StateService";
-import { WorldObjectType } from "./ObjectTypes/WorldObjectType";
 
 export interface IWorldConfig extends IBrokerConfig {
     name?: string;

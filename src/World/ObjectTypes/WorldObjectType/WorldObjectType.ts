@@ -32,8 +32,8 @@ export class WorldObjectType extends ObjectType
         this.key = "world";
     }
 
-    created(broker: ServiceBroker) {
-        broker.logger.debug("preparing world");
+    created() {
+        this.logger.debug("preparing world");
     }
 
     add(): void {}

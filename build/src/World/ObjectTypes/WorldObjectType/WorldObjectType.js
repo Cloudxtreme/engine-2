@@ -8,8 +8,8 @@ let WorldObjectType = class WorldObjectType extends ObjectType_1.ObjectType {
     initialize() {
         this.key = "world";
     }
-    created(broker) {
-        broker.logger.debug("preparing world");
+    created() {
+        this.logger.debug("preparing world");
     }
     add() { }
     remove() { }

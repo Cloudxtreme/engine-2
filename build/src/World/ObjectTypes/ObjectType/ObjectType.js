@@ -35,7 +35,9 @@ exports.compose = (...types) => {
             base.traits[t.name] = t;
         });
         if (initializers.length > 0) {
-            base.prototype._initialize = lodash.flowRight(...initializers);
+            base.prototype._initialize = function (props) {
+                return lodash.flowRight(...initializers.map((i) => i.bind(this)))(props);
+            };
         }
         return base;
     };

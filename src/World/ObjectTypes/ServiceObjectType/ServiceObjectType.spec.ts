@@ -1,5 +1,6 @@
 import { ServiceBroker } from "moleculer";
 
+import { compose, ObjectType } from "../ObjectType";
 import { ServiceObjectType } from "./ServiceObjectType";
 
 const mockLogger = {
@@ -8,6 +9,9 @@ const mockLogger = {
 const mockService = {
     logger: mockLogger,
 };
+
+const mockFunction = jest.fn();
+
 global.broker = new ServiceBroker();
 global.broker.createService = jest.fn().mockReturnValue(mockService);
 
