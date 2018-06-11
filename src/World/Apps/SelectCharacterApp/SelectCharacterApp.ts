@@ -1,4 +1,4 @@
-import {IObject} from '../../ObjectTypes/ObjectType';
+import {IObject} from '../../ObjectTypes/ObjectType/index';
 import {App, IInputMessage} from '../App';
 
 interface ICharacterData {

@@ -43,12 +43,11 @@ describe("ObjectType", () => {
         const mockFunction = jest.fn();
 
         class OneObjectType extends ObjectType {
-            constructor(traits: any) {
-                super(traits);
-                mockFunction(traits);
+            initialize(props: any) {
+                mockFunction(props);
                 this.foo = "bar";
                 this.baz = "bar";
-                this.test = jest.fn()
+                this.test = jest.fn();
             }
         }
 
@@ -56,8 +55,7 @@ describe("ObjectType", () => {
         // tslint:disable-next-line:max-classes-per-file
         @compose(OneObjectType)
         class TwoObjectType extends ObjectType {
-            constructor(traits: any) {
-                super(traits);
+            initialize(props: any) {
                 this.baz = "baz";
             }
 
@@ -68,7 +66,7 @@ describe("ObjectType", () => {
             instance = new TwoObjectType({ foo: "bar" });
         });
 
-        it("calls super of inherited object types", () => {
+        it("calls initializers of inherited object types", () => {
             expect(mockFunction).toHaveBeenCalledWith({ foo: "bar" });
         });
 

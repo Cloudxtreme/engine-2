@@ -17,7 +17,9 @@ exports.World = (options = {}) => {
             global.broker = broker;
             global.config = config;
             broker.logger.debug("creating world...");
-            this.world = new WorldObjectType_1.WorldObjectType();
+            this.world = new WorldObjectType_1.WorldObjectType({
+                key: "world",
+            });
         },
     };
 };

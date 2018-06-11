@@ -6,16 +6,10 @@ export interface IObjectType {
     key: string;
     objectType: string;
     parent: IObjectType;
+    initialize?: Function;
 }
 
-type TTraitList = {
-    [key: string]: any;
-};
-
-export type TConstructor<T = {}> = new (...args: any[]) => T;
-
 export abstract class ObjectType implements IObjectType {
-
     readonly uuid: string;
     readonly key: string;
     readonly objectType: string;
@@ -31,33 +25,29 @@ export abstract class ObjectType implements IObjectType {
                 this.objectType.replace("ObjectType", ""),
             )}:${this.uuid.slice(-5, -1)}`;
         }
-        const traits = this.constructor.traits;
-        // tslint:disable-next-line:no-this-assignment
-        const that = this;
-        lodash.keys(traits).forEach((name: string) => {
-            const newProps = new traits[name](props);
-            lodash.keys(newProps).forEach((k: string) => {
-                if (!that[k]) that[k] = newProps[k];
-                if (typeof newProps[k] === "function") {
-
-                    that[k] = newProps[k];
-                }
-            });
-        });
+        if (this._initialize) this._initialize.call(this, props);
+        if (this.initialize) this.initialize(props);
     }
 }
 
 export const compose = (...types: any[]) => {
     return (base: any) => {
         base.traits = {};
+        const initializers = [];
         types.forEach((t: any) => {
-            Object.getOwnPropertyNames(t).forEach((name: string) => {
+            Object.getOwnPropertyNames(t.prototype).forEach((name: string) => {
                 if (!base.prototype[name] && name !== "constructor") {
                     base.prototype[name] = t.prototype[name];
+                } else if (name === "initialize") {
+                    initializers.push(t.prototype[name]);
                 }
             });
             base.traits[t.name] = t;
         });
+
+        if (initializers.length > 0) {
+            base.prototype._initialize = lodash.flowRight(...initializers);
+        }
 
         return base;
     };

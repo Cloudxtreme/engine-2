@@ -8,7 +8,7 @@ import {
 
 import { IObjectType, ObjectType } from "../";
 
-export interface IServiceObject {
+export interface IServiceObjectType {
     methods: ServiceMethods;
     actions: Actions;
     events: ServiceEvents;
@@ -18,21 +18,23 @@ export interface IServiceObject {
     started?: Function;
 }
 
-export class ServiceObjectType extends ObjectType implements IServiceObject {
+export class ServiceObjectType extends ObjectType
+    implements IServiceObjectType {
     readonly methods: ServiceMethods = {};
     readonly actions: Actions = {};
     readonly events: ServiceEvents = {};
     readonly service: Service;
     readonly logger: LoggerInstance;
 
-    constructor(traits: IObjectType) {
-        super(traits);
+    initialize(traits: IObjectType) {
+        this.created = traits.created;
+        this.started = traits.started;
         this.service = global.broker.createService(this._serviceDefinition());
-        this.logger = this.service.logger;
     }
 
-    created(): void {}
-    started(): void {}
+    get logger() {
+        return this.service.logger;
+    }
 
     // tslint:disable-next-line:function-name
     private _serviceDefinition() {

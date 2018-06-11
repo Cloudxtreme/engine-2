@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird';
 import {Context} from 'moleculer';
 
-import {IObject} from '../../../ObjectTypes/ObjectType';
+import {IObject} from '../../../ObjectTypes/ObjectType/index';
 import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType';
 import {DataService} from '../DataService';
 

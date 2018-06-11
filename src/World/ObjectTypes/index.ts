@@ -1,4 +1,4 @@
-export * from "./ObjectType";
+export * from "./ObjectType/index";
 export * from "./ServiceObjectType";
 export * from "./WorldObjectType";
 export * from "./CharacterObjectType";
