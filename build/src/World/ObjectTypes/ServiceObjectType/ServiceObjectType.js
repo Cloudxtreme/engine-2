@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const _1 = require("../");
-class ServiceObjectType extends _1.ObjectType {
+const ObjectType_1 = require("../ObjectType");
+class ServiceObjectType extends ObjectType_1.ObjectType {
     constructor() {
         super(...arguments);
         this.methods = {};

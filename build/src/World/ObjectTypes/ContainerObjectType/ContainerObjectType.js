@@ -2,8 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const lodash = require("lodash");
-const _1 = require("../");
-let ContainerObjectType = class ContainerObjectType extends _1.ObjectType {
+const ObjectType_1 = require("../ObjectType");
+const EventedObjectType_1 = require("../EventedObjectType");
+let ContainerObjectType = class ContainerObjectType extends ObjectType_1.ObjectType {
     constructor() {
         super(...arguments);
         this.objects = {};
@@ -41,7 +42,7 @@ let ContainerObjectType = class ContainerObjectType extends _1.ObjectType {
     emit() { }
 };
 ContainerObjectType = tslib_1.__decorate([
-    _1.compose(_1.EventedObjectType)
+    ObjectType_1.compose(EventedObjectType_1.EventedObjectType)
 ], ContainerObjectType);
 exports.ContainerObjectType = ContainerObjectType;
 //# sourceMappingURL=ContainerObjectType.js.map
