@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
 
-import { ObjectType } from "../";
+import { ObjectType } from "../ObjectType";
 
 export interface IEventedObjectType {
     on(event: string, cb: Function): void;
