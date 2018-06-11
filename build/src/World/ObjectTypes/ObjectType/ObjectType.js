@@ -12,10 +12,10 @@ class ObjectType {
         if (!this.key) {
             this.key = `${lodash.kebabCase(this.objectType.replace("ObjectType", ""))}:${this.uuid.slice(-5, -1)}`;
         }
-        if (this._initialize)
-            this._initialize.call(this, props);
         if (this.initialize)
             this.initialize(props);
+        if (this._initialize)
+            this._initialize.call(this, props);
     }
 }
 exports.ObjectType = ObjectType;

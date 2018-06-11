@@ -25,8 +25,8 @@ export abstract class ObjectType implements IObjectType {
                 this.objectType.replace("ObjectType", ""),
             )}:${this.uuid.slice(-5, -1)}`;
         }
-        if (this._initialize) this._initialize.call(this, props);
         if (this.initialize) this.initialize(props);
+        if (this._initialize) this._initialize.call(this, props);
     }
 }
 

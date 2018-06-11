@@ -35,9 +35,7 @@ export const World: Function = (
             global.config = config;
 
             broker.logger.debug("creating world...");
-            this.world = new WorldObjectType({
-                key: "world",
-            });
+            this.world = new WorldObjectType();
             // // broker.createService(WorldLoop(config));
             // broker.createService(AppManagerService(config));
             //
