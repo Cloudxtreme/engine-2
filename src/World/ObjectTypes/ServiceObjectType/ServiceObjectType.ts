@@ -30,10 +30,7 @@ export class ServiceObjectType extends ObjectType
         this.created = traits.created;
         this.started = traits.started;
         this.service = global.broker.createService(this._serviceDefinition());
-    }
-
-    get logger() {
-        return this.service.logger;
+        this.logger = this.service.logger;
     }
 
     // tslint:disable-next-line:function-name

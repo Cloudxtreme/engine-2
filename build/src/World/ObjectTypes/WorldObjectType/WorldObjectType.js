@@ -1,8 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
-const _1 = require("../");
-let WorldObjectType = class WorldObjectType extends _1.ObjectType {
+const ContainerObjectType_1 = require("../ContainerObjectType");
+const ObjectType_1 = require("../ObjectType");
+const ServiceObjectType_1 = require("../ServiceObjectType");
+let WorldObjectType = class WorldObjectType extends ObjectType_1.ObjectType {
+    initialize() {
+        this.key = "world";
+    }
     created(broker) {
         broker.logger.debug("preparing world");
     }
@@ -12,7 +17,7 @@ let WorldObjectType = class WorldObjectType extends _1.ObjectType {
     on() { }
 };
 WorldObjectType = tslib_1.__decorate([
-    _1.compose(_1.ContainerObjectType, _1.ServiceObjectType)
+    ObjectType_1.compose(ContainerObjectType_1.ContainerObjectType, ServiceObjectType_1.ServiceObjectType)
 ], WorldObjectType);
 exports.WorldObjectType = WorldObjectType;
 //# sourceMappingURL=WorldObjectType.js.map

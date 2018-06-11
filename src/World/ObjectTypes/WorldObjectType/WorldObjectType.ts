@@ -8,14 +8,12 @@ import {
 } from "moleculer";
 
 import {
-    compose,
     ContainerObjectType,
     IContainerObjectType,
-    IServiceObjectType,
-    ObjectType,
-    ServiceObjectType,
     TObjectContainer,
-} from "../";
+} from "../ContainerObjectType";
+import { compose, ObjectType } from "../ObjectType";
+import { IServiceObjectType, ServiceObjectType } from "../ServiceObjectType";
 
 @compose(
     ContainerObjectType,
@@ -29,6 +27,10 @@ export class WorldObjectType extends ObjectType
     readonly objects: TObjectContainer;
     readonly service: Service;
     readonly logger: LoggerInstance;
+
+    initialize() {
+        this.key = "world";
+    }
 
     created(broker: ServiceBroker) {
         broker.logger.debug("preparing world");
