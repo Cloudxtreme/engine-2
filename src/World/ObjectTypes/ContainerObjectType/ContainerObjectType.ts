@@ -2,11 +2,14 @@ import * as lodash from "lodash";
 
 import {
     compose,
-    EventedObjectType,
-    IEventedObjectType,
     IObjectType,
     ObjectType,
-} from "../";
+} from "../ObjectType";
+
+import {
+    EventedObjectType,
+    IEventedObjectType,
+} from "../EventedObjectType";
 
 export type TObjectContainer = {
     [key: string]: IObjectType;
