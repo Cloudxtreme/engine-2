@@ -51,7 +51,6 @@ describe("ObjectType", () => {
             }
         }
 
-
         // tslint:disable-next-line:max-classes-per-file
         @compose(OneObjectType)
         class TwoObjectType extends ObjectType {
