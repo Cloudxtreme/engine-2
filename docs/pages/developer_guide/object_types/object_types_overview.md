@@ -35,4 +35,5 @@ Objects capable of listening for or responding to events.
 #### Functions
 * **on(event: string, callback: Function)** - adds a listener for the provided event.
 * **emit(event: string, args: any[])** - emits an event with the provided arguments.
+
 ### ServiceObjectType

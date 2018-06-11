@@ -6,7 +6,7 @@ import {
     ServiceMethods,
 } from "moleculer";
 
-import { IObjectType, ObjectType } from "../";
+import { IObjectType, ObjectType } from "../ObjectType";
 
 export interface IServiceObjectType {
     methods: ServiceMethods;
