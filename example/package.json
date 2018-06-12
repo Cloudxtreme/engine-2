@@ -16,7 +16,7 @@
   },
   "scripts": {
     "world": "./node_modules/moleculer/bin/moleculer-runner.js -c ./config/world.config.js",
-    "migrate:latest": "knex --knexfile ./config/knexfile.js migrate:latest",
-    "migrate:rollback": "knex --knexfile ./config/knexfile.js migrate:rollback"
+    "migrate:latest": "./node_modules/knex/bin/cli.js --knexfile ./config/knexfile.js migrate:latest",
+    "migrate:rollback": "./node_modules/knex/bin/cli.js ./config/knexfile.js migrate:rollback"
   }
 }

@@ -34,14 +34,13 @@ export const World: Function = (
             global.broker = broker;
             global.config = config;
 
+            broker.createService(SnapshotDataService(config));
             broker.logger.debug("creating world...");
             this.world = new WorldObjectType();
-            // // broker.createService(WorldLoop(config));
             // broker.createService(AppManagerService(config));
             //
             // // load data services
             // broker.createService(PlayerDataService(config));
-            // broker.createService(SnapshotDataService(config));
             // broker.createService(ObjectDataService(config));
             //
             // //load world state

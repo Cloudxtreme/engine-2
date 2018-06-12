@@ -1,13 +1,12 @@
 //tslint:disable-next-line
-import * as Knex from 'knex';
+import * as Knex from "knex";
 import {
     Actions,
     Context,
     ServiceMethods,
-    ServiceSchema,
     ServiceSettingSchema,
-} from 'moleculer';
-import {IWorldConfig} from '../../../World';
+} from "moleculer";
+import { IWorldConfig } from "../../../World";
 
 export interface IDataServiceSchema {
     name: string;
@@ -27,13 +26,15 @@ export const DataService = (builder: Function): Function => {
             settings: schema.settings,
             actions: {
                 create(ctx: Context) {
-                    return schema.create.bind(this)({...ctx.params});
+                    return schema.create.bind(this)({ ...ctx.params });
                 },
                 ...schema.actions,
             },
             created() {
-                // tslint:disable-next-line:non-literal-require
-                this.db = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
+                this.db = Knex(
+                    // tslint:disable-next-line:non-literal-require
+                    require(`${process.env.GAME_ROOT}/config/knexfile`),
+                );
             },
         };
     };

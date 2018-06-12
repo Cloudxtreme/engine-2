@@ -27,7 +27,7 @@ export class ServiceObjectType extends ObjectType
     readonly logger: LoggerInstance;
 
     initialize(props: IObjectType) {
-        this.service = global.broker.createService(this._serviceDefinition())
+        this.service = global.broker.createService(this._serviceDefinition());
         this.logger = this.service.logger;
     }
 
@@ -40,6 +40,7 @@ export class ServiceObjectType extends ObjectType
             events: { ...{}, ...this.events },
             created: this.created,
             started: this.started,
+            objectTypeDefinition: this,
         };
     }
 }

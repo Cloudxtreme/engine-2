@@ -56,7 +56,7 @@
     "bluebird": "^3.5.1",
     "bookshelf": "^0.13.3",
     "fastest-validator": "^0.6.6",
-    "glob-fs": "^0.1.7",
+    "glob": "^7.1.2",
     "gulp-rename": "^1.2.2",
     "handlebars": "^4.0.11",
     "immutable": "^3.8.2",

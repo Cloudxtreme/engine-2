@@ -1,6 +1,6 @@
 import * as lodash from "lodash";
 
-import { compose, ObjectType } from "./ObjectType";
+import { compose, ObjectType, TObjectConstraints } from "./ObjectType";
 
 describe("ObjectType", () => {
     let emptyInstance;
@@ -43,6 +43,12 @@ describe("ObjectType", () => {
         const mockFunction = jest.fn();
 
         class OneObjectType extends ObjectType {
+            static readonly schema: TObjectConstraints = {
+                foo: {
+                    presence: true,
+                },
+            };
+
             initialize(props: any) {
                 mockFunction(props);
                 this.foo = "bar";
@@ -54,6 +60,12 @@ describe("ObjectType", () => {
         // tslint:disable-next-line:max-classes-per-file
         @compose(OneObjectType)
         class TwoObjectType extends ObjectType {
+            static readonly schema: TObjectConstraints = {
+                baz: {
+                    presence: true,
+                },
+            };
+
             initialize(props: any) {
                 this.baz = "baz";
             }
@@ -84,6 +96,39 @@ describe("ObjectType", () => {
 
         it("does not change the objectType", () => {
             expect(instance.objectType).toEqual("TwoObjectType");
+        });
+
+        it("merges the schemas of previous types", () => {
+            expect(TwoObjectType.schema).toEqual(
+                expect.objectContaining({
+                    foo: { presence: true },
+                    baz: { presence: true },
+                }),
+            );
+        });
+
+        it("correctly serializes mult-inheritance objects", () => {
+            expect(instance.serialize()).toEqual(
+                expect.objectContaining({
+                    uuid: instance.uuid,
+                    key: instance.key,
+                    objectType: instance.objectType,
+                    foo: instance.foo,
+                    baz: "baz", // make sure we are getting TwoObjectType's baz
+                }),
+            );
+        });
+    });
+
+    describe("serialize", () => {
+        it("should serialize the instance", () => {
+            expect(fullInstance.serialize()).toEqual(
+                expect.objectContaining({
+                    key: fullInstance.key,
+                    objectType: fullInstance.objectType,
+                    uuid: fullInstance.uuid,
+                }),
+            );
         });
     });
 });

@@ -20,6 +20,7 @@ class ServiceObjectType extends ObjectType_1.ObjectType {
             events: Object.assign({}, this.events),
             created: this.created,
             started: this.started,
+            objectTypeDefinition: this,
         };
     }
 }

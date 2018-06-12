@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const lodash = require("lodash");
 const uuid = require("uuid");
+const validate = require("validate.js");
 class ObjectType {
     constructor(props = {}) {
         this.uuid = props.uuid;
@@ -12,17 +13,32 @@ class ObjectType {
         if (!this.key) {
             this.key = `${lodash.kebabCase(this.objectType.replace("ObjectType", ""))}:${this.uuid.slice(-5, -1)}`;
         }
-        if (this.initialize)
-            this.initialize(props);
         if (this._initialize)
             this._initialize.call(this, props);
+        if (this.initialize)
+            this.initialize(props);
+    }
+    serialize() {
+        return validate.cleanAttributes(this, this.constructor.schema);
     }
 }
+ObjectType.schema = {
+    uuid: {
+        presence: true,
+    },
+    key: {
+        presence: true,
+    },
+    objectType: {
+        presence: true,
+    },
+};
 exports.ObjectType = ObjectType;
 exports.compose = (...types) => {
     return (base) => {
         base.traits = {};
         const initializers = [];
+        const serializers = [];
         types.forEach((t) => {
             Object.getOwnPropertyNames(t.prototype).forEach((name) => {
                 if (!base.prototype[name] && name !== "constructor") {
@@ -33,6 +49,9 @@ exports.compose = (...types) => {
                 }
             });
             base.traits[t.name] = t;
+            if (t.schema) {
+                base.schema = lodash.merge(Object.assign({}, t.schema, base.schema, ObjectType.schema));
+            }
         });
         if (initializers.length > 0) {
             base.prototype._initialize = function (props) {

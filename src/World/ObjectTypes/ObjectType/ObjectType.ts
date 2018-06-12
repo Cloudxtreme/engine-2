@@ -1,5 +1,6 @@
 import * as lodash from "lodash";
 import * as uuid from "uuid";
+import * as validate from "validate.js";
 
 export interface IObjectType {
     uuid: string;
@@ -9,7 +10,27 @@ export interface IObjectType {
     initialize?: Function;
 }
 
+export type TObjectConstraints = {
+    [key: string]: TObjectConstraint;
+};
+
+type TObjectConstraint = {
+    presence?: true;
+};
+
 export abstract class ObjectType implements IObjectType {
+    static readonly schema: TObjectConstraints = {
+        uuid: {
+            presence: true,
+        },
+        key: {
+            presence: true,
+        },
+        objectType: {
+            presence: true,
+        },
+    };
+
     readonly uuid: string;
     readonly key: string;
     readonly objectType: string;
@@ -25,8 +46,12 @@ export abstract class ObjectType implements IObjectType {
                 this.objectType.replace("ObjectType", ""),
             )}:${this.uuid.slice(-5, -1)}`;
         }
-        if (this.initialize) this.initialize(props);
         if (this._initialize) this._initialize.call(this, props);
+        if (this.initialize) this.initialize(props);
+    }
+
+    serialize() {
+        return validate.cleanAttributes(this, this.constructor.schema);
     }
 }
 
@@ -34,6 +59,7 @@ export const compose = (...types: any[]) => {
     return (base: any) => {
         base.traits = {};
         const initializers = [];
+        const serializers = [];
         types.forEach((t: any) => {
             Object.getOwnPropertyNames(t.prototype).forEach((name: string) => {
                 if (!base.prototype[name] && name !== "constructor") {
@@ -43,6 +69,14 @@ export const compose = (...types: any[]) => {
                 }
             });
             base.traits[t.name] = t;
+            if (t.schema) {
+                base.schema = lodash.merge({
+                    ...{},
+                    ...t.schema,
+                    ...base.schema,
+                    ...ObjectType.schema,
+                });
+            }
         });
 
         if (initializers.length > 0) {
