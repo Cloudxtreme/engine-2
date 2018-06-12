@@ -14,7 +14,7 @@ export const SnapshotDataService = DataService(
                 })
                 .into("snapshots")
                 .then(() => {
-                    return WorldObjectType(data);
+                    return data;
                 });
         },
         actions: {

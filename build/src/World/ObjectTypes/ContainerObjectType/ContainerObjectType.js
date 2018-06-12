@@ -6,8 +6,7 @@ const validate = require("validate.js");
 const ObjectType_1 = require("../ObjectType");
 const EventedObjectType_1 = require("../EventedObjectType");
 let ContainerObjectType = class ContainerObjectType extends ObjectType_1.ObjectType {
-    constructor() {
-        super(...arguments);
+    initialize() {
         this.objects = {};
     }
     add(pathOrObject, object) {

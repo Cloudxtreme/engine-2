@@ -28,7 +28,11 @@ export class ContainerObjectType extends ObjectType
         },
     };
 
-    readonly objects: TObjectContainer = {};
+    readonly objects: TObjectContainer;
+
+    initialize() {
+        this.objects = {};
+    }
 
     add(pathOrObject: string | IObjectType, object: IObjectType) {
         let parent: IObjectType;
@@ -72,6 +76,9 @@ export class ContainerObjectType extends ObjectType
             objects[key] = value.serialize();
         });
 
-        return { ...validate.cleanAttributes(this, this.constructor.schema), objects };
+        return {
+            ...validate.cleanAttributes(this, this.constructor.schema),
+            objects,
+        };
     }
 }

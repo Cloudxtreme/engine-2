@@ -9,32 +9,56 @@ const ServiceObjectType_1 = require("../ServiceObjectType");
 let WorldObjectType = class WorldObjectType extends ObjectType_1.ObjectType {
     initialize() {
         this.key = "world";
-        this.objectTypePaths = [];
-        this.objectTypePaths.push(path.resolve(__dirname, ".."));
-        this.OBJECT_TYPES = {};
     }
     created() {
-        this.objectTypePaths = this.schema.objectTypeDefinition.objectTypePaths;
-        this.OBJECT_TYPES = this.schema.objectTypeDefinition.OBJECT_TYPES;
-        this.logger.info("registering ObjectTypes...");
-        const files = this.objectTypePaths.reduce((r, p) => {
-            return r.concat(nodeGlob.sync(path.join(p, "**/*Type.js")));
-        }, []);
-        files.forEach((file) => {
-            const objectType = path.basename(file, ".js");
-            this.logger.debug(`registering '${objectType}'`);
-            this.OBJECT_TYPES[objectType] = require(file)[objectType];
-        });
+        this._setObjectTypePaths();
+        this._registerObjectTypes();
         this.logger.info("loading latest snapshot...");
-        this.broker.call("data.snapshot.getLatest")
+        this.broker
+            .call("data.snapshot.getLatest")
             .then((data) => {
             if (!data) {
                 this.logger.warn("----> no snapshot was found, starting fresh! <----");
+                return this.saveSnapshot();
+            }
+            else {
             }
         });
     }
     get methods() {
-        return {};
+        return {
+            saveSnapshot() {
+                this.logger.info("persisting snapshot");
+                const serialized = this.schema.objectTypeDefinition.serialize();
+                return this.broker
+                    .call("data.snapshot.create", serialized)
+                    .then((data) => {
+                    this.broker.broadcast("world.snapshot.created", {
+                        id: data.id,
+                        updatedAt: data.updatedAt,
+                    });
+                    return data;
+                });
+            },
+            _setObjectTypePaths() {
+                this.objectTypePaths = [];
+                this.objectTypePaths.push(path.resolve(__dirname, ".."));
+            },
+            _registerObjectTypes() {
+                this.OBJECT_TYPES = {};
+                this.logger.info("registering ObjectTypes...");
+                const files = this.objectTypePaths.reduce((r, p) => {
+                    return r.concat(nodeGlob.sync(path.join(p, "**/*Type.@(js|ts)")));
+                }, []);
+                files.forEach((file) => {
+                    const objectType = path
+                        .basename(file)
+                        .replace(/(\.ts|\.js)/, "");
+                    this.logger.debug(`registering '${objectType}'`);
+                    this.OBJECT_TYPES[objectType] = require(file)[objectType];
+                });
+            },
+        };
     }
     add() { }
     remove() { }
