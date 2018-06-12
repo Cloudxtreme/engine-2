@@ -1,15 +1,14 @@
 import * as lodash from "lodash";
+import * as validate from "validate.js";
 
 import {
     compose,
     IObjectType,
     ObjectType,
+    TObjectConstraints,
 } from "../ObjectType";
 
-import {
-    EventedObjectType,
-    IEventedObjectType,
-} from "../EventedObjectType";
+import { EventedObjectType, IEventedObjectType } from "../EventedObjectType";
 
 export type TObjectContainer = {
     [key: string]: IObjectType;
@@ -23,6 +22,12 @@ export interface IContainerObjectType {
 @compose(EventedObjectType)
 export class ContainerObjectType extends ObjectType
     implements IContainerObjectType, IEventedObjectType {
+    static readonly schema: TObjectConstraints = {
+        objects: {
+            presence: true,
+        },
+    };
+
     readonly objects: TObjectContainer = {};
 
     add(pathOrObject: string | IObjectType, object: IObjectType) {
@@ -60,4 +65,13 @@ export class ContainerObjectType extends ObjectType
 
     on(): void {}
     emit(): void {}
+
+    serialize() {
+        const objects = {};
+        lodash.forEach(this.objects, (value: IObjectType, key: string) => {
+            objects[key] = value.serialize();
+        });
+
+        return { ...validate.cleanAttributes(this, this.constructor.schema), objects };
+    }
 }

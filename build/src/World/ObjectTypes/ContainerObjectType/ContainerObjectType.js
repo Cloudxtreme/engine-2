@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const lodash = require("lodash");
+const validate = require("validate.js");
 const ObjectType_1 = require("../ObjectType");
 const EventedObjectType_1 = require("../EventedObjectType");
 let ContainerObjectType = class ContainerObjectType extends ObjectType_1.ObjectType {
@@ -40,6 +41,18 @@ let ContainerObjectType = class ContainerObjectType extends ObjectType_1.ObjectT
     }
     on() { }
     emit() { }
+    serialize() {
+        const objects = {};
+        lodash.forEach(this.objects, (value, key) => {
+            objects[key] = value.serialize();
+        });
+        return Object.assign({}, validate.cleanAttributes(this, this.constructor.schema), { objects });
+    }
+};
+ContainerObjectType.schema = {
+    objects: {
+        presence: true,
+    },
 };
 ContainerObjectType = tslib_1.__decorate([
     ObjectType_1.compose(EventedObjectType_1.EventedObjectType)
