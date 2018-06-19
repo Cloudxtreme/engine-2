@@ -4,86 +4,34 @@
   "description": "Lucid MUD Engine",
   "engineStrict": true,
   "engines": {
-    "node": ">= 8.9.0"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testMatch": [
-      "**/*.spec.ts",
-      "*.spec.ts"
-    ],
-    "rootDir": "src",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
+    "node": ">= 10.1.0"
   },
   "license": "MIT",
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module"
+    },
+    "env": {
+      "jest": true,
+      "node": true
+    },
+    "extends": "eslint:recommended",
+    "plugins": ["jest"]
+  },
+  "prettier": {
+    "tabWidth": 4
+  },
   "devDependencies": {
-    "@types/bcrypt": "^2.0.0",
-    "@types/bluebird": "^3.5.20",
-    "@types/bluebird-global": "^3.5.5",
-    "@types/faker": "^4.1.2",
-    "@types/immutable": "^3.8.7",
-    "@types/jest": "~22.2.2",
-    "@types/knex": "^0.14.12",
-    "@types/mongoose": "^5.0.11",
-    "@types/node": "~8.10.0",
-    "dotenv": "^5.0.1",
-    "faker": "^4.1.0",
-    "gulp": "^3.9.1",
-    "gulp-ejs": "^3.1.2",
-    "jest": "~22.4.3",
-    "knex-cleaner": "^1.1.4",
-    "precommit-hook": "^3.0.0",
-    "rimraf": "~2.6.2",
-    "ts-jest": "~22.4.2",
-    "tslint": "~5.9.1",
-    "tslint-microsoft-contrib": "~5.0.3",
-    "tsutils": "~2.24.0",
-    "typedoc": "^0.11.1",
-    "typedoc-markdown-theme": "^0.0.4",
-    "typedoc-plugin-ensure-internal": "https://github.com/deap82/typedoc-plugin-ensure-internal",
-    "typescript": "~2.8.1",
-    "validate-typescript": "^2.0.1",
-    "yeoman-generator": "^2.0.4"
+    "eslint": "^4.19.1",
+    "eslint-plugin-jest": "^21.17.0",
+    "jest": "^23.1.0",
+    "prettier": "^1.13.5"
   },
   "dependencies": {
-    "bcrypt": "^2.0.1",
-    "bluebird": "^3.5.1",
-    "bookshelf": "^0.13.3",
-    "fastest-validator": "^0.6.6",
-    "glob-fs": "^0.1.7",
-    "gulp-rename": "^1.2.2",
-    "handlebars": "^4.0.11",
-    "immutable": "^3.8.2",
-    "ioredis": "^3.2.2",
-    "knex": "^0.14.6",
-    "lodash": "^4.17.5",
-    "moleculer": "^0.12.3",
-    "mongoose": "^5.0.17",
-    "nats": "^0.8.10",
-    "object-path": "^0.11.4",
-    "pg": "^7.4.1",
-    "prettyjson": "^1.2.1",
-    "redis": "^2.8.0",
-    "root-require": "^0.3.1",
-    "uuid": "^3.2.1",
-    "validate.js": "file:../validate.js"
+    "moleculer": "^0.12.8",
+    "ramda": "^0.25.0"
   },
-  "main": "./build/src/index.js",
-  "scripts": {
-    "test": "jest",
-    "watch": "tsc -w -p tsconfig.release.json",
-    "compile": "rm -rf build && tsc -p tsconfig.release.json",
-    "build": "yarn test && yarn lint && yarn compile && yarn doc",
-    "doc": "BUNDLE_GEMFILE=./docs/Gemfile bundle exec jekyll build -s ./docs -d ./docs/_site",
-    "lint": "./node_modules/tslint/bin/tslint --project ./",
-    "validate": "npm ls"
-  },
-  "pre-commit": [
-    "lint"
-  ]
+  "main": "./src/index.js",
+  "scripts": {}
 }
