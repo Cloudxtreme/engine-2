@@ -7,24 +7,43 @@ permalink: admin_portal_overview.html
 summary: Documentation for the Lucid Mud Engine
 ---
 
-The WorldObjectType Process is the actual game. It is responsible for handling the player interaction and managing the state
-of the game world.
+ The World process runs the actual implementation of the game. It is a [Moleculer]() broker process that spins up the
+ various services required to run the game world. It can be configured by passing in the configuration values to the
+ function.
 
 ## Configuration
-The WorldObjectType process is configured through the `config/world.config.js` file. Example:
+The World can be configured within the `config/world.config.js` file by passing in  the configuration options to the
+`World` function:
+
 ```javascript
 require('./config');
-const { WorldObjectType } = require("lucid-engine");
 
-module.exports = WorldObjectType({
-    name: 'Example WorldObjectType',
-    transporter: process.env.TRANSPORT_URL
+const { World } = require("lucid-engine");
+
+module.exports = World({
+    name: "Example"
 });
+
 ```
 
-### name
-The WorldObjectType name is required, this is the name of your game or game world.
+### Options
+#### name
+The name of the world. This can be any string value, and may be displayed to the player at various points.
 
-### transporter (default redis://localhost:6379)
-The [Transporter]() connection to use. This is used by Moleculer and **must** be the same value as used in the WorldObjectType 
-process. This allows the communication between the Portal and the WorldObjectType processes. 
+#### transporter
+_default: nats://localhost:4242_
+
+The transporter to use for the Moleculer services. The LME is tested using both [nats]() and [redis]() transporters.
+ 
+#### logLevel
+_default: debug_
+
+The logLevel sets the verbosity at which logging happens. It a may be set to `fatal`, `error`, `warn`, `info`, `debug`,
+and `trace`.
+
+## Running
+### Development Mode
+Running the World process in development mode is relatively simple. From the game directory call `yarn run world` from 
+the command line.
+
+### Production

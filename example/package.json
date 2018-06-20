@@ -5,17 +5,18 @@
   "license": "MIT",
   "engineStrict": true,
   "engines": {
-    "node": ">= 8.9.0"
+    "node": ">= 10.4.0"
   },
   "dependencies": {
     "dotenv": "^5.0.1",
     "generator-lucid-engine": "file:../generator",
     "lucid-engine": "file:..",
-    "moleculer": "^0.12.3",
+    "moleculer": "^0.12.4",
+    "nats": "^1.0.0",
     "redis": "^2.8.0"
   },
   "scripts": {
-    "portal": "moleculer-runner -c ./config/portal.config.js",
+    "world": "./node_modules/moleculer/bin/moleculer-runner.js -c ./config/world.config.js",
     "migrate:latest": "knex --knexfile ./config/knexfile.js migrate:latest",
     "migrate:rollback": "knex --knexfile ./config/knexfile.js migrate:rollback"
   }
