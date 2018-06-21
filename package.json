@@ -1,48 +1,54 @@
 {
-  "name": "lucid-engine",
-  "version": "0.0.1",
-  "description": "Lucid MUD Engine",
-  "engineStrict": true,
-  "engines": {
-    "node": ">= 10.1.0"
-  },
-  "license": "MIT",
-  "prettier": {
-    "tabWidth": 4
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
+    "name": "lucid-engine",
+    "version": "0.0.1",
+    "description": "Lucid MUD Engine",
+    "engineStrict": true,
+    "engines": {
+        "node": ">= 10.1.0"
     },
-    "testMatch": [
-      "**/*.spec.ts",
-      "*.spec.ts"
-    ],
-    "rootDir": "src",
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ]
-  },
-  "devDependencies": {
-    "@types/jest": "^23.1.1",
-    "@types/node": "^10.3.4",
-    "dotenv": "^6.0.0",
-    "eslint": "^4.19.1",
-    "eslint-plugin-jest": "^21.17.0",
-    "faker": "^4.1.0",
-    "jest": "^23.1.0",
-    "prettier": "^1.13.5",
-    "ts-jest": "^22.4.6",
-    "tslint": "^5.10.0",
-    "tslint-microsoft-contrib": "^5.0.3",
-    "typescript": "^2.9.2"
-  },
-  "dependencies": {
-    "moleculer": "^0.12.8",
-    "ramda": "^0.25.0"
-  },
-  "rootDir": "./src",
-  "main": "index.js",
-  "scripts": {}
+    "license": "MIT",
+    "prettier": {
+        "tabWidth": 4
+    },
+    "jest": {
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testMatch": [
+            "**/*.spec.ts",
+            "*.spec.ts"
+        ],
+        "rootDir": "src",
+        "moduleFileExtensions": [
+            "ts",
+            "js"
+        ]
+    },
+    "prettier": {
+        "trailingComma": "all",
+        "tabWidth": 4
+    },
+    "devDependencies": {
+        "@types/bluebird": "^3.5.20",
+        "@types/jest": "^23.1.1",
+        "@types/node": "^10.3.4",
+        "dotenv": "^6.0.0",
+        "eslint": "^4.19.1",
+        "eslint-plugin-jest": "^21.17.0",
+        "faker": "^4.1.0",
+        "jest": "^23.1.0",
+        "prettier": "^1.13.5",
+        "ts-jest": "^22.4.6",
+        "tslint": "^5.10.0",
+        "tslint-microsoft-contrib": "^5.0.3",
+        "typescript": "^2.9.2"
+    },
+    "dependencies": {
+        "bluebird": "^3.5.1",
+        "moleculer": "^0.12.8",
+        "ramda": "^0.25.0"
+    },
+    "rootDir": "./src",
+    "main": "index.js",
+    "scripts": {}
 }
