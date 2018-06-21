@@ -6,7 +6,7 @@ exports.Service = {
      * Creates a service definition. May be used by the World process config to create services.
      */
     define(name, ...definition) {
-        return R.pipe(R.assoc("name", `services.${name}`), ...definition);
+        return (config = {}) => R.pipe(R.assoc("name", `services.${name}`), ...definition)(config);
     },
     /**
      * adds the function as a callback for when the Service is created. This can be called multiple times to add

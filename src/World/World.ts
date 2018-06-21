@@ -1,4 +1,5 @@
 import { BrokerOptions, ServiceBroker, ServiceSchema } from "moleculer";
+import { StateService } from "./Services/StateService";
 
 export interface IWorldConfig {
     transporter?: string;
@@ -17,6 +18,7 @@ type TBrokerLifeCycleFunction = (broker: ServiceBroker) => void;
  */
 export const World = (config: IWorldConfig = {}): BrokerOptions => {
     const created = (broker: ServiceBroker) => {
+        broker.createService(StateService());
         if (config.onCreate) {
             config.onCreate.call(broker);
         }

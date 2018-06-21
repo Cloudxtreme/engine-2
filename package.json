@@ -50,5 +50,7 @@
     },
     "rootDir": "./src",
     "main": "index.js",
-    "scripts": {}
+    "scripts": {
+        "watch": "./node_modules/typescript/bin/tsc -w"
+    }
 }

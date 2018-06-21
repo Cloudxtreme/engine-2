@@ -12,17 +12,18 @@ export interface IServiceConfig {
 type TServiceCreatedFunction = (broker: ServiceBroker) => void;
 type TServiceLifeCycleFunction = () => Bluebird<void>;
 type TServicePropsFunction = (props: IServiceConfig) => IServiceConfig;
-export type TServiceDefinition = (config: IServiceConfig) => ServiceSchema;
+export type TServiceDefinition = (config?: IServiceConfig | {}) => ServiceSchema;
 
 export const Service = {
     /**
      * Creates a service definition. May be used by the World process config to create services.
      */
     define(name: string, ...definition: Function[]): TServiceDefinition {
-        return R.pipe(
-            R.assoc("name", `services.${name}`),
-            ...definition,
-        );
+        return (config: IServiceConfig = {}): ServiceSchema =>
+            R.pipe(
+                R.assoc("name", `services.${name}`),
+                ...definition,
+            )(config);
     },
 
     /**

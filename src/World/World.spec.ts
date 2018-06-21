@@ -1,4 +1,4 @@
-import { ServiceBroker, ServiceSchema } from "moleculer";
+import { Service, ServiceBroker, ServiceSchema } from "moleculer";
 
 import { World } from "./World";
 

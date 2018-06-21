@@ -6,3 +6,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./CharacterObjectType"));
 __export(require("./RoomObjectType"));
 __export(require("./WorldObjectType"));
+__export(require("./ObjectType"));
