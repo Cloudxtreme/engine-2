@@ -2,13 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const R = require("ramda");
 exports.Service = {
-    definition(props) {
-        return R.pipe((p) => p)(props);
+    /**
+     * Creates a service definition. May be used by the World process config to create services.
+     */
+    define(name, ...definition) {
+        return R.pipe(R.assoc("name", `services.${name}`), ...definition);
     },
     /**
      * adds the function as a callback for when the Service is created. This can be called multiple times to add
      * multiple created callbacks
-     * @param cb the cb to fire when the service is created
      */
     onCreate(cb) {
         return R.ifElse(R.pipe(R.prop("created"), R.isNil), R.assoc("created", cb), R.pipe((props) => {

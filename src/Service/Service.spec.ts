@@ -2,11 +2,27 @@ import * as Bluebird from "bluebird";
 import { ServiceBroker } from "moleculer";
 import * as R from "ramda";
 
-import { Service } from "./Service";
+import { IServiceConfig, Service } from "./Service";
 
 const broker = new ServiceBroker();
 
 describe("Service", () => {
+    describe("define", () => {
+        it("creates a service definition function", () => {
+            expect(typeof Service.define("service", () => {})).toEqual(
+                "function",
+            );
+        });
+
+        it("sets the service name correctly", () => {
+            expect(
+                Service.define("service", (config: IServiceConfig) => config)(
+                    {},
+                ),
+            ).toEqual(expect.objectContaining({ name: "services.service" }));
+        });
+    });
+
     describe("onCreate", () => {
         it("sets the base function for created if not set", () => {
             const mockFunction = jest.fn();

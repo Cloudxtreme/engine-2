@@ -6,10 +6,28 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * function.
  */
 exports.World = (config = {}) => {
+    const created = (broker) => {
+        if (config.onCreate) {
+            config.onCreate.call(broker);
+        }
+    };
+    const started = (broker) => {
+        if (config.onStart) {
+            config.onStart.call(broker);
+        }
+    };
+    const stopped = (broker) => {
+        if (config.onCreate) {
+            config.onStop.call(broker);
+        }
+    };
     return {
         nodeID: "lucid-mud",
         transporter: config.transporter || "nats://localhost:4222",
         logger: console,
         logLevel: config.logLevel || "debug",
+        created,
+        started,
+        stopped,
     };
 };

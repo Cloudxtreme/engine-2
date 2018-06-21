@@ -35,8 +35,8 @@ const { World } = require("lucid-engine");
 const AnalyticsService = require("../services/AnalyticsService")
 
 module.exports = World({
-    created() {
-        this.startService(AnalyticsService());
+    onCreate() {
+        this.createService(AnalyticsService());
     }
 })
 ```
