@@ -8,6 +8,7 @@
     },
     "license": "MIT",
     "prettier": {
+        "trailingComma": "all",
         "tabWidth": 4
     },
     "jest": {
@@ -24,13 +25,10 @@
             "js"
         ]
     },
-    "prettier": {
-        "trailingComma": "all",
-        "tabWidth": 4
-    },
     "devDependencies": {
         "@types/bluebird": "^3.5.20",
         "@types/jest": "^23.1.1",
+        "@types/knex": "^0.14.14",
         "@types/node": "^10.3.4",
         "dotenv": "^6.0.0",
         "eslint": "^4.19.1",
@@ -45,8 +43,10 @@
     },
     "dependencies": {
         "bluebird": "^3.5.1",
+        "knex": "^0.14.6",
         "moleculer": "^0.12.8",
-        "ramda": "^0.25.0"
+        "ramda": "^0.25.0",
+        "redis": "^2.8.0"
     },
     "rootDir": "./src",
     "main": "index.js",

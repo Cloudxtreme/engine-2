@@ -47,3 +47,10 @@ Running the World process in development mode is relatively simple. From the gam
 the command line.
 
 ### Production
+
+
+## Services
+The LME World process is made up of individual services, each providing specific functionality. For more information on
+creating custom services see the [Developer Guide]().
+
+### StateService
