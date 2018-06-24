@@ -25,22 +25,30 @@ describe("Service", () => {
         it("correctly chains multiple service definitions", () => {
             const mock1 = jest.fn();
             const mock2 = jest.fn();
+            const mock3 = jest.fn();
+            const mock4 = jest.fn();
             const def1 = Service.define(
                 "service",
-                Service.method("test", mock1),
+                Service.method("mock1", mock1),
+                Service.action("mock3", mock3),
             );
             const def2 = Service.define(
                 "service1",
                 def1,
-                Service.method("test2", mock2),
+                Service.method("mock2", mock2),
+                Service.action("mock4", mock4),
             );
 
             expect(def2()).toEqual(
                 expect.objectContaining({
                     name: "services.service1",
                     methods: {
-                        test: mock1,
-                        test2: mock2,
+                        mock1,
+                        mock2,
+                    },
+                    actions: {
+                        mock3,
+                        mock4,
                     },
                 }),
             );

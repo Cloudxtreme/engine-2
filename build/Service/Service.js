@@ -9,6 +9,12 @@ exports.Service = {
         return (config = {}) => R.compose(R.assoc("name", `services.${name}`), ...definition)(config);
     },
     /**
+     * add an action
+     */
+    action(name, func) {
+        return R.pipe(R.pipe(R.when(R.pipe(R.prop("actions"), R.isNil), R.assoc("actions", {}))), R.assocPath(["actions", name], func));
+    },
+    /**
      * adds a method to the service
      */
     method(name, func) {

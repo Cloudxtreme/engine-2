@@ -1,5 +1,5 @@
 import * as Bluebird from "bluebird";
-import { ServiceBroker, ServiceSchema } from "moleculer";
+import { Action, Context, ServiceBroker, ServiceSchema } from "moleculer";
 import * as R from "ramda";
 
 export interface IServiceConfig {
@@ -12,6 +12,8 @@ export interface IServiceConfig {
 type TServiceCreatedFunction = (broker: ServiceBroker) => void;
 type TServiceLifeCycleFunction = () => Bluebird<void>;
 type TServicePropsFunction = (props: IServiceConfig) => IServiceConfig;
+type TServiceActionFunction = (ctx: Context) => any;
+
 export type TServiceDefinition = (
     config?: IServiceConfig | {},
 ) => ServiceSchema;
@@ -26,6 +28,24 @@ export const Service = {
                 R.assoc("name", `services.${name}`),
                 ...definition,
             )(config);
+    },
+
+    /**
+     * add an action
+     */
+    action(name: string, func: TServiceDefinition) {
+        return R.pipe(
+            R.pipe(
+                R.when(
+                    R.pipe(
+                        R.prop("actions"),
+                        R.isNil,
+                    ),
+                    R.assoc("actions", {}),
+                ),
+            ),
+            R.assocPath(["actions", name], func),
+        );
     },
 
     /**
