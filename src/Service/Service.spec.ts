@@ -21,6 +21,30 @@ describe("Service", () => {
                 ),
             ).toEqual(expect.objectContaining({ name: "services.service" }));
         });
+
+        it("correctly chains multiple service definitions", () => {
+            const mock1 = jest.fn();
+            const mock2 = jest.fn();
+            const def1 = Service.define(
+                "service",
+                Service.method("test", mock1),
+            );
+            const def2 = Service.define(
+                "service1",
+                def1,
+                Service.method("test2", mock2),
+            );
+
+            expect(def2()).toEqual(
+                expect.objectContaining({
+                    name: "services.service1",
+                    methods: {
+                        test: mock1,
+                        test2: mock2,
+                    },
+                }),
+            );
+        });
     });
 
     describe("onCreate", () => {
@@ -91,6 +115,14 @@ describe("Service", () => {
                     expect(mock1).toHaveBeenCalledWith("foo");
                     expect(mock2).toHaveBeenCalledWith("foo");
                 });
+        });
+    });
+
+    describe("method", () => {
+        it("sets up the method on ervice.methods", () => {
+            const mock = jest.fn();
+            Service.method("test", mock)().methods.test();
+            expect(mock).toHaveBeenCalled();
         });
     });
 });

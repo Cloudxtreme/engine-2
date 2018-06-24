@@ -45,12 +45,14 @@
         "bluebird": "^3.5.1",
         "knex": "^0.14.6",
         "moleculer": "^0.12.8",
+        "pg": "^7.4.3",
         "ramda": "^0.25.0",
         "redis": "^2.8.0"
     },
     "rootDir": "./src",
     "main": "index.js",
     "scripts": {
-        "watch": "./node_modules/typescript/bin/tsc -w"
+        "watch": "./node_modules/typescript/bin/tsc -w",
+        "test:db:migrate": "NODE_ENV=test ./node_modules/knex/bin/cli.js --knexfile ./example/config/knexfile.js migrate:latest"
     }
 }

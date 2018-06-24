@@ -1,34 +1,28 @@
-import * as Bluebird from 'bluebird';
+import * as Bluebird from "bluebird";
 
-import {IObject} from '../../../ObjectTypes/ObjectType/index';
-import {WorldObjectType} from '../../../ObjectTypes/WorldObjectType/index';
-import {DataService, IDataServiceSchema} from '../DataService/index';
+import {Service} from "../../../../Service";
+import {DataService} from "../DataService";
 
-export const SnapshotDataService = DataService((): IDataServiceSchema => ({
-    name: 'snapshot',
-    create(data: IObject) {
-        return this.db.insert({
-            data: data,
-        })
-            .into('snapshots')
-            .then(() => {
-                return WorldObjectType(data);
-            });
-    },
-    actions: {
-        getLatest() {
-            return this.db.select()
-                .from('snapshots')
-                .orderBy('created_at', 'desc')
-                .first()
-                //tslint:disable-next-line:no-any
-                .then((data: any) => {
-                    if (!data) {
-                        return false;
-                    }
+export interface ISnapshot {
+    id: number;
+    created_at: Date;
+    data: any;
+}
 
-                    return data;
+export const SnapshotDataService = Service.define(
+    "snapshots",
+    DataService,
+    Service.method(
+        "findLatest",
+        function(): Bluebird<ISnapshot> {
+            return this.knex
+                .select("*")
+                .from("snapshots")
+                .orderBy("created_at", "desc")
+                .limit(1)
+                .then((rows: ISnapshot[]) => {
+                    return rows[0];
                 });
         },
-    },
-}));
+    ),
+);

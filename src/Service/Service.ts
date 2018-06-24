@@ -12,7 +12,9 @@ export interface IServiceConfig {
 type TServiceCreatedFunction = (broker: ServiceBroker) => void;
 type TServiceLifeCycleFunction = () => Bluebird<void>;
 type TServicePropsFunction = (props: IServiceConfig) => IServiceConfig;
-export type TServiceDefinition = (config?: IServiceConfig | {}) => ServiceSchema;
+export type TServiceDefinition = (
+    config?: IServiceConfig | {},
+) => ServiceSchema;
 
 export const Service = {
     /**
@@ -20,10 +22,28 @@ export const Service = {
      */
     define(name: string, ...definition: Function[]): TServiceDefinition {
         return (config: IServiceConfig = {}): ServiceSchema =>
-            R.pipe(
+            R.compose(
                 R.assoc("name", `services.${name}`),
                 ...definition,
             )(config);
+    },
+
+    /**
+     * adds a method to the service
+     */
+    method(name: string, func: Function) {
+        return R.pipe(
+            R.pipe(
+                R.when(
+                    R.pipe(
+                        R.prop("methods"),
+                        R.isNil,
+                    ),
+                    R.assoc("methods", {}),
+                ),
+            ),
+            R.assocPath(["methods", name], func),
+        );
     },
 
     /**
