@@ -53,4 +53,13 @@ the command line.
 The LME World process is made up of individual services, each providing specific functionality. For more information on
 creating custom services see the [Developer Guide]().
 
+### SnapshotDataService
+_services.snapshots_
+
+The SnapshotDataService is used to create and pull world snapshots from the database.
+
+#### Actions
+* **findLatest** - returns the most recently saved snapshot
+* **create(state)** - saves a snapshot to the database.
+
 ### StateService

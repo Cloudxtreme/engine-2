@@ -8,7 +8,23 @@ summary: Documentation for the Lucid Mud Engine
 ---
 
 ## Services
-The LME is made up of [Moleculer](http://moleculer.services/) services. New services can be defined to extend the
+The LME is made up of [Moleculer](http://moleculer.services/) micro-services. Each micro-service manages a specific 
+domain of functionality within the LME.
+
+### Service List
+
+#### SnapshotDataService
+##### SnapshotDataService
+_services.snapshots_
+
+The SnapshotDataService is used to create and pull world snapshots from the database.
+
+###### Actions
+* **findLatest** - returns the most recently saved snapshot
+* **create(state)** - saves a snapshot to the database.
+ 
+ 
+ is a sew services can be defined to extend the
 capabilities of the LME as necessary. A Service is created by calling `Service.define(serviceName, ...definition)`. An
 example is provided demonstrating the creation of a service that adds analytics abilities:
 
