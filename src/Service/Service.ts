@@ -33,7 +33,7 @@ export const Service = {
     /**
      * add an action
      */
-    action(name: string, func: TServiceDefinition) {
+    action(name: string, func: TServiceActionFunction) {
         return R.pipe(
             R.pipe(
                 R.when(

@@ -1,31 +1,24 @@
+import * as Bluebird from "bluebird";
 import * as Knex from "knex";
 import { Service, ServiceBroker } from "moleculer";
 
 import { ISnapshot, SnapshotDataService } from "./SnapshotDataService";
-
-const broker = new ServiceBroker();
-
-let service;
-let snapshot;
 
 // tslint:disable
 require("../../../../../example/config/config");
 const knex = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
 // tslint:enable
 
-describe("SnapshotDataService", () => {
-    beforeEach(() => {
-        service = new Service(broker, SnapshotDataService());
-        service.created();
-    });
+const broker = new ServiceBroker();
+broker.createService(SnapshotDataService());
 
-    afterEach(() => {
-        return knex
-            .from("snapshots")
-            .del()
-            .finally(() => {
-                service.knex.destroy();
-            });
+const service = broker.getLocalService("services.snapshots");
+let snapshot;
+
+describe("SnapshotDataService", () => {
+    afterAll(() => {
+        knex.destroy();
+        broker.stop();
     });
 
     describe("findLatest", () => {
@@ -45,19 +38,6 @@ describe("SnapshotDataService", () => {
                 .then((rows: ISnapshot[]) => {
                     snapshot = rows[0];
                 });
-        });
-
-        afterEach(() => {
-            return knex
-                .from("snapshots")
-                .del()
-                .finally(() => {
-                    service.knex.destroy();
-                });
-        });
-
-        afterAll(() => {
-            knex.destroy();
         });
 
         it("finds the most recent snapshot", () => {
@@ -82,6 +62,32 @@ describe("SnapshotDataService", () => {
                 expect(snap.data).toEqual(expect.objectContaining(data));
                 expect(snap.id).toBeDefined();
                 expect(snap.created_at).toBeDefined();
+            });
+        });
+    });
+
+    describe("actions", () => {
+        describe("findLatest", () => {
+            it("calls findLatest method", () => {
+                service.findLatest = jest.fn(Bluebird.resolve);
+
+                return broker
+                    .call("services.snapshots.findLatest")
+                    .then(() => expect(service.findLatest).toHaveBeenCalled());
+            });
+        });
+
+        describe("create", () => {
+            it("calls the create method", () => {
+                service.create = jest.fn(Bluebird.resolve);
+
+                return broker
+                    .call("services.snapshots.create", { a: 1, b: 1, c: 1 })
+                    .then(() =>
+                        expect(service.create).toHaveBeenCalledWith(
+                            expect.objectContaining({ a: 1, b: 1, c: 1 }),
+                        ),
+                    );
             });
         });
     });

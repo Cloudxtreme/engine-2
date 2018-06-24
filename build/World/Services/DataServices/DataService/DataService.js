@@ -7,4 +7,6 @@ exports.DataService = Service_1.Service.define("data", Service_1.Service.onCreat
     this.knex = Knex(
     // tslint:disable-next-line:non-literal-require
     require(`${process.env.GAME_ROOT}/config/knexfile.js`));
+}), Service_1.Service.onStop(function () {
+    return this.knex.destroy();
 }));

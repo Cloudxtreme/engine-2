@@ -10,4 +10,7 @@ export const DataService = Service.define(
             require(`${process.env.GAME_ROOT}/config/knexfile.js`),
         );
     }),
+    Service.onStop(function() {
+        return this.knex.destroy();
+    }),
 );

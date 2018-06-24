@@ -1,4 +1,5 @@
 import * as Bluebird from "bluebird";
+import { Context } from "moleculer";
 
 import { Service } from "../../../../Service";
 import { DataService } from "../DataService";
@@ -36,5 +37,11 @@ export const SnapshotDataService = Service.define(
                     .where({ id: rows[0] }),
             )
             .then((rows: ISnapshot[]): ISnapshot => rows[0]);
+    }),
+    Service.action("findLatest", async function(): Promise<ISnapshot> {
+        return <Promise<ISnapshot>>this.findLatest();
+    }),
+    Service.action("create", async function(ctx: Context): Promise<ISnapshot> {
+        return <Promise<ISnapshot>>this.create(ctx.params);
     }),
 );
