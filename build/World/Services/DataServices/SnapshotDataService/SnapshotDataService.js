@@ -11,4 +11,14 @@ exports.SnapshotDataService = Service_1.Service.define("snapshots", DataService_
         .then((rows) => {
         return rows[0];
     });
+}), Service_1.Service.method("create", function (snapshot) {
+    return this.knex
+        .returning("id")
+        .insert({ data: snapshot })
+        .into("snapshots")
+        .then((rows) => this.knex
+        .select("*")
+        .from("snapshots")
+        .where({ id: rows[0] }))
+        .then((rows) => rows[0]);
 }));

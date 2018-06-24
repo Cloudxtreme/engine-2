@@ -14,11 +14,22 @@ const knex = Knex(require(`${process.env.GAME_ROOT}/config/knexfile`));
 // tslint:enable
 
 describe("SnapshotDataService", () => {
+    beforeEach(() => {
+        service = new Service(broker, SnapshotDataService());
+        service.created();
+    });
+
+    afterEach(() => {
+        return knex
+            .from("snapshots")
+            .del()
+            .finally(() => {
+                service.knex.destroy();
+            });
+    });
+
     describe("findLatest", () => {
         beforeEach(() => {
-            service = new Service(broker, SnapshotDataService());
-            service.created();
-
             return knex
                 .insert({
                     data: { a: 1, b: 2, c: 3 },
@@ -59,6 +70,18 @@ describe("SnapshotDataService", () => {
                     }),
                 );
                 expect(latest.created_at).toBeDefined();
+            });
+        });
+    });
+
+    describe("create", () => {
+        it("creates a snapshot and returns it", () => {
+            const data = { a: 3, b: 2, c: 1 };
+
+            return service.create(data).then((snap: ISnapshot) => {
+                expect(snap.data).toEqual(expect.objectContaining(data));
+                expect(snap.id).toBeDefined();
+                expect(snap.created_at).toBeDefined();
             });
         });
     });
