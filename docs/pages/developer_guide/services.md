@@ -19,7 +19,7 @@ _services.snapshots_
 
 The SnapshotDataService is used to create and pull world snapshots from the database.
 
-###### Actions
+###### Action
 * **findLatest** - returns the most recently saved snapshot
 * **create(state)** - saves a snapshot to the database.
  
