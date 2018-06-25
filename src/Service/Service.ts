@@ -11,7 +11,7 @@ export interface IServiceConfig {
 
 type TServiceCreatedFunction = (broker: ServiceBroker) => void;
 type TServiceLifeCycleFunction = () => Bluebird<void>;
-type TServicePropsFunction = (props: IServiceConfig) => IServiceConfig;
+type TServiceConfigFunction = (config: IServiceConfig) => ServiceSchema;
 type TServiceActionFunction = (ctx: Context) => any;
 
 export type TServiceDefinition = (
@@ -33,44 +33,37 @@ export const Service = {
     /**
      * add an action
      */
-    action(name: string, func: TServiceActionFunction) {
-        return R.pipe(
-            R.pipe(
-                R.when(
-                    R.pipe(
-                        R.prop("actions"),
-                        R.isNil,
-                    ),
-                    R.assoc("actions", {}),
-                ),
-            ),
-            R.assocPath(["actions", name], func),
-        );
+    action(name: string, func: TServiceActionFunction): TServiceConfigFunction {
+        return R.assocPath(["actions", name], func);
+    },
+
+    /**
+     * Adds the given service dependency
+     */
+    dependency(name: string): TServiceConfigFunction {
+        return (config: IServiceConfig): ServiceSchema =>
+            R.assoc(
+                "dependencies",
+                R.pipe(
+                    R.prop("dependencies"),
+                    R.defaultTo([]),
+                    R.append(name),
+                )(config),
+            )(config);
     },
 
     /**
      * adds a method to the service
      */
-    method(name: string, func: Function) {
-        return R.pipe(
-            R.pipe(
-                R.when(
-                    R.pipe(
-                        R.prop("methods"),
-                        R.isNil,
-                    ),
-                    R.assoc("methods", {}),
-                ),
-            ),
-            R.assocPath(["methods", name], func),
-        );
+    method(name: string, func: Function): TServiceConfigFunction {
+        return R.assocPath(["methods", name], func);
     },
 
     /**
      * adds the function as a callback for when the Service is created. This can be called multiple times to add
      * multiple created callbacks
      */
-    onCreate(cb: TServiceCreatedFunction): TServicePropsFunction {
+    onCreate(cb: TServiceCreatedFunction): TServiceConfigFunction {
         return R.ifElse(
             R.pipe(
                 R.prop("created"),
@@ -97,8 +90,8 @@ export const Service = {
      * adds the function as a callback to be fired when the Service is started. Multiple callbacks will be chained
      * together. Expects the function to return a promise.
      */
-    onStart(cb: TServiceLifeCycleFunction): TServicePropsFunction {
-        return <TServicePropsFunction>R.ifElse(
+    onStart(cb: TServiceLifeCycleFunction): TServiceConfigFunction {
+        return <TServiceConfigFunction>R.ifElse(
             R.pipe(
                 R.prop("started"),
                 R.isNil,
@@ -122,8 +115,8 @@ export const Service = {
      * adds the function as a callback to be fired when the Service is stopped. Multiple callbacks will be chained
      * together. Expects the function to return a promise.
      */
-    onStop(cb: TServiceLifeCycleFunction): TServicePropsFunction {
-        return <TServicePropsFunction>R.ifElse(
+    onStop(cb: TServiceLifeCycleFunction): TServiceConfigFunction {
+        return <TServiceConfigFunction>R.ifElse(
             R.pipe(
                 R.prop("stopped"),
                 R.isNil,

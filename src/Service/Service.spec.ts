@@ -58,7 +58,7 @@ describe("Service", () => {
     describe("onCreate", () => {
         it("sets the base function for created if not set", () => {
             const mockFunction = jest.fn();
-            Service.onCreate(mockFunction)({}).created(broker);
+            Service.onCreate(mockFunction)({}).created();
             expect(mockFunction).toHaveBeenCalled();
         });
 
@@ -129,8 +129,16 @@ describe("Service", () => {
     describe("method", () => {
         it("sets up the method on ervice.methods", () => {
             const mock = jest.fn();
-            Service.method("test", mock)().methods.test();
+            Service.method("test", mock)({}).methods.test();
             expect(mock).toHaveBeenCalled();
+        });
+    });
+
+    describe("dependency",  () => {
+        it("appends the dependency", () => {
+            expect(Service.dependency("foo")({}).dependencies).toEqual(
+                expect.arrayContaining(["foo"]),
+            );
         });
     });
 });

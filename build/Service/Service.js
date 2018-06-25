@@ -12,13 +12,19 @@ exports.Service = {
      * add an action
      */
     action(name, func) {
-        return R.pipe(R.pipe(R.when(R.pipe(R.prop("actions"), R.isNil), R.assoc("actions", {}))), R.assocPath(["actions", name], func));
+        return R.assocPath(["actions", name], func);
+    },
+    /**
+     * Adds the given service dependency
+     */
+    dependency(name) {
+        return (config) => R.assoc("dependencies", R.pipe(R.prop("dependencies"), R.defaultTo([]), R.append(name))(config))(config);
     },
     /**
      * adds a method to the service
      */
     method(name, func) {
-        return R.pipe(R.pipe(R.when(R.pipe(R.prop("methods"), R.isNil), R.assoc("methods", {}))), R.assocPath(["methods", name], func));
+        return R.assocPath(["methods", name], func);
     },
     /**
      * adds the function as a callback for when the Service is created. This can be called multiple times to add

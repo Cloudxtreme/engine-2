@@ -7,10 +7,9 @@ Bluebird.promisifyAll(Redis);
 
 export const StateService = Service.define(
     "state",
-    Service.onStart(function() {
+    Service.dependency("services.snapshots"),
+    Service.onCreate(function() {
         this.logger.info("connecting to redis instance");
         this.redis = Redis.createClient(process.env.REDIS_URL);
-
-        return Bluebird.resolve();
     }),
 );
