@@ -1,5 +1,11 @@
-import { compose } from "ramda";
+import { ServiceEvents } from "moleculer";
+import { assoc, compose, curry, isNil, pipe, prop, when } from "ramda";
 
-import { ObjectType } from "../ObjectType";
+import { IObject, ObjectType } from "../ObjectType";
 
-const ServiceObjectType = ObjectType("ServiceObject");
+interface IServiceObject extends IObject {
+}
+
+export const ServiceObjectType = function(object: IServiceObject | {} = {}): IServiceObject {
+    return <IServiceObject>ObjectType("ServiceObject")(<IServiceObject>object);
+};

@@ -7,6 +7,7 @@ export interface IObject {
     uuid: string;
     key: string;
     objectType: string;
+    objectTypes: string[];
     createdAt: string;
     updatedAt: string;
 }
@@ -80,20 +81,15 @@ const addObjectType = curry(function(objectType: string, object: IObject) {
 });
 
 export const ObjectType = function(objectType: string, ...definition: Function[]): TObjectFactory {
-    return pipe(
-        pipe(
-            when(
-                isNil,
-                () => {},
-            ),
-        ),
-        assoc("objectType", objectType),
-        setObjectTypes,
-        addObjectType(objectType),
-        setUuid,
-        setKey,
-        setCreatedAt,
+    return compose(
         setUpdatedAt,
-        compose(...definition),
+        setCreatedAt,
+        setKey,
+        setUuid,
+        ...definition,
+        addObjectType(objectType),
+        setObjectTypes,
+        assoc("objectType", objectType),
+        pipe(when(isNil, () => {})),
     );
 };

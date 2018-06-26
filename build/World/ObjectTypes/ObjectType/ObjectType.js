@@ -22,5 +22,5 @@ const addObjectType = ramda_1.curry(function (objectType, object) {
     return ramda_1.when(ramda_1.pipe(ramda_1.prop("objectTypes"), ramda_1.any), ramda_1.assoc("objectTypes", ramda_1.pipe(ramda_1.prop("objectTypes"), ramda_1.append(objectType))(object)))(object);
 });
 exports.ObjectType = function (objectType, ...definition) {
-    return ramda_1.pipe(ramda_1.pipe(ramda_1.when(ramda_1.isNil, () => { })), ramda_1.assoc("objectType", objectType), setObjectTypes, addObjectType(objectType), setUuid, setKey, setCreatedAt, setUpdatedAt, ramda_1.compose(...definition));
+    return ramda_1.compose(setUpdatedAt, setCreatedAt, setKey, setUuid, ...definition, addObjectType(objectType), setObjectTypes, ramda_1.assoc("objectType", objectType), ramda_1.pipe(ramda_1.when(ramda_1.isNil, () => { })));
 };
