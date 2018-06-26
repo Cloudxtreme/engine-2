@@ -10,10 +10,10 @@ function setKey(object) {
     return ramda_1.when(ramda_1.pipe(ramda_1.prop("key"), ramda_1.isNil), ramda_1.assoc("key", `${lodash_1.kebabCase(object.objectType)}:${object.uuid.slice(-5)}`))(object);
 }
 function setCreatedAt(object) {
-    return ramda_1.when(ramda_1.pipe(ramda_1.prop("createdAt"), ramda_1.isNil), ramda_1.assoc("createdAt", new Date()))(object);
+    return ramda_1.when(ramda_1.pipe(ramda_1.prop("createdAt"), ramda_1.isNil), ramda_1.assoc("createdAt", new Date().getTime()))(object);
 }
 function setUpdatedAt(object) {
-    return ramda_1.when(ramda_1.pipe(ramda_1.prop("updatedAt"), ramda_1.isNil), ramda_1.assoc("updatedAt", new Date()))(object);
+    return ramda_1.when(ramda_1.pipe(ramda_1.prop("updatedAt"), ramda_1.isNil), ramda_1.assoc("updatedAt", new Date().getTime()))(object);
 }
 function setObjectTypes(object) {
     return ramda_1.when(ramda_1.pipe(ramda_1.prop("objectTypes"), ramda_1.isNil), ramda_1.assoc("objectTypes", []))(object);

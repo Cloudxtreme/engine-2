@@ -43,7 +43,7 @@ describe("ObjectType", () => {
         });
 
         it("doesn't set createdAt", () => {
-            const createdAt = new Date();
+            const createdAt = new Date().getTime();
             expect(ot("object", { createdAt }).createdAt).toEqual(createdAt);
         });
     });
@@ -59,7 +59,7 @@ describe("ObjectType", () => {
         });
 
         it("doesn't set updatedAt", () => {
-            const updatedAt = new Date();
+            const updatedAt = new Date().getTime();
             expect(ot({ updatedAt }).updatedAt).toEqual(updatedAt);
         });
     });

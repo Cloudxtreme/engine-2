@@ -40,7 +40,7 @@ function setCreatedAt(object: IObject): IObject {
             prop("createdAt"),
             isNil,
         ),
-        assoc("createdAt", new Date()),
+        assoc("createdAt", new Date().getTime()),
     )(object);
 }
 
@@ -50,7 +50,7 @@ function setUpdatedAt(object: IObject): IObject {
             prop("updatedAt"),
             isNil,
         ),
-        assoc("updatedAt", new Date()),
+        assoc("updatedAt", new Date().getTime()),
     )(object);
 }
 
