@@ -1,9 +1,9 @@
 import { dasherize } from "inflection";
-import { assoc, compose, curry, defaultTo, either, evolve, isNil, map, pipe, prop, when } from "ramda";
 import { kebabCase } from "lodash";
+import { any, append, assoc, compose, curry, isNil, not, pipe, prop, when } from "ramda";
 import * as UUID from "uuid";
 
-interface IObject {
+export interface IObject {
     uuid: string;
     key: string;
     objectType: string;
@@ -11,7 +11,7 @@ interface IObject {
     updatedAt: string;
 }
 
-type TObjectFactory = (object: IObject) => IObject;
+export type TObjectFactory = (object: IObject) => IObject;
 
 function setUuid(object: IObject): IObject {
     return when(
@@ -46,20 +46,54 @@ function setCreatedAt(object: IObject): IObject {
 function setUpdatedAt(object: IObject): IObject {
     return when(
         pipe(
-            prop("createdAt"),
+            prop("updatedAt"),
             isNil,
         ),
         assoc("updatedAt", new Date()),
     )(object);
 }
 
+function setObjectTypes(object: IObject) {
+    return when(
+        pipe(
+            prop("objectTypes"),
+            isNil,
+        ),
+        assoc("objectTypes", []),
+    )(object);
+}
+
+const addObjectType = curry(function(objectType: string, object: IObject) {
+    return when(
+        pipe(
+            prop("objectTypes"),
+            any,
+        ),
+        assoc(
+            "objectTypes",
+            pipe(
+                prop("objectTypes"),
+                append(objectType),
+            )(object),
+        ),
+    )(object);
+});
+
 export const ObjectType = function(objectType: string, ...definition: Function[]): TObjectFactory {
-    return compose(
+    return pipe(
+        pipe(
+            when(
+                isNil,
+                () => {},
+            ),
+        ),
+        assoc("objectType", objectType),
+        setObjectTypes,
+        addObjectType(objectType),
+        setUuid,
+        setKey,
         setCreatedAt,
         setUpdatedAt,
-        setKey,
-        setUuid,
-        assoc("objectType", objectType),
-        ...definition,
+        compose(...definition),
     );
 };

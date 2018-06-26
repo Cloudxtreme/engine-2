@@ -63,4 +63,15 @@ describe("ObjectType", () => {
             expect(ot({ updatedAt }).updatedAt).toEqual(updatedAt);
         });
     });
+
+    describe("objectTypes", () => {
+        let ot;
+        beforeEach(() => {
+            ot = ObjectType("SomeObject", (props: any) => props);
+        });
+
+        it("adds the object type to the objectTypes array", () => {
+            expect(ot().objectTypes).toContain("SomeObject");
+        });
+    })
 });
