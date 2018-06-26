@@ -1,33 +1,11 @@
-import {compose} from '../../../utils';
-import {
-    IObject,
-    ObjectType,
-} from '../ObjectType';
+import { ContainerObjectType, IContainerObject } from "../ContainerObjectType";
+import { IObject, ObjectType } from "../ObjectType";
+import { IServiceObject, ServiceObjectType } from "../ServiceObjectType";
 
-let WorldObjectType = (data: IObject) => {
-    let schema = {
-        updated_at: {},
-        objects: {
-            presence: true,
-        },
-    };
+interface IWorldObject extends IObject, IContainerObject, IServiceObject {
 
-    schema = {...{}, ...data.schema, ...schema};
+}
 
-    delete data.schema;
-
-    return {
-        ...data,
-        schema,
-        object_type: 'World',
-        key: 'world',
-        updated_at: new Date(),
-        live: true,
-        destroyable: false,
-        objects: {},
-    };
+export const WorldObjectType = function(object: IWorldObject | {} = {}): IContainerObject {
+    return <IWorldObject>ObjectType("WorldObject", ContainerObjectType, ServiceObjectType)(<IWorldObject>object);
 };
-
-WorldObjectType = compose(ObjectType, WorldObjectType);
-
-export {WorldObjectType};

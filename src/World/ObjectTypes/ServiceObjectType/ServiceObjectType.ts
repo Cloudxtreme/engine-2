@@ -3,7 +3,7 @@ import { assoc, compose, curry, isNil, pipe, prop, when } from "ramda";
 
 import { IObject, ObjectType } from "../ObjectType";
 
-interface IServiceObject extends IObject {
+export interface IServiceObject extends IObject {
 }
 
 export const ServiceObjectType = function(object: IServiceObject | {} = {}): IServiceObject {

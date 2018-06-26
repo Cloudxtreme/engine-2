@@ -3,7 +3,7 @@ import { any, assoc, assocPath, curry, isNil, not, pipe, prop, when } from "ramd
 
 import { IObject, ObjectType } from "../ObjectType";
 
-interface IContainerObject extends IObject {
+export interface IContainerObject extends IObject {
     children: IObject[];
 }
 

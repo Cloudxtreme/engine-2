@@ -1,15 +1,16 @@
 import * as Bluebird from "bluebird";
 import * as Redis from "redis";
 
-import { Service } from "../../../Service";
+import { define, dependency, onCreate } from "../../../Service";
 
 Bluebird.promisifyAll(Redis);
 
-export const StateService = Service.define(
+export const StateService = define(
     "state",
-    Service.dependency("services.snapshots"),
-    Service.onCreate(function() {
+    dependency("services.snapshots"),
+    onCreate(function() {
         this.logger.info("connecting to redis instance");
         this.redis = Redis.createClient(process.env.REDIS_URL);
+        this.logger.info("loading world");
     }),
 );

@@ -24,6 +24,6 @@ describe("addObject", () => {
     });
 
     it("throws an error when attempting to add to a non container object", () => {
-        expect(() => addObject(child, {})).toThrowError("Object is not of type 'ContainerObject'")
+        expect(() => addObject(child, {})).toThrowError("Object is not of type 'ContainerObject'");
     });
 });
