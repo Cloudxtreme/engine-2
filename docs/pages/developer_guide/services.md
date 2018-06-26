@@ -64,4 +64,5 @@ module.exports = World({
 * **onCreate(function)** - adds a function to be called when the service is created. The function will be passed the 
   Moleculer broker instance.
 * **onStart(function)** - adds a function to be called when the service is started. Must return a **Promise**.
-* **onStop(function)** -adds a function to be called when the service is stopped. Must return a **Promise**.
+* **onStop(function)** - adds a function to be called when the service is stopped. Must return a **Promise**.
+* **dependency(name)** - adds the provided service name as a dependency.
