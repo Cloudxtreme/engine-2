@@ -4,8 +4,6 @@ import * as R from "ramda";
 
 import {  action, define, dependency, IServiceConfig, method, onCreate, onStart, onStop  } from "./Service";
 
-const broker = new ServiceBroker();
-
 describe("Service", () => {
     describe("define", () => {
         it("creates a service definition function", () => {

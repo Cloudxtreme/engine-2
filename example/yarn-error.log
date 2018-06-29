@@ -1,5 +1,5 @@
 Arguments: 
-  /Users/fugufish/.nvm/versions/node/v10.4.1/bin/node /Users/fugufish/.nvm/versions/node/v10.4.1/bin/yarn add nats
+  /Users/fugufish/.nvm/versions/node/v10.4.1/bin/node /Users/fugufish/.nvm/versions/node/v10.4.1/bin/yarn add knex
 
 PATH: 
   /Users/fugufish/.rvm/gems/ruby-2.3.4/bin:/Users/fugufish/.rvm/gems/ruby-2.3.4@global/bin:/Users/fugufish/.rvm/rubies/ruby-2.3.4/bin:/Users/fugufish/.nvm/versions/node/v10.4.1/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/fugufish/.rvm/bin
@@ -37,12 +37,13 @@ npm manifest:
       "generator-lucid-engine": "file:../generator",
       "lucid-engine": "file:..",
       "moleculer": "^0.12.4",
+      "nats": "^1.0.0",
       "redis": "^2.8.0"
     },
     "scripts": {
       "world": "./node_modules/moleculer/bin/moleculer-runner.js -c ./config/world.config.js",
-      "migrate:latest": "knex --knexfile ./config/knexfile.js migrate:latest",
-      "migrate:rollback": "knex --knexfile ./config/knexfile.js migrate:rollback"
+      "db:migrate:latest": "./node_modules/knex/bin/cli.js --knexfile ./config/knexfile.js migrate:latest",
+      "db:migrate:rollback": "./node_modules/knex/bin/cli.js --knexfile ./config/knexfile.js migrate:rollback"
     }
   }
 
@@ -1490,6 +1491,12 @@ Lockfile:
       snapdragon "^0.8.1"
       to-regex "^3.0.1"
   
+  nats@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/nats/-/nats-1.0.0.tgz#6b1681c46ec08ea0b92dfed1abe413692b44c35f"
+    dependencies:
+      nuid "^1.0.0"
+  
   nice-try@^1.0.4:
     version "1.0.4"
     resolved "https://registry.yarnpkg.com/nice-try/-/nice-try-1.0.4.tgz#d93962f6c52f2c1558c0fbda6d512819f1efe1c4"
@@ -1516,6 +1523,10 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/normalize-path/-/normalize-path-2.1.1.tgz#1ab28b556e198363a8c1a6f7e6fa20137fe6aed9"
     dependencies:
       remove-trailing-separator "^1.0.1"
+  
+  nuid@^1.0.0:
+    version "1.0.0"
+    resolved "https://registry.yarnpkg.com/nuid/-/nuid-1.0.0.tgz#04ecc21be41cc321940a9089984382f3bdc61638"
   
   object-copy@^0.1.0:
     version "0.1.0"

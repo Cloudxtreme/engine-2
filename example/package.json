@@ -10,6 +10,7 @@
   "dependencies": {
     "dotenv": "^5.0.1",
     "generator-lucid-engine": "file:../generator",
+    "knex": "^0.14.6",
     "lucid-engine": "file:..",
     "moleculer": "^0.12.4",
     "nats": "^1.0.0",
@@ -17,7 +18,7 @@
   },
   "scripts": {
     "world": "./node_modules/moleculer/bin/moleculer-runner.js -c ./config/world.config.js",
-    "migrate:latest": "knex --knexfile ./config/knexfile.js migrate:latest",
-    "migrate:rollback": "knex --knexfile ./config/knexfile.js migrate:rollback"
+    "db:migrate:latest": "./node_modules/knex/bin/cli.js --knexfile ./config/knexfile.js migrate:latest",
+    "db:migrate:rollback": "./node_modules/knex/bin/cli.js --knexfile ./config/knexfile.js migrate:rollback"
   }
 }

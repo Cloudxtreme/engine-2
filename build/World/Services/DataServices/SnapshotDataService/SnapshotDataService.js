@@ -10,7 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const Service_1 = require("../../../../Service");
 const DataService_1 = require("../DataService");
-exports.SnapshotDataService = Service_1.Service.define("snapshots", DataService_1.DataService, Service_1.Service.method("findLatest", function () {
+exports.SnapshotDataService = Service_1.define("snapshots", DataService_1.DataService, Service_1.method("findLatest", function () {
+    this.logger.debug("finding latest snapshot");
     return this.knex
         .select("*")
         .from("snapshots")
@@ -19,7 +20,8 @@ exports.SnapshotDataService = Service_1.Service.define("snapshots", DataService_
         .then((rows) => {
         return rows[0];
     });
-}), Service_1.Service.method("create", function (snapshot) {
+}), Service_1.method("create", function (snapshot) {
+    this.logger.debug("saving snapshot");
     return this.knex
         .returning("id")
         .insert({ data: snapshot })
@@ -29,12 +31,11 @@ exports.SnapshotDataService = Service_1.Service.define("snapshots", DataService_
         .from("snapshots")
         .where({ id: rows[0] }))
         .then((rows) => rows[0]);
-}), Service_1.Service.action("findLatest", function () {
+}), Service_1.action("findLatest", function () {
+    return this.findLatest();
+}), Service_1.action("create", function (ctx) {
     return __awaiter(this, void 0, void 0, function* () {
-        return this.findLatest();
-    });
-}), Service_1.Service.action("create", function (ctx) {
-    return __awaiter(this, void 0, void 0, function* () {
+        console.log(ctx.params);
         return this.create(ctx.params);
     });
 }));

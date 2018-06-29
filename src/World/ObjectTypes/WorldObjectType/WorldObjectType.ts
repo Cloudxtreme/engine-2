@@ -2,7 +2,7 @@ import { ContainerObjectType, IContainerObject } from "../ContainerObjectType";
 import { IObject, ObjectType } from "../ObjectType";
 import { IServiceObject, ServiceObjectType } from "../ServiceObjectType";
 
-interface IWorldObject extends IObject, IContainerObject, IServiceObject {
+export interface IWorldObject extends IObject, IContainerObject, IServiceObject {
 
 }
 

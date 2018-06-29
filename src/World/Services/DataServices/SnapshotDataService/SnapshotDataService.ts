@@ -1,7 +1,7 @@
 import * as Bluebird from "bluebird";
 import { Context } from "moleculer";
 
-import { Service } from "../../../../Service";
+import { action, define, method } from "../../../../Service";
 import { DataService } from "../DataService";
 
 export interface ISnapshot {
@@ -10,10 +10,12 @@ export interface ISnapshot {
     data: any;
 }
 
-export const SnapshotDataService = Service.define(
+export const SnapshotDataService = define(
     "snapshots",
     DataService,
-    Service.method("findLatest", function(): Bluebird<ISnapshot> {
+    method("findLatest", function(): Bluebird<ISnapshot> {
+        this.logger.debug("finding latest snapshot");
+
         return this.knex
             .select("*")
             .from("snapshots")
@@ -25,7 +27,9 @@ export const SnapshotDataService = Service.define(
                 },
             );
     }),
-    Service.method("create", function(snapshot: any): Bluebird<ISnapshot> {
+    method("create", function(snapshot: any): Bluebird<ISnapshot> {
+        this.logger.debug("saving snapshot");
+
         return this.knex
             .returning("id")
             .insert({ data: snapshot })
@@ -38,10 +42,11 @@ export const SnapshotDataService = Service.define(
             )
             .then((rows: ISnapshot[]): ISnapshot => rows[0]);
     }),
-    Service.action("findLatest", async function(): Promise<ISnapshot> {
+    action("findLatest", function(): Promise<ISnapshot> {
         return <Promise<ISnapshot>>this.findLatest();
     }),
-    Service.action("create", async function(ctx: Context): Promise<ISnapshot> {
+    action("create", async function(ctx: Context): Promise<ISnapshot> {
+        console.log(ctx.params);
         return <Promise<ISnapshot>>this.create(ctx.params);
     }),
 );
